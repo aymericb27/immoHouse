@@ -13,6 +13,7 @@
                 {!! Form::open(['url' => 'postInfoGeneral', 'enctype'=>'multipart/form-data']) !!}
                 <div>
                     <fieldset>
+                        
                         <legend>{{__('General information')}}</legend>
                         <div class="form-group {!! $errors->has('sale_or_rent') ? 'has-error' : '' !!}">
                             {!! Form::label('sale_or_rent', __('sale'), ['class' =>'mb-0']) !!}
