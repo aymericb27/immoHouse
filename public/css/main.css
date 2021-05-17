@@ -1,0 +1,114 @@
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+}
+.menu li {
+    display: inline-block;
+    padding: 37px 7px;
+}
+
+.navbar{
+    list-style-type: none;
+}
+
+.navbar li {
+    width: 33%;
+    height: 50px;
+    position: relative;
+    text-align: center;
+    padding: 13px;
+}
+
+.navbar li.selected {
+    background: #32557f;
+    color: white;
+}
+
+
+
+.navbar li:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 25px solid white;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+  .navbar li.selected:before {
+    content: "";
+    position: absolute;
+    right: -25px;
+    z-index: 1;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 25px solid  #32557f;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+  }
+
+.background-accueil{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/background-accueil.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    height: 300px;
+}
+
+.boxCommand div{
+    background: #e8e8e8;
+    text-align: center;
+    padding: 40px 0px;
+}
+
+.boxCommand.selected div{
+    background: #32557f;
+    color: white;
+}
+
+.payment_method{
+    width: 30%;
+}
+
+.custom-file-upload{
+    border: 1px solid #568fc3;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.custom-file-upload .fa-plus{
+    font-size: 32px;
+}
+
+.property-pictures{
+    display: none;
+}
+
+.fileList{
+    list-style-type: none;
+}
+
+.fileList li {
+    display: inline-block;
+    width: 20%;
+}
+
+.fileList img{
+    padding: 10px;
+    width: 100%;
+}
+.removeFile .fa-trash{
+    font-size: 25px;
+}
+.removeFile {
+    position: relative;
+    top: 14px;
+    left: -43px;
+    vertical-align: top;
+    background: whitesmoke;
+    padding: 7px;
+}
