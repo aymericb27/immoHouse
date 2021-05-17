@@ -55,10 +55,10 @@ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
             var reader = new FileReader();
 
             reader.onload = function(event) {
-                $html = "<div><img src='"+ event.target.result +"'><a class='removeFile' href='#' onclick='removeFile()' data-fileid='" + fileId + "'><i class='fa fa-trash'></i></a></div>";
-                var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + fileId + "\">Remove</a>";
-                var removeLink = "<a class='removeFile' href='#' data-fileid='" + fileId + "'><i class='fa fa-trash'></i></a>";
+              //  $html = "<div><img src='"+ event.target.result +"'><a class='removeFile' href='#' onclick='removeFile()' data-fileid='" + fileId + "'><i class='fa fa-trash'></i></a></div>";
+               // var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + fileId + "\">Remove</a>";
 
+                var removeLink = "<a class='removeFile' href='#' data-fileid='" + fileId + "'><i class='fa fa-trash'></i></a>";
                 output.push("<li><img src='"+ event.target.result +"'>", removeLink,"</li>");
                 $(".fileList").append(output.join(""));
             }
@@ -97,7 +97,7 @@ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
 
     return this;
 };
-/*
+
 (function () {
     var filesToUpload = [];
 
@@ -113,7 +113,6 @@ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
         console.log($('input[type=file]')[0].files[0]);
         for (var i = 0, len = filesToUpload.length; i < len; i++) {
             formData.append("files[]", filesToUpload[i].file);
-            console.log(filesToUpload[i].file);
         }
 
         console.log(formData.entries());
@@ -133,5 +132,5 @@ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
                 alert("ERROR - " + data.responseText);
             }
         });
-    });*/
+    });
 })()

@@ -24,8 +24,6 @@
     color: white;
 }
 
-
-
 .navbar li:after {
     content: "";
     position: absolute;
@@ -106,9 +104,10 @@
 }
 .removeFile {
     position: relative;
-    top: 14px;
-    left: -43px;
+    top: -40px;
+    left: 10px;
     vertical-align: top;
     background: whitesmoke;
+    color: #ff5656;
     padding: 7px;
 }
