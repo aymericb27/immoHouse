@@ -31,8 +31,11 @@ class ImmoController extends Controller
     }
 
     public function publishDetailed(Request $request, ImmoRepository $immoRepository){
-       $idProperty = $immoRepository->save($request->input());
-       $immoRepository->savePhoto($idProperty,$request->file('files'));
-       return $idProperty;
+       //$idProperty = $immoRepository->save($request->input());
+    $idProperty = 7;
+      // $immoRepository->savePhoto($idProperty,$request->file('files'));
+      $property = $immoRepository->getPropertyById($idProperty);
+      return redirect()->route('home',['idProperty' => $idProperty]);
+      //return view('property_detailed',['property' => $property ]);
     }
 }

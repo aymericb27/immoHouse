@@ -1,41 +1,8 @@
-/*FileList = [];
+$('.close_popup i').on('click',function(){
+    console.log('click');
+    $('#message_popup').hide();
+})
 
-$("#property_picture").on('change',function (event) {
-    var files = event.originalEvent.target.files;
-    for(var i = 0; i < files.length; i++){
-        FileList.push(files[i]);
-    }
-    console.log(FileList);
-
-
-    $("#FormInfoDetailed").on('submit',function (e) {
-        var formData = new FormData(this);
-
-        for (var i = 0, len = FileList.length; i < len; i++) {
-
-            formData.append("files[]", FileList[i]);
-        }
-
-        console.log(formData.get('files[]'));
-
-        $.ajax({
-            url: $('#FormInfoDetailed').attr('action'),
-            data: formData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            type: "POST",
-            success: function (data) {
-                console.log(data);
-               // files1Uploader.clear();
-            },
-            error: function (data) {
-                alert("ERROR - " + data.responseText);
-            }
-        });
-    });
-
-})*/
 
 $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
     var fileIdCounter = 0;

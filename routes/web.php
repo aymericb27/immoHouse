@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('publishSuccessful/{idProperty}', function($idProperty){
+    return view('welcome',['idProperty' => $idProperty, 'message' => 'publishSuccessful']);
+});
 
 Route::get('/publish',[App\Http\Controllers\ImmoController::class,'publish']);
 Route::post('/postInfoGeneral',[App\Http\Controllers\ImmoController::class,'postInfoGeneral']);

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class ImmoRepository implements ImmoRepositoryInterface
 {
 
@@ -17,6 +19,16 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     public function saveInSession($property){
         session(['property' => $property]);
+    }
+
+    public function getPropertyById($idProperty)
+    {
+        $property = DB::table('property')
+        ->join('type_of_property','property.fk_type_of_property','=','type_of_property.id')
+        ->join('condition_building','condition_building.id','=','property.fk_condition_building')
+        ->where('property.id','=',$idProperty)
+        ->get()->toArray();
+        return $property[0];
     }
 
 	public function save($property)

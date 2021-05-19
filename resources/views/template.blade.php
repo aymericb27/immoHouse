@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link href=" {!! url('css/bootstrap-extras.css') !!}" rel="stylesheet"/>
     <link href=" {!! url('css/bootstrap.css') !!}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{!! url('css/fontawesome-free-5.15.3-web/css/all.css')  !!}">
     <link rel="stylesheet" href=" {!! url('css/main.css') !!}">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -40,7 +41,27 @@
             </div>
         </div>
     </header>
-	@yield('content')
+    @isset($message)
+        <div id="message_popup">
+            <div class="row">
+
+                <div class="close_popup">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div class="col-md-10">
+                    @if($message === "publishSuccessful")
+                        <p>{{__('The property has been added successfully !')}}</p>
+                        <p><a href='{{$idProperty}}'>{{__('click here to see it')}}</a></p>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+    @endisset
+    <div id="content">
+	    @yield('content')
+    </div>
+
 </body>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="{!! url('js/payment.js') !!}"></script>

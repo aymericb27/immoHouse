@@ -21,6 +21,8 @@ class CreatePropertyTable extends Migration
             $table->integer('address_postal_code');
             $table->string('description');
             $table->integer('fk_condition_building')->unsigned();
+            $table->integer('fk_type_of_property')->unsigned();
+            $table->integer('fk_user')->unsigned();
             $table->integer('living_space');
             $table->integer('nbr_bathroom');
             $table->integer('nbr_facade');
@@ -28,12 +30,10 @@ class CreatePropertyTable extends Migration
             $table->integer('nbr_toilet');
             $table->integer('price');
             $table->integer('sale_or_rent');
-            $table->integer('type_of_property_id')->unsigned();
-            $table->integer('user_id')->unsigned();
             $table->integer('year_construct');
-            $table->foreign('type_of_property_id')->references('id')->on('type_of_property');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('fk_condition_building')->references('id')->on('condition_building');
+            $table->foreign('fk_type_of_property')->references('id')->on('type_of_property');
+            $table->foreign('fk_user')->references('id')->on('users');
             $table->timestamps();
         });
     }

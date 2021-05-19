@@ -11,6 +11,39 @@
     list-style-type: none;
 }
 
+header{
+    border-bottom: 1px solid #d4d4d4;
+}
+
+#message_popup{
+    background-color: #51ad55;
+    color: whitesmoke;
+    padding: 10px 20px;
+    position: fixed;
+    width: 40%;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%,0);
+    z-index: 10;
+}
+#message_popup p {
+    margin: 0px;
+}
+
+#message_popup a {
+    text-decoration: underline;
+}
+
+.close_popup{
+    position: fixed;
+    right: 0;
+    padding: 0 15px;
+}
+
+.close_popup i {
+    cursor: pointer;
+}
+
 .navbar li {
     width: 33%;
     height: 50px;
