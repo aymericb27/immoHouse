@@ -79,7 +79,7 @@ $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
 
         console.log($('input[type=file]')[0].files[0]);
         for (var i = 0, len = filesToUpload.length; i < len; i++) {
-            formData.append("files[]", filesToUpload[i].file);
+            formData.append("property_files[]", filesToUpload[i].file);
         }
 
         console.log(formData.entries());

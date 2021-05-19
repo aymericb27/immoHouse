@@ -24,11 +24,12 @@
                     <li><a>Agences</a></li>
                     <li><a>A vendre</a></li>
                     @auth
-                    <li><a href="{!! url('/publish') !!}">publier une annonce  </a></li>
+                        <li><a href="{!! url('/publish') !!}">publier une annonce  </a></li>
+                        <li><a href="{!! url('/getMyListingProperties') !!}">mes annonces </a></li>
                     @endauth
                     @guest
-                    <li><a href="{!! url('/register') !!}">s'enregister</a></li>
-                    <li><a href="{!! url('/login') !!}">se connecter</a></li>
+                        <li><a href="{!! url('/register') !!}">s'enregister</a></li>
+                        <li><a href="{!! url('/login') !!}">se connecter</a></li>
                     @endguest
                 </ul>
             </div>

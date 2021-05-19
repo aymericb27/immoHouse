@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\infoGeneralRequest;
+use App\Http\Requests\PublishDetailedRequest;
 use App\Repositories\ImmoRepository;
 
 
@@ -25,15 +26,18 @@ class ImmoController extends Controller
         return $request->input();
     }
 
-    public function testForm()
-    {
-        return view('testForm');
+    public  function getMyListingProperties(ImmoRepository $immoRepository){
+        $listProperties = $immoRepository->getListingPropertiesByUserId(Auth::id());
+        foreach($listProperties as $key => $property){
+            $listProperties[$key]->picture = $immoRepository->getFirstPictureByIdProperty($property->id);
+        }
+        return view('listingOfProperties', ['listProperties' => $listProperties]);
+
     }
 
-    public function publishDetailed(Request $request, ImmoRepository $immoRepository){
-       //$idProperty = $immoRepository->save($request->input());
-    $idProperty = 7;
-      // $immoRepository->savePhoto($idProperty,$request->file('files'));
+    public function publishDetailed(PublishDetailedRequest $request, ImmoRepository $immoRepository){
+       $idProperty = $immoRepository->save($request->input());
+       $immoRepository->savePhoto($idProperty,$request->file('property_files'));
       $property = $immoRepository->getPropertyById($idProperty);
       return redirect()->route('home',['idProperty' => $idProperty]);
       //return view('property_detailed',['property' => $property ]);

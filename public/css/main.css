@@ -81,6 +81,10 @@ header{
     border-bottom: 25px solid transparent;
   }
 
+  #content{
+     padding-top: 5%;
+  }
+
 .background-accueil{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/background-accueil.jpg");
     background-repeat: no-repeat;
@@ -143,4 +147,13 @@ header{
     background: whitesmoke;
     color: #ff5656;
     padding: 7px;
+}
+
+.list_property .picture
+{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 250px;
+    position: relative;
 }

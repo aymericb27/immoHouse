@@ -31,6 +31,29 @@ class ImmoRepository implements ImmoRepositoryInterface
         return $property[0];
     }
 
+    public function getListingPropertiesByUserId($idUser){
+        return DB::table('property')
+        ->join('type_of_property','property.fk_type_of_property','=','type_of_property.id')
+        ->join('condition_building','condition_building.id','=','property.fk_condition_building')
+        ->select('property.price','property.id','property.address_number','property.address_postal_code','property.address')
+        ->where('property.fk_user','=',$idUser)
+        ->get()->toArray();
+    }
+
+    public function getPicturesByIdProperty($idProperty)
+    {
+        return DB::table('property_picture')->where('fk_property',$idProperty)->get()->toArray();
+    }
+
+    public function getFirstPictureByIdProperty($idProperty)
+    {
+        return DB::table('property_picture')
+        ->where('fk_property',$idProperty)
+        ->where('order',0)
+        ->get()->toArray()[0];
+
+    }
+
 	public function save($property)
 	{
 
@@ -40,8 +63,8 @@ class ImmoRepository implements ImmoRepositoryInterface
         $this->property->address_number = session('property')['address_number'];
         $this->property->address_box = session('property')['address_box'];
         $this->property->address_postal_code = session('property')['postal_code'];
-        $this->property->type_of_property_id = session('property')['fk_type_of_property'];
-        $this->property->user_id = Auth::id();
+        $this->property->fk_type_of_property = session('property')['fk_type_of_property'];
+        $this->property->fk_user = Auth::id();
 
         unset($property['_token']);
         foreach($property as $key => $pro ){
@@ -54,10 +77,13 @@ class ImmoRepository implements ImmoRepositoryInterface
     public function savePhoto($idProperty,$files){
         foreach($files as $key => $file){
 
-            //Move Uploaded File
-            $destinationPath = 'uploads';
+            $idPicture = DB::table('property_picture')->insertGetId(
+                ['extension' => $file->getClientOriginalExtension(),
+                 'order'=> $key,
+                 'fk_property'=> $idProperty
+                ]);
 
-            $store  = Storage::disk('public')->put('uploads/immo_'. $idProperty .'/pic-'. $key  .'.'. $file->getClientOriginalExtension(),  File::get($file));
+            $store  = Storage::disk('public')->put('immo_'. $idProperty .'/pic-'.  $idPicture  .'.'. $file->getClientOriginalExtension(),  File::get($file));
        }
     }
 
