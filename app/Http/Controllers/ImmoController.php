@@ -22,8 +22,14 @@ class ImmoController extends Controller
 
     public function postPayment(Request $request)
     {
-
         return $request->input();
+    }
+
+    public function getProperty($n,ImmoRepository $immoRepository){
+        $property = $immoRepository->getPropertyById($n);
+        $property->id = $n;
+        $property->pictures =  $immoRepository->getPicturesByIdProperty($n);
+        return view('property_detailed',['property' => $property ]);
     }
 
     public  function getMyListingProperties(ImmoRepository $immoRepository){

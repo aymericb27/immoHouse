@@ -157,3 +157,11 @@ header{
     height: 250px;
     position: relative;
 }
+
+.list_property{
+    cursor: pointer;
+}
+
+.list_property:hover{
+    background-color: #d4d4d4;
+}

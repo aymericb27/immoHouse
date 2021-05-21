@@ -25,6 +25,7 @@ Route::get('/publish',[App\Http\Controllers\ImmoController::class,'publish']);
 Route::post('/postInfoGeneral',[App\Http\Controllers\ImmoController::class,'postInfoGeneral']);
 Route::post('/publishDetailed',[App\Http\Controllers\ImmoController::class,'publishDetailed']);
 Route::get('/getMyListingProperties',[App\Http\Controllers\ImmoController::class,'getMyListingProperties']);
+Route::get('/getProperty/{n}', [App\Http\Controllers\ImmoController::class,'getProperty']);
 
 Route::post('/postPayment',[App\Http\Controllers\PaymentController::class,'postPayment']);
 Route::get('/paymentSuccess',[App\Http\Controllers\PaymentController::class,'paymentSuccess']);

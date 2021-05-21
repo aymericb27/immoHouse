@@ -12,40 +12,44 @@
             <div class="panel-body">
                 {!! Form::open(['url' => 'publishDetailed', 'enctype'=>'multipart/form-data',"id" =>'FormInfoDetailed']) !!}
                 <div >
-                    <div class="row">
-                        <div class="form-group col-md-6 {!! $errors->has('year_construct') ? 'has-error' : '' !!} " >
-                            {!! Form::label('year_construct', __('year of construct')) !!}
-                            {!! Form::number ('year_construct', 1, ['class' => 'form-control']) !!}
-                            {!! $errors->first('year_construct', '<small class="help-block">:message</small>') !!}
-                        </div>
+                    <fieldset>
 
-                        <div class="form-group col-md-6 {!! $errors->has('nbr_floor') ? 'has-error' : '' !!} " >
-                            {!! Form::label('nbr_floor', __('number of floor')) !!}
-                            {!! Form::text ('nbr_floor', 1, ['class' => 'form-control']) !!}
-                            {!! $errors->first('nbr_floor', '<small class="help-block">:message</small>') !!}
+                        <legend>{{__('General information')}}</legend>
+                        <div class="row">
+                            <div class="form-group col-md-6 {!! $errors->has('year_construct') ? 'has-error' : '' !!} " >
+                                {!! Form::label('year_construct', __('year of construct')) !!}
+                                {!! Form::number ('year_construct', 1, ['class' => 'form-control']) !!}
+                                {!! $errors->first('year_construct', '<small class="help-block">:message</small>') !!}
+                            </div>
+
+                            <div class="form-group col-md-6 {!! $errors->has('nbr_floor') ? 'has-error' : '' !!} " >
+                                {!! Form::label('nbr_floor', __('number of floor')) !!}
+                                {!! Form::text ('nbr_floor', 1, ['class' => 'form-control']) !!}
+                                {!! $errors->first('nbr_floor', '<small class="help-block">:message</small>') !!}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 {!! $errors->has('nbr_facade') ? 'has-error' : '' !!} " >
-                            {!! Form::label('nbr_facade', __('number of facade')) !!}
-                            {!! Form::number ('nbr_facade', 1, ['class' => 'form-control']) !!}
-                            {!! $errors->first('nbr_facade', '<small class="help-block">:message</small>') !!}
+                        <div class="row">
+                            <div class="form-group col-md-6 {!! $errors->has('nbr_facade') ? 'has-error' : '' !!} " >
+                                {!! Form::label('nbr_facade', __('number of facade')) !!}
+                                {!! Form::number ('nbr_facade', 1, ['class' => 'form-control']) !!}
+                                {!! $errors->first('nbr_facade', '<small class="help-block">:message</small>') !!}
+                            </div>
+                            <div class="form-group col-md-6 {!! $errors->has('nbr_toilet') ? 'has-error' : '' !!} " >
+                                {!! Form::label('nbr_toilet', __('number of toilet')) !!}
+                                {!! Form::number ('nbr_toilet', 1, ['class' => 'form-control']) !!}
+                                {!! $errors->first('nbr_toilet', '<small class="help-block">:message</small>') !!}
+                            </div>
                         </div>
-                        <div class="form-group col-md-6 {!! $errors->has('nbr_toilet') ? 'has-error' : '' !!} " >
-                            {!! Form::label('nbr_toilet', __('number of toilet')) !!}
-                            {!! Form::number ('nbr_toilet', 1, ['class' => 'form-control']) !!}
-                            {!! $errors->first('nbr_toilet', '<small class="help-block">:message</small>') !!}
+                        <div class="form-group {!! $errors->has('fk_condition_building') ? 'has-error' : '' !!}">
+                            {!! Form::label('fk_condition_building', __('condition of the building')) !!}
+                            <select class=" form-control" name="fk_condition_building">
+                                <option value="1">{{ __('Excellent')}}</option>
+                                <option value="2">{{ __('Satisfactory')}}</option>
+                                <option value="3">{{ __('Conditional')}}</option>
+                            </select>
+                            {!! $errors->first('fk_condition_building', '<small class="help-block">:message</small>') !!}
                         </div>
-                    </div>
-                    <div class="form-group {!! $errors->has('fk_condition_building') ? 'has-error' : '' !!}">
-                        {!! Form::label('fk_condition_building', __('condition of the building')) !!}
-                        <select class=" form-control" name="fk_condition_building">
-                            <option value="1">{{ __('Excellent')}}</option>
-                            <option value="2">{{ __('Satisfactory')}}</option>
-                            <option value="3">{{ __('Conditional')}}</option>
-                        </select>
-                        {!! $errors->first('fk_condition_building', '<small class="help-block">:message</small>') !!}
-                    </div>
+                    </fieldset>
                     <div class="form-group {!! $errors->has('living_space') ? 'has-error' : '' !!}">
                         {!! Form::label('living_space', __('living space')) !!}
                         {!! Form::number ('living_space', 1, ['class' => 'form-control']) !!}
@@ -72,7 +76,7 @@
                         </div>
                         {!! $errors->first('property_pictures', '<small class="help-block">:message</small>') !!}
                     </div>
-                    
+
                     <div class="row files" id="files1">
                         <ul class="fileList"></ul>
                     </div>
