@@ -13,7 +13,7 @@
                 {!! Form::open(['url' => 'postInfoGeneral', 'enctype'=>'multipart/form-data']) !!}
                 <div>
                     <fieldset>
-                        
+
                         <legend>{{__('General information')}}</legend>
                         <div class="form-group {!! $errors->has('sale_or_rent') ? 'has-error' : '' !!}">
                             {!! Form::label('sale_or_rent', __('sale'), ['class' =>'mb-0']) !!}
@@ -44,11 +44,19 @@
                     </fieldset>
                     <fieldset>
                         <legend>{{__('address')}}</legend>
-                        <div class="form-group {!! $errors->has('address') ? 'has-error' : '' !!}">
-                            {!! Form::label('address', __('address')) !!}
-                            {!! Form::text ('address', "rue de morimont", ['class' => 'form-control']) !!}
-                            {!! $errors->first('address', '<small class="help-block">:message</small>') !!}
+                        <div class="row">
+                            <div class="form-group col-md-8 {!! $errors->has('address') ? 'has-error' : '' !!}">
+                                {!! Form::label('address', __('address')) !!}
+                                {!! Form::text ('address', "rue de morimont", ['class' => 'form-control', "id" => "ship-address"]) !!}
+                                {!! $errors->first('address', '<small class="help-block">:message</small>') !!}
+                            </div>
+                            <div class="form-group col-md-4 {!! $errors->has('address_town') ? 'has-error' : '' !!}">
+                                {!! Form::label('address_town', __('town')) !!}
+                                {!! Form::text ('address_town', 45, ['class' => 'form-control', "id" =>'locality']) !!}
+                                {!! $errors->first('address_town', '<small class="help-block">:message</small>') !!}
+                            </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-4 {!! $errors->has('address_number') ? 'has-error' : '' !!}">
                                 {!! Form::label('address_number', __('number')) !!}
@@ -62,7 +70,7 @@
                             </div>
                             <div class="form-group col-md-4  {!! $errors->has('postal_code') ? 'has-error' : '' !!}">
                                 {!! Form::label('postal_code', __('postal code')) !!}
-                                {!! Form::number ('postal_code', 1340, ['class' => 'form-control']) !!}
+                                {!! Form::number ('postal_code', 1340, ['class' => 'form-control', 'id' => "postcode"]) !!}
                                 {!! $errors->first('postal_code', '<small class="help-block">:message</small>') !!}
                             </div>
                         </div>

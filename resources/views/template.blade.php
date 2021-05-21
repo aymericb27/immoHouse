@@ -68,6 +68,8 @@
 </body>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="{!! url('js/payment.js') !!}"></script>
+<script src="{!! url('js/autoCompleteAdress.js') !!}"></script>
 <script src="{!! url('js/main.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 </html>
