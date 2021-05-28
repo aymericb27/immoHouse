@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('content')
-<div class="container height-head" ng-controller="propertyController">
+<div class="container height-head">
         <div class="panel panel-info">
             <div class="panel-heading"></div>
             <ul class="navbar">
