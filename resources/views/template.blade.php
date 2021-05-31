@@ -6,6 +6,7 @@
     <link href=" {!! url('css/bootstrap.css') !!}" rel="stylesheet"/>
     <link rel="stylesheet" href="{!! url('css/fontawesome-free-5.15.3-web/css/all.css')  !!}">
     <link rel="stylesheet" href=" {!! url('css/main.css') !!}">
+    <link rel="stylesheet" href=" {!! url('css/form.css') !!}">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
@@ -15,7 +16,7 @@
 </head>
 <body ng-app="myApp">
     <header>
-        <div class='row' >
+        <div class='row m-0' >
             <div class="menu-logo col-md-3">
                 <a href="{!! url('/') !!}">
                     <img src="{!! url('img/logo.png') !!}">
@@ -26,20 +27,20 @@
                     <li><a>Agences</a></li>
                     <li><a>A vendre</a></li>
                     @auth
-                        <li><a href="{!! url('/publish') !!}">publier une annonce  </a></li>
-                        <li><a href="{!! url('/getMyListingProperties') !!}">mes annonces </a></li>
+                        <li><a href="{!! url('/publish') !!}">{{__("publish an announcement")}} </a></li>
+                        <li><a href="{!! url('/getMyListingProperties') !!}">{{__('my list of properties')}}</a></li>
                     @endauth
                     @guest
-                        <li><a href="{!! url('/register') !!}">s'enregister</a></li>
-                        <li><a href="{!! url('/login') !!}">se connecter</a></li>
+                        <li><a href="{!! url('/register') !!}">{{__('register')}}</a></li>
+                        <li><a href="{!! url('/login') !!}">{{__('login')}}</a></li>
                     @endguest
                 </ul>
             </div>
             <div class="menu-lang col-md-2">
                 <ul>
-                    <li>FR</li>
-                    <li>NL</li>
-                    <li>ENG</li>
+                    <li><a href="{!! url('/FR') !!}">FR</a></li>
+                    <li><a href="{!! url('/NL') !!}">NL</a></li>
+                    <li><a href="{!! url('/EN') !!}">ENG</a></li>
                 </ul>
             </div>
         </div>
@@ -70,6 +71,7 @@
 <script src="{!! url('js/payment.js') !!}"></script>
 <script src="{!! url('js/autoCompleteAdress.js') !!}"></script>
 <script src="{!! url('js/main.js') !!}"></script>
+<script src="{!! url('js/form.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 </html>

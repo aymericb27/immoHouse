@@ -7,10 +7,6 @@
     padding: 37px 7px;
 }
 
-.navbar{
-    list-style-type: none;
-}
-
 header{
     border-bottom: 1px solid #d4d4d4;
 }
@@ -44,46 +40,43 @@ header{
     cursor: pointer;
 }
 
-.navbar li {
-    width: 33%;
-    height: 50px;
-    position: relative;
+.leftSidePublish{
+    list-style-type: none;
+}
+
+.leftSidePublish li{
+    padding: 10px;
+}
+.leftSidePublish li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18px;
+    height: 100%;
+    width: 4px;
+    background: var(--cd-color-2);
+  }
+  .numberCircle {
+    border-radius: 98%;
+    width: 32px;
+    height: 32px;
+    padding: 4px 8px;
+    background: #fff;
+    border: 2px solid #568fc3;
+    color: #666;
     text-align: center;
-    padding: 13px;
+    font: 18px Arial, sans-serif;
 }
 
-.navbar li.selected {
-    background: #32557f;
-    color: white;
+.selected .numberCircle{
+    background-color:  #568fc3;
+    color: whitesmoke;
 }
 
-.navbar li:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-left: 25px solid white;
-    border-top: 25px solid transparent;
-    border-bottom: 25px solid transparent;
-  }
-  .navbar li.selected:before {
-    content: "";
-    position: absolute;
-    right: -25px;
-    z-index: 1;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-left: 25px solid  #32557f;
-    border-top: 25px solid transparent;
-    border-bottom: 25px solid transparent;
-  }
+.leftSidePublish .selected{
+    font-weight: 600;
+}
 
-  #content{
-     padding-top: 5%;
-  }
 
 .background-accueil{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/background-accueil.jpg");

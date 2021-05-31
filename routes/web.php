@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Route::get('publishSuccessful/{idProperty}', function($idProperty){
     return view('welcome',['idProperty' => $idProperty, 'message' => 'publishSuccessful']);
 });
@@ -34,3 +36,9 @@ Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paym
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/{lang}', function($lang){
+    App::setlocale($lang);
+    return view('welcome');
+
+});
