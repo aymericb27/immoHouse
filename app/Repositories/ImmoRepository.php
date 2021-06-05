@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
 
 class ImmoRepository implements ImmoRepositoryInterface
 {
@@ -29,6 +30,11 @@ class ImmoRepository implements ImmoRepositoryInterface
         ->where('property.id','=',$idProperty)
         ->get()->toArray();
         return $property[0];
+    }
+
+    public function getPropertyAdditionnalInformation()
+    {
+        return DB::table('property_additionnal_information')->select('information_'.  strtoupper(App::currentLocale()),'id')->get();
     }
 
     public function getListingPropertiesByUserId($idUser){

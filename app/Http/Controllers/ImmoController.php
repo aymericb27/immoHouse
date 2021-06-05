@@ -11,8 +11,10 @@ use App\Repositories\ImmoRepository;
 
 class ImmoController extends Controller
 {
-    public function publish(){
-        return view('formPublish');
+    public function publish(ImmoRepository $immoRepository){
+
+
+        return view('formPublish', ["property_additionnal_information" => $immoRepository->getPropertyAdditionnalInformation()]);
     }
 
     public function postInfoGeneral(infoGeneralRequest $request, ImmoRepository $immoRepository){
