@@ -12,18 +12,10 @@
             </ul>
             <div class="card b-0 show">
                 <pre>
-                    {{print_r($property_additionnal_information[0]['information_EN'])}}
                 {{print_r($property_additionnal_information)}}
             </pre>
                 <div class="row justify-content-center">
                     <div class="col-lg-10 col-md-11">
-                        <div class="form-group">
-                            <label class="form-control-label">Who I'm building for?</label>
-                             <input type="text" id="name" name="name" placeholder="Enter your name here ..." class="" onblur="validate1(1)"> </div>
-                            <div class="form-group"> <label class="form-control-label">What's your email address?</label>
-                             <input type="text" id="email" name="email" placeholder="Please enter your email here ..." class="" onblur="validate1(2)">
-                             </div>
-
                              <div class="switch switch--horizontal form-group {!! $errors->has('sale_or_rent') ? 'has-error' : '' !!}">
                                 {{ Form::radio('sale_or_rent', '1', true, ['checked' => "checked"]) }}
                                 {!! Form::label('sale_or_rent', __('sale'), ['class' =>'mb-0']) !!}

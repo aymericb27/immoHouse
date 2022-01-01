@@ -1,7 +1,10 @@
 $('.close_popup i').on('click',function(){
-    console.log('click');
     $('#message_popup').hide();
-})
+});
+
+$('input[type=radio][name=is_society]').change(function() {
+    (this.value == 1) ? $('.company_register').removeClass('d-none') : $('.company_register').addClass('d-none');
+});
 
 
 $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {

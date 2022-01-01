@@ -6,7 +6,6 @@
     <link href=" {!! url('css/bootstrap.css') !!}" rel="stylesheet"/>
     <link rel="stylesheet" href="{!! url('css/fontawesome-free-5.15.3-web/css/all.css')  !!}">
     <link rel="stylesheet" href=" {!! url('css/main.css') !!}">
-    <link rel="stylesheet" href=" {!! url('css/form.css') !!}">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
@@ -38,9 +37,9 @@
             </div>
             <div class="menu-lang col-md-2">
                 <ul>
-                    <li><a href="{!! url('/FR') !!}">FR</a></li>
-                    <li><a href="{!! url('/NL') !!}">NL</a></li>
-                    <li><a href="{!! url('/EN') !!}">ENG</a></li>
+                    <li><a href="{!! url('/language/FR') !!}">FR</a></li>
+                    <li><a href="{!! url('/language/NL') !!}">NL</a></li>
+                    <li><a href="{!! url('/language/EN') !!}">ENG</a></li>
                 </ul>
             </div>
         </div>

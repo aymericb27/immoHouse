@@ -1,7 +1,18 @@
 {
-    "send": "envoyer",
     "address" : "adresse",
-    "town" : "ville",
+    "are you a a real estate company ?" : "Êtes vous une société immobilière ?",
+    "Confirm Password" : "confirmer le mot de passe",
+    "E-Mail Address": "Adresse E-Mail",
+    "Firstname": "Prénom",
+    "insert your company logo" : "insérer le logo de votre entreprise",
+    "login" : "se connecter",
     "my list of properties" : "ma liste de propriété",
-    "publish an announcement" : "publier une annonce"
+    "Name" : "Nom",
+    "no" : "non",
+    "Password" : "mot de passe",
+    "publish an announcement" : "publier une annonce",
+    "register": "s'enregistrer",
+    "send": "envoyer",
+    "town" : "ville",
+    "yes": "oui"
 }

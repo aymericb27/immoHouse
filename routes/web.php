@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LogoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,11 +34,12 @@ Route::get('/paymentSuccess',[App\Http\Controllers\PaymentController::class,'pay
 Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paymentCancel']);
 
 Auth::routes();
+Route::get('/logout', [LogoutController::class,'perform'])->name('logout.perform');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/{lang}', function($lang){
+Route::get('/language/{lang}', function($lang){
     App::setlocale($lang);
-    return view('welcome');
-
+    session()->put('locale', $lang);
+    return redirect()->back();
 });
