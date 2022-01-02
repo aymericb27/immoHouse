@@ -5,9 +5,14 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Companies_users;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class RegisterController extends Controller
 {
@@ -51,9 +56,13 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'firstName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'company_name' => ['required_if:is_society,1', 'max:255'],
+            'company_logo' => ['required_if:is_society,1','mimes:jpg,jpeg,png,bmp','max:20000'],
         ]);
+
     }
 
     /**
@@ -64,12 +73,27 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Log::debug(print_r($data));
-        return 'ok';
-        return User::create([
+
+        $user = User::create([
+            'firstName' => $data['firstName'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        if($data['is_society'] == 1){
+            $request = request();
+            $file = $request->file('company_logo');
+
+            $company = Company::create([
+                'name' => $data['company_name'],
+                'extension_logo' => $extension = $file->getClientOriginalExtension(),
+            ]);
+            $store  = Storage::disk('public')->put('company_logo/company_' .$company->id. '/logo.'.$extension,  File::get($file));
+            $link_user_company = Companies_users::Create([
+                'fk_companies' => $company->id,
+                'fk_users' => $user->id,
+            ]);
+        }
+        return $user;
     }
 }

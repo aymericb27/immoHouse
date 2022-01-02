@@ -10,7 +10,7 @@
                     <div class="card-header"></div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
+                        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group row">
@@ -28,7 +28,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Firstname') }}</label>
+                                <label for="firstName" class="col-md-4 col-form-label text-md-right">{{ __('Firstname') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="firstName" type="text" class="form-control @error('firstName') is-invalid @enderror" name="firstName" value="{{ old('firstName') }}" required autocomplete="firstName" autofocus>
@@ -95,9 +95,9 @@
                                     <div class="col-md-6">
                                         <input id="company_name" type="text" class="form-control @error('name') is-invalid @enderror" name="company_name" autocomplete="name">
 
-                                        @error('name')
+                                        @error('company_name')
                                             <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                {{ $message }}
                                             </span>
                                         @enderror
                                     </div>
@@ -107,7 +107,7 @@
                                     <label for="company_logo" class="col-md-4 col-form-label text-md-right">{{ __('insert your company logo') }}</label>
                                     <div class="col-md-6">
                                         {!! Form::file ('company_logo', null, ['class' => 'form-control']) !!}
-                                        {!! $errors->first('company_logo', '<small class="help-block">:message</small>') !!}
+                                        {!! $errors->first('company_logo', '<small class="invalid-feedback">:message</small>') !!}
                                     </div>
                                 </div>
                             </div>

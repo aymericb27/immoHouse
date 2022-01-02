@@ -15,7 +15,7 @@ use App\Http\Controllers\LogoutController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 
 
@@ -36,7 +36,7 @@ Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paym
 Auth::routes();
 Route::get('/logout', [LogoutController::class,'perform'])->name('logout.perform');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('/language/{lang}', function($lang){
     App::setlocale($lang);
