@@ -1,73 +1,61 @@
 $(document).ready(function() {
-
-    var current_fs, next_fs, previous_fs;
-
-    $(".next").click(function() {
-
-        str1 = "next1";
-        str2 = "next2";
-
-        // if (!str1.localeCompare($(this).attr('id')) && validate1(0) == true) {
-        //     val1 = true;
-        // } else {
-        //     val1 = false;
-        // }
-
-        // if (!str2.localeCompare($(this).attr('id')) && validate2(0) == true) {
-        //     val2 = true;
-        // } else {
-        //     val2 = false;
-        // }
-        val1 = true;
-        val2 = true;
-        if ((!str1.localeCompare($(this).attr('id')) && val1 == true) || (!str2.localeCompare($(this).attr('id')) && val2 == true)) {
-            current_fs = $(this).parent().parent().parent();
-            next_fs = $(this).parent().parent().parent().next();
-
-            $(current_fs).removeClass("show");
-            $(next_fs).addClass("show");
-
-            $("#progressbar li").eq($(".card").index(next_fs)).addClass("active");
-
-            current_fs.animate({}, {
-                step: function() {
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-
-                    next_fs.css({
-                        'display': 'block'
-                    });
-                }
-            });
+    $('.nextPublishButton').on('click',function(){
+        if(validatePublishForm()){
+            $step = $(this).attr('id').split('-')[1];
+            $('#left_form_step-' + $step).addClass('form_step_publish_already_selected');
+            goToStep($step);
         }
     });
 
-    $(".prev").click(function() {
+    $('.previousPublishButton').on('click',function(){
+        $step = $(this).attr('id').split('-')[1];
+        goToStep($step);
+    })
 
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
+    $('.left_form_step').on('click',function(){
+        if($(this).hasClass('form_step_publish_already_selected')){
+            $step = $(this).attr('id').split('-')[1];
+            goToStep($step);
+        }
+    })
 
-        $(current_fs).removeClass("show");
-        $(previous_fs).addClass("show");
+    $('.image_type_of_property > div').on('click',function(){
+        $type = $(this).attr('id').split('-')[1];
+        $( 'input[name="sub_type_of_property"]' ).prop( "checked", false );
+        $('.type_of_property_selected').removeClass('type_of_property_selected');
+        $('.type_of_property_' + $type).addClass('type_of_property_selected');
+        $('.image_type_of_property_selected').removeClass('image_type_of_property_selected');
+        $(this).addClass('image_type_of_property_selected');
+    })
 
-        $("#progressbar li").eq($(".card").index(next_fs)).removeClass("active");
+    function goToStep($step){
+        $('.form_step_publish_selected').removeClass('form_step_publish_selected');
+        $('#left_form_step-' + $step).addClass('form_step_publish_selected');
+        $('.form_publish_selected').removeClass('form_publish_selected');
+        $('#form_publish_step-' + $step).addClass('form_publish_selected');
+    }
 
-        current_fs.animate({}, {
-            step: function() {
-
-                current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                });
-
-                previous_fs.css({
-                    'display': 'block'
-                });
-            }
-        });
-    });
-
+    function validatePublishForm(){
+        $('.error').hide();
+        $step = parseInt($('.form_publish_selected').attr('id').split('-')[1]);
+        $isValid = true;
+        $errorClass= '';
+        console.log($step);
+        switch($step){
+            case 0 :
+                if(!$('.image_type_of_property_selected')[0]){
+                    $isValid = false;
+                    $errorClass = 'err_image_type_of_property';
+                    break;
+                }
+                if($('input[name="sub_type_of_property"]').prop('checked') == false){
+                    $isValid = false;
+                    $errorClass = "err_type_of_property";
+                }
+        }
+        if(!$isValid){
+            $('.' + $errorClass).show();
+        }
+        return $isValid;
+    }
 });

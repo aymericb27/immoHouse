@@ -1,166 +1,242 @@
 @extends('template')
-
 @section('content')
-<div class="container-fluid px-1 py-5 mx-auto">
-    <div class="row d-flex justify-content-center">
-        <div class="col-xl-7 col-lg-8 col-md-9">
-            <ul id="progressbar" class="text-center">
-                <li class="active step0" id="step1">{{ __('general information')}}</li>
-                <li class="step0" id="step2">{{ __('detailed information')}}</li>
-                <li class="step0" id="step3">{{ __('payment')}}</li>
-                <li class="step0" id="step4">{{ __('validation')}}</li>
-            </ul>
-            <div class="card b-0 show">
-                <pre>
-                {{print_r($property_additionnal_information)}}
-            </pre>
-                <div class="row justify-content-center">
-                    <div class="col-lg-10 col-md-11">
-                             <div class="switch switch--horizontal form-group {!! $errors->has('sale_or_rent') ? 'has-error' : '' !!}">
-                                {{ Form::radio('sale_or_rent', '1', true, ['checked' => "checked"]) }}
-                                {!! Form::label('sale_or_rent', __('sale'), ['class' =>'mb-0']) !!}
-                                {{ Form::radio('sale_or_rent', '0') }}
-                                {!! Form::label('sale_or_rent', __('rent'), ['class' => 'pl-10 mb-0' ]) !!}
+<div class="row h-100 mr-0">
+    <div class="col-md-4 leftPubishFormContainer pt-40">
+        <ul class="mainLeftSideInfo">
+            <li>
+                <div class="d-inline-block"><img src="{!! url('img/icon/property_information.png') !!}"></div>
+                <div class="d-inline-block mainColor">{{ __('property information') }}</div>
+                <div>
+                    <ul class="childLeftSideInfo bar">
+                        <li id="left_form_step-0" class="left_form_step form_step_publish_selected form_step_publish_already_selected">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('type of property') }}</div>
+                        </li>
+                        <li id="left_form_step-1" class="left_form_step">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('address') }}</div>
+                        </li>
+                        <li id="left_form_step-2" class="left_form_step">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('price') }}</div>
+                        </li>
+                        <li id="left_form_step-3" class="left_form_step">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('additional information') }}</div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li id="left_form_step-4" class="left_form_step">
+                <div class="d-inline-block"><img class="icon_contact_details" src="{!! url('img/icon/contact_details.png') !!}"><img class="icon_contact_details_colored" src="{!! url('img/icon/contact_details_colored.png') !!}"></div>
+                <div class="d-inline-block">{{ __('Your contact details') }}</div>
+            </li>
+            <li id="left_form_step-5" class="left_form_step">
+                <div class="d-inline-block"><img class="icon_title_description" src="{!! url('img/icon/title_description.png') !!}"><img class="icon_title_description_colored" src="{!! url('img/icon/title_description_colored.png') !!}"></div>
+                <div class="d-inline-block">{{ __('Title and Description') }}</div>
+            </li>
+            <li id="left_form_step-6" class="left_form_step">
+                <div class="d-inline-block"><img class="icon_payment" src="{!! url('img/icon/payment.png') !!}"><img class="icon_payment_colored" src="{!! url('img/icon/payment_colored.png') !!}"></div>
+                <div class="d-inline-block">{{ __('payment') }}</div>
+            </li>
 
-                                <span class="toggle-outside"><span class="toggle-inside"></span></span>
-                            </div>
-                             <div class="form-group {!! $errors->has('fk_type_of_property') ? 'has-error' : '' !!}">
-                                {!! Form::label('fk_type_of_property', __('type of property'), ['class' => "form-control-label" , 'onblur'=>"validate1(3)"]) !!}
-                                <select class=" form-control" name="fk_type_of_property">
-                                    <option value="1">{{ __('house')}}</option>
-                                    <option value="2">{{ __('flat')}}</option>
-                                    <option value="3">{{ __('office')}}</option>
-                                    <option value="4">{{ __('industrial')}}</option>
-                                    <option value="5">{{ __('business')}}</option>
-                                    <option value="6">{{ __('land')}}</option>
-                                    <option value="7">{{ __('garage')}}</option>
-                                    <option value="8">{{ __('other')}}</option>
-                                </select>
-                                {!! $errors->first('fk_type_of_property', '<small class="help-block">:message</small>') !!}
-                            </div>
-                        <div class="form-group {!! $errors->has('price') ? 'has-error' : '' !!}">
-                            {!! Form::label('price', __('price'), ['class' => "form-control-label" ]) !!}
-                            {!! Form::number ('price', 50000, ['class' => 'form-control']) !!}
-                            {!! $errors->first('price', '<small class="help-block">:message</small>') !!}
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-8 {!! $errors->has('address') ? 'has-error' : '' !!}">
-                                {!! Form::label('address', __('address'), ['class' => "form-control-label" ]) !!}
-                                {!! Form::text ('address', "rue de morimont", ['class' => 'form-control', "id" => "ship-address"]) !!}
-                                {!! $errors->first('address', '<small class="help-block">:message</small>') !!}
-                            </div>
-                            <div class="form-group col-md-4 {!! $errors->has('address_town') ? 'has-error' : '' !!}">
-                                {!! Form::label('address_town', __('town'), ['class' => "form-control-label" ]) !!}
-                                {!! Form::text ('address_town', 45, ['class' => 'form-control', "id" =>'locality']) !!}
-                                {!! $errors->first('address_town', '<small class="help-block">:message</small>') !!}
-                            </div>
-                        </div>
+        </ul>
+    </div>
+    <div class="col-md-8 p-80">
+        {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish']) !!}
+            <div id="form_publish_step-0" class="form_publish_step form_publish_selected">
+                <div class="switch_field mb-50">
+                    <input type="radio" id="sale_radio" name="sale_or_rent" value="1" checked/>
+                    <label for="sale_radio">{{__('for sale')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                    <input type="radio" id="radio-two" name="sale_or_rent" value="0" />
+                    <label for="radio-two">{{__('for rent')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-4 {!! $errors->has('address_number') ? 'has-error' : '' !!}">
-                                {!! Form::label('address_number', __('number'), ['class' => "form-control-label" ]) !!}
-                                {!! Form::number ('address_number', 45, ['class' => 'form-control']) !!}
-                                {!! $errors->first('address_number', '<small class="help-block">:message</small>') !!}
+                <div class="row mb-50">
+                    <div class="col-md-4 image_type_of_property">
+                        <div id="image_type_of_property-house">
+                            <div>
+                                <img class="no_checked" src="{!! url('img/icon/house.png') !!}">
+                                <img class="checked" src="{!! url('img/icon/house_colored.png') !!}">
                             </div>
-                            <div class="form-group col-md-4 {!! $errors->has('address_box') ? 'has-error' : '' !!}">
-                                {!! Form::label('address_box', __('box'), ['class' => "form-control-label" ]) !!}
-                                {!! Form::number ('address_box', 2, ['class' => 'form-control']) !!}
-                                {!! $errors->first('address_box', '<small class="help-block">:message</small>') !!}
+                            <div class="color_link">{{__('house')}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 image_type_of_property">
+                        <div id="image_type_of_property-apartment">
+                            <div>
+                                <img class="no_checked" src="{!! url('img/icon/apartment.png') !!}">
+                                <img class="checked" src="{!! url('img/icon/apartment_colored.png') !!}">
                             </div>
-                            <div class="form-group col-md-4  {!! $errors->has('postal_code') ? 'has-error' : '' !!}">
-                                {!! Form::label('postal_code', __('postal code'), ['class' => "form-control-label" ]) !!}
-                                {!! Form::number ('postal_code', 1340, ['class' => 'form-control', 'id' => "postcode"]) !!}
-                                {!! $errors->first('postal_code', '<small class="help-block">:message</small>') !!}
+                            <div class="color_link">{{__('apartment')}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 image_type_of_property">
+                        <div id="image_type_of_property-other">
+                            <div>
+                                <img class="no_checked" src="{!! url('img/icon/ground.png') !!}">
+                                <img class="checked" src="{!! url('img/icon/ground_colored.png') !!}">
                             </div>
+                            <div class="color_link">{{__('other')}}</div>
+                        </div>
+                    </div>
+                    <div class="row error err_image_type_of_property m-10">
+                        {{__('please select a type of property')}}
+                    </div>
+                </div>
+                <div class="type_of_property type_of_property_house switch_field">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="radio" id="property_house" name="sub_type_of_property" value="1"/>
+                            <label for="property_house">{{__('house')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_bungalow" name="sub_type_of_property" value="1"/>
+                            <label for="property_bungalow">{{__('bungalow')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_country_house" name="sub_type_of_property" value="1"/>
+                            <label for="property_country_house">{{__('country house')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_chalet" name="sub_type_of_property" value="1"/>
+                            <label for="property_chalet">{{__('chalet')}}<img src="{!! url('img/icon/check.png') !!}"></label>
                         </div>
                     </div>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="circle">
-                        <div class="fa fa-long-arrow-right next" id="next1"></div>
+                <div class="type_of_property type_of_property_apartment switch_field">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="radio" id="property_apartment" name="sub_type_of_property" value="1"/>
+                            <label for="property_apartment">{{__('apartment')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_ground_floor" name="sub_type_of_property" value="1"/>
+                            <label for="property_ground_floor">{{__('ground floor')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_penthouse" name="sub_type_of_property" value="1"/>
+                            <label for="property_penthouse">{{__('penthouse')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_duplex" name="sub_type_of_property" value="1"/>
+                            <label for="property_duplex">{{__('duplex')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="type_of_property type_of_property_other switch_field">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="radio" id="property_ground" name="sub_type_of_property" value="1"/>
+                            <label for="property_ground">{{__('land')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_garage" name="sub_type_of_property" value="1"/>
+                            <label for="property_garage">{{__('garage')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_office" name="sub_type_of_property" value="1"/>
+                            <label for="property_office">{{__('office')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_industry" name="sub_type_of_property" value="1"/>
+                            <label for="property_industry">{{__('industry')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="radio" id="property_business" name="sub_type_of_property" value="1"/>
+                            <label for="property_business">{{__('business')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_farm" name="sub_type_of_property" value="1"/>
+                            <label for="property_farm">{{__('farm')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="radio" id="property_other" name="sub_type_of_property" value="1"/>
+                            <label for="property_other">{{__('other')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row error err_type_of_property m-10">
+                    {{__('please select a sub-type of property')}}
+                </div>
+                <div class="form_publish_btn p-20">
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-1")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-1" class="form_publish_step">
+                address
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-0">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-2")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-2" class="form_publish_step">
+                price
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-1">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-3")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-3" class="form_publish_step">
+                additional information
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-2">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-4")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-4" class="form_publish_step">
+                Your contact details
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-3">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-5")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-5" class="form_publish_step">
+                Title and Description
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-4">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-6" class="form_publish_step">
+                payment
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-5">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card b-0">
-                <div class="fa fa-long-arrow-left prev"> </div>
-                <div class="row justify-content-center">
-                    <div class="col-lg-10 col-md-11">
-                        <div class="form-group"> <label class="form-control-label">What is the website title?</label> <input type="text" id="web-title" name="web-title" placeholder="Enter your website title here ..." class="" onblur="validate2(1)"> </div>
-                        <div class="row">
-
-                            <div class="form-group col-md-6 {!! $errors->has('living_space') ? 'has-error' : '' !!}">
-                                {!! Form::label('living_space', __('living space')) !!}
-                                {!! Form::number ('living_space', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('living_space', '<small class="help-block">:message</small>') !!}
-                            </div>
-
-                            <div class="form-group col-md-6 {!! $errors->has('nbr_bathroom') ? 'has-error' : '' !!}">
-                                {!! Form::label('nbr_bathroom', __('number of bathroom')) !!}
-                                {!! Form::number ('nbr_bathroom', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('nbr_bathroom', '<small class="help-block">:message</small>') !!}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6 {!! $errors->has('year_construct') ? 'has-error' : '' !!} " >
-                                {!! Form::label('year_construct', __('year of construct')) !!}
-                                {!! Form::number ('year_construct', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('year_construct', '<small class="help-block">:message</small>') !!}
-                            </div>
-
-                            <div class="form-group col-md-6 {!! $errors->has('nbr_floor') ? 'has-error' : '' !!} " >
-                                {!! Form::label('nbr_floor', __('number of floor')) !!}
-                                {!! Form::text ('nbr_floor', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('nbr_floor', '<small class="help-block">:message</small>') !!}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 {!! $errors->has('nbr_facade') ? 'has-error' : '' !!} " >
-                                {!! Form::label('nbr_facade', __('number of facade')) !!}
-                                {!! Form::number ('nbr_facade', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('nbr_facade', '<small class="help-block">:message</small>') !!}
-                            </div>
-                            <div class="form-group col-md-6 {!! $errors->has('nbr_toilet') ? 'has-error' : '' !!} " >
-                                {!! Form::label('nbr_toilet', __('number of toilet')) !!}
-                                {!! Form::number ('nbr_toilet', 1, ['class' => 'form-control']) !!}
-                                {!! $errors->first('nbr_toilet', '<small class="help-block">:message</small>') !!}
-                            </div>
-                        </div>
-                        <div class="form-group {!! $errors->has('fk_condition_building') ? 'has-error' : '' !!}">
-                            {!! Form::label('fk_condition_building', __('condition of the building')) !!}
-                            <select class=" form-control" name="fk_condition_building">
-                                <option value="1">{{ __('Excellent')}}</option>
-                                <option value="2">{{ __('Satisfactory')}}</option>
-                                <option value="3">{{ __('Conditional')}}</option>
-                            </select>
-                            {!! $errors->first('fk_condition_building', '<small class="help-block">:message</small>') !!}
-                        </div>
-                        <div class="form-group {!! $errors->has('description') ? 'has-error' : '' !!}">
-                            {!! Form::label('description', __('description')) !!}
-                            {!! Form::textarea ('description', 1, ['class' => 'form-control' ]) !!}
-                            {!! $errors->first('description', '<small class="help-block">:message</small>') !!}
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="circle">
-                        <div class="fa fa-long-arrow-right next" id="next2"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="card b-0">
-                <div class="row d-flex justify-content-center text-center">
-                    <div class="confirm">
-                        <h4 class="mb-2">Thank You !</h4>
-                        <p>An estimation will be sent on your email address.</p>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="check"> <img src="https://i.imgur.com/g6KlBWR.gif" class="check-mark"> </div>
-                </div>
-            </div>
-        </div>
+        {!! Form::close() !!}
     </div>
 </div>
 @endsection

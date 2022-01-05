@@ -2379,6 +2379,7 @@
     display: inline-block;
     font-weight: 400;
     color: #ffffff;
+    border-radius: 2px;
     /* background-color: white; */
     text-align: center;
     vertical-align: middle;
