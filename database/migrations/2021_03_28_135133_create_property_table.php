@@ -25,6 +25,9 @@ class CreatePropertyTable extends Migration
             $table->integer('fk_energy_class')->unsigned();
             $table->integer('fk_type_of_property')->unsigned();
             $table->integer('fk_user')->unsigned();
+            $table->integer('has_garden');
+            $table->integer('has_swimming_pool');
+            $table->integer('has_terrace');
             $table->integer('living_space')->nullable();
             $table->integer('is_online');
             $table->integer('kitchen_area')->nullable();

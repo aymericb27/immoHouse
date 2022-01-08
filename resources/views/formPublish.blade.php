@@ -22,20 +22,28 @@
                         </li>
                         <li id="left_form_step-3" class="left_form_step">
                             <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
-                            <div class="d-inline-block">{{ __('additional information') }}</div>
+                            <div class="d-inline-block">{{ __('photo') }}</div>
+                        </li>
+                        <li id="left_form_step-4" class="left_form_step">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('general information') }}</div>
+                        </li>
+                        <li id="left_form_step-5" class="left_form_step">
+                            <div class="d-inline-block"><img class="round_empty" src="{!! url('img/icon/round_empty.png') !!}"> <img class="round_empty_colored" src="{!! url('img/icon/round_empty_colored.png') !!}"> <img class="round_checked" src="{!! url('img/icon/round_checked.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('energy') }}</div>
                         </li>
                     </ul>
                 </div>
             </li>
-            <li id="left_form_step-4" class="left_form_step">
-                <div class="d-inline-block"><img class="icon_contact_details" src="{!! url('img/icon/contact_details.png') !!}"><img class="icon_contact_details_colored" src="{!! url('img/icon/contact_details_colored.png') !!}"></div>
-                <div class="d-inline-block">{{ __('Your contact details') }}</div>
-            </li>
-            <li id="left_form_step-5" class="left_form_step">
-                <div class="d-inline-block"><img class="icon_title_description" src="{!! url('img/icon/title_description.png') !!}"><img class="icon_title_description_colored" src="{!! url('img/icon/title_description_colored.png') !!}"></div>
-                <div class="d-inline-block">{{ __('Title and Description') }}</div>
-            </li>
             <li id="left_form_step-6" class="left_form_step">
+                <div class="d-inline-block"><img class="icon_contact_details" src="{!! url('img/icon/contact_details.png') !!}"><img class="icon_contact_details_colored" src="{!! url('img/icon/contact_details_colored.png') !!}"></div>
+                <div class="d-inline-block">{{ __('your contact details') }}</div>
+            </li>
+            <li id="left_form_step-7" class="left_form_step">
+                <div class="d-inline-block"><img class="icon_title_description" src="{!! url('img/icon/title_description.png') !!}"><img class="icon_title_description_colored" src="{!! url('img/icon/title_description_colored.png') !!}"></div>
+                <div class="d-inline-block">{{ __('description') }}</div>
+            </li>
+            <li id="left_form_step-8" class="left_form_step">
                 <div class="d-inline-block"><img class="icon_payment" src="{!! url('img/icon/payment.png') !!}"><img class="icon_payment_colored" src="{!! url('img/icon/payment_colored.png') !!}"></div>
                 <div class="d-inline-block">{{ __('payment') }}</div>
             </li>
@@ -45,11 +53,12 @@
     <div class="col-md-8 p-80">
         {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish']) !!}
             <div id="form_publish_step-0" class="form_publish_step form_publish_selected">
+                <h2>{{ __('type of property') }}</h2>
                 <div class="switch_field mb-50">
                     <input type="radio" id="sale_radio" name="sale_or_rent" value="1" checked/>
                     <label for="sale_radio">{{__('for sale')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                    <input type="radio" id="radio-two" name="sale_or_rent" value="0" />
-                    <label for="radio-two">{{__('for rent')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                    <input type="radio" id="rent_radio" name="sale_or_rent" value="0" />
+                    <label for="rent_radio">{{__('for rent')}}<img src="{!! url('img/icon/check.png') !!}"></label>
                 </div>
 
                 <div class="row mb-50">
@@ -166,31 +175,112 @@
                 </div>
             </div>
             <div id="form_publish_step-1" class="form_publish_step">
-                address
-                <div class="form_publish_btn p-20">
-                    <div>
-                        <div class="previousPublishButton" id="step_publish_previous-0">
+                <h2>{{ __('address') }}</h2>
+                <div class="row">
+                    <div class="form-group col-md-8 {!! $errors->has('street') ? 'has-error' : '' !!}">
+                        {!! Form::label('street', __('street'), ['class' => "form-control-label" ]) !!}
+                        {!! Form::text ('street', "rue de morimont", ['class' => 'form-control', "id" => "ship-address"]) !!}
+                        {!! $errors->first('street', '<small class="help-block">:message</small>') !!}
+                        <div class="row error err_street pl-15">
+                            {{__('the field street is required')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-5 {!! $errors->has('town') ? 'has-error' : '' !!}">
+                        {!! Form::label('town', __('town'), ['class' => "form-control-label" ]) !!}
+                        {!! Form::text ('town', 45, ['class' => 'form-control', "id" =>'locality']) !!}
+                        {!! $errors->first('town', '<small class="help-block">:message</small>') !!}
+                        <div class="row error err_town pl-15">
+                            {{__('the field town is required')}}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3  {!! $errors->has('postal_code') ? 'has-error' : '' !!}">
+                        {!! Form::label('postal_code', __('postal code'), ['class' => "form-control-label" ]) !!}
+                        {!! Form::number ('postal_code', 1340, ['class' => 'form-control', 'id' => "postcode"]) !!}
+                        {!! $errors->first('postal_code', '<small class="help-block">:message</small>') !!}
+                        <div class="row error err_postal_code pl-15">
+                            {{__('the field postal code is required')}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4 {!! $errors->has('address_number') ? 'has-error' : '' !!}">
+                        {!! Form::label('address_number', __('number'), ['class' => "form-control-label" ]) !!}
+                        {!! Form::number ('address_number', 45, ['class' => 'form-control']) !!}
+                        {!! $errors->first('address_number', '<small class="help-block">:message</small>') !!}
+                        <div class="row error err_address_number pl-15">
+                            {{__('the field number is required')}}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4 {!! $errors->has('address_box') ? 'has-error' : '' !!}">
+                        {!! Form::label('address_box', __('box'), ['class' => "form-control-label" ]) !!}
+                        {!! Form::number ('address_box', 2, ['class' => 'form-control']) !!}
+                        {!! $errors->first('address_box', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form_publish_btn row">
+                    <div class="col-md-4">
+                        <div class="previousPublishButton row" id="step_publish_previous-0">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-2")) }}
+                    <div class="col-md-4 pr-0">
+                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-2")) }}
+                    </div>
+
                 </div>
             </div>
             <div id="form_publish_step-2" class="form_publish_step">
-                price
-                <div class="form_publish_btn p-20">
-                    <div>
+                <h2>{{ __('price') }}</h2>
+                <div class="form-group col-md-8 {!! $errors->has('price') ? 'has-error' : '' !!}">
+                    {!! Form::label('price', __('price'), ['class' => "form-control-label" ]) !!}
+                    {!! Form::number ('price', 50000, ['class' => 'form-control']) !!}
+                    {!! $errors->first('price', '<small class="help-block">:message</small>') !!}
+                    <div class="row error err_price pl-15">
+                        {{__('the field price is required')}}
+                    </div>
+                </div>
+                <div class="form-group col-md-8 {!! $errors->has('monthly_costs') ? 'has-error' : '' !!}">
+                    <label for="monthly_costs" class="form-control-label"> {{__('monthly costs')}} <span>({{__('optional')}})</span></label>
+                    {!! Form::number ('monthly_costs', 50000, ['class' => 'form-control']) !!}
+                    {!! $errors->first('monthly_costs', '<small class="help-block">:message</small>') !!}
+                </div>
+                <div class="form-group col-md-8 d_sale {!! $errors->has('cadastral_income') ? 'has-error' : '' !!}">
+                    <label for="cadastral_income" class="form-control-label"> {{__('cadastral income')}} <span>({{__('optional')}})</span></label>
+                    {!! Form::number ('cadastral_income', 50000, ['class' => 'form-control']) !!}
+                    {!! $errors->first('cadastral_income', '<small class="help-block">:message</small>') !!}
+                </div>
+                <div class="form-group col-md-8 d_sale {!! $errors->has('price_square_meter') ? 'has-error' : '' !!}">
+                    <label for="price_square_meter" class="form-control-label"> {{__('price by m²')}} <span>({{__('optional')}})</span></label>
+                    {!! Form::number ('price_square_meter', 50000, ['class' => 'form-control']) !!}
+                    {!! $errors->first('price_square_meter', '<small class="help-block">:message</small>') !!}
+                </div>
+                <div class="form_publish_btn row">
+                    <div class="col-md-4">
                         <div class="previousPublishButton" id="step_publish_previous-1">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-3")) }}
+                    <div class="col-md-4 pr-0">
+                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-3")) }}
+                    </div>
                 </div>
             </div>
             <div id="form_publish_step-3" class="form_publish_step">
-                additional information
+                <h2>{{ __('photo') }}</h2>
+                <div class="gallery_property">
+                    <label for='property_picture' class='custom-file-upload btn'>
+                        {{__('select photos')}}
+                        <input type='file' name='property_pictures' id='property_picture' class="form-control property-pictures" multiple>
+                    </label>
+                </div>
+                <div class="row files" id="files1">
+                    <ul class="fileList"></ul>
+                </div>
+                {!! $errors->first('property_pictures', '<small class="help-block">:message</small>') !!}
                 <div class="form_publish_btn p-20">
                     <div>
                         <div class="previousPublishButton" id="step_publish_previous-2">
@@ -202,6 +292,136 @@
                 </div>
             </div>
             <div id="form_publish_step-4" class="form_publish_step">
+                <h2>{{ __('general information') }}</h2>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('nbr_bedroom') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/bedroom.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="nbr_bedroom" class="form-control-label d-inline-block"> {{__('number of bedroom')}} <span>({{__('optional')}})</span></label>
+
+                        <div class="less_or_plus_box">
+                            <div class="btn d-inline-block less">-</div>
+                            {!! Form::number ('nbr_bedroom', 4, ['class' => 'form-control d-inline-block pl-40', "min"=> 0 , "step" => 1, "oninput" => "validity.valid||(value='');"]) !!}
+                            <div class="btn d-inline-block plus">+</div>
+                        </div>
+                        {!! $errors->first('nbr_bedroom', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('nbr_bathroom') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/bath.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="nbr_bathroom" class="form-control-label d-inline-block"> {{__('number of bathroom')}} <span>({{__('optional')}})</span></label>
+                        <div class="less_or_plus_box">
+                            <div class="btn d-inline-block less">-</div>
+                            {!! Form::number ('nbr_bathroom', 4, ['class' => 'form-control d-inline-block pl-40', "min"=> 0 , "step" => 1, "oninput" => "validity.valid||(value='');"]) !!}
+                            <div class="btn d-inline-block plus">+</div>
+                        </div>
+                        {!! $errors->first('nbr_bathroom', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('nbr_toilet') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/toilet.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="nbr_toilet" class="form-control-label d-inline-block"> {{__('number of toilet')}} <span>({{__('optional')}})</span></label>
+                        <div class="less_or_plus_box">
+                            <div class="btn d-inline-block less">-</div>
+                            {!! Form::number ('nbr_toilet', 4, ['class' => 'form-control d-inline-block pl-40', "min"=> 0 , "step" => 1, "oninput" => "validity.valid||(value='');"]) !!}
+                            <div class="btn d-inline-block plus">+</div>
+                        </div>
+                        {!! $errors->first('nbr_toilet', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('nbr_room') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/plans.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="nbr_room" class="form-control-label d-inline-block"> {{__('number of room')}} <span>({{__('optional')}})</span></label>
+                        <div class="less_or_plus_box">
+                            <div class="btn d-inline-block less">-</div>
+                            {!! Form::number ('nbr_room', 4, ['class' => 'form-control d-inline-block pl-40', "min"=> 0 , "step" => 1, "oninput" => "validity.valid||(value='');"]) !!}
+                            <div class="btn d-inline-block plus">+</div>
+                        </div>
+                        {!! $errors->first('nbr_room', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('total_area') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/house_size.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="total_area" class="form-control-label d-inline-block"> {{__('total area')}} <span>({{__('optional')}})</span></label>
+                        {!! Form::number ('total_area', 4, ['class' => 'form-control d-inline-block', "min"=> 0 , "step" => 1, "oninput" => "validity.valid||(value='');"]) !!}
+                        {!! $errors->first('total_area', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('has_garden') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/garden.png') !!}"></div>
+                    <div class="col-md-6">
+                        <label for="total_area" class="form-control-label d-inline-block"> {{__('garden')}}</label>
+                        <div class="switch_field text-left">
+                            <input type="radio" id="has_garden_no" name="has_garden" value="0" checked/>
+                            <label for="has_garden_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <input type="radio" id="has_garden_yes" name="has_garden" value="1" />
+                            <label for="has_garden_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('has_swimming_pool') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/swimming_pool.png') !!}"></div>
+                    <div class="col-md-6">
+                        <label for="has_swimming_pool" class="form-control-label d-inline-block"> {{__('swimming pool')}}</label>
+                        <div class="switch_field text-left">
+                            <input type="radio" id="has_swimming_pool_no" name="has_swimming_pool" value="0" checked/>
+                            <label for="has_swimming_pool_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <input type="radio" id="has_swimming_pool_yes" name="has_swimming_pool" value="1" />
+                            <label for="has_swimming_pool_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('has_terrace') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/terrace.png') !!}"></div>
+                    <div class="col-md-6">
+                        <label for="has_terrace" class="form-control-label d-inline-block"> {{__('terrace')}}</label>
+                        <div class="switch_field text-left">
+                            <input type="radio" id="has_terrace_no" name="has_terrace" value=0 checked/>
+                            <label for="has_terrace_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <input type="radio" id="has_terrace_yes" name="has_terrace" value="1" />
+                            <label for="has_terrace_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('has_terrace') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/living_room.png') !!}"></div>
+                    <div class="col-md-6">
+                        <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}}</label>
+                        @foreach ($property_other_room as $other_room)
+                            <div class="pb-10 pt-10">
+                                {!! Form::checkbox ('property_other_room', $other_room->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_".$other_room->id]) !!}
+                                <label for="checkbox_property_other_room_{{$other_room->id}}" name="checkbox2_lbl" class="css-label lite-blue-check"> {{ $other_room->room}}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-3">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-5")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-5" class="form_publish_step">
+                <h2>{{ __('energy') }}</h2>
+                additional information
+                <div class="form_publish_btn p-20">
+                    <div>
+                        <div class="previousPublishButton" id="step_publish_previous-4">
+                            <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
+                            <div class="d-inline-block">{{ __('previous') }}</div>
+                        </div>
+                    </div>
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
+                </div>
+            </div>
+            <div id="form_publish_step-6" class="form_publish_step">
                 Your contact details
                 <div class="form_publish_btn p-20">
                     <div>
@@ -239,4 +459,6 @@
         {!! Form::close() !!}
     </div>
 </div>
+<script src="{!! url('js/autoCompleteAdress.js') !!}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 @endsection

@@ -6,6 +6,7 @@
     <link href=" {!! url('css/bootstrap.css') !!}" rel="stylesheet"/>
     <link rel="stylesheet" href="{!! url('css/fontawesome-free-5.15.3-web/css/all.css')  !!}">
     <link rel="stylesheet" href=" {!! url('css/main.css') !!}">
+    <link rel="stylesheet" href=" {!! url('css/checkbox.css') !!}">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
@@ -68,9 +69,8 @@
 </body>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="{!! url('js/payment.js') !!}"></script>
-<script src="{!! url('js/autoCompleteAdress.js') !!}"></script>
 <script src="{!! url('js/main.js') !!}"></script>
 <script src="{!! url('js/form.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+
 </html>

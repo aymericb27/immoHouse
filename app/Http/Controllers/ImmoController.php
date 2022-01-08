@@ -14,7 +14,9 @@ class ImmoController extends Controller
     public function publish(ImmoRepository $immoRepository){
 
 
-        return view('formPublish', ["property_additionnal_information" => $immoRepository->getPropertyAdditionnalInformation()]);
+        return view('formPublish', [
+            "property_additionnal_information" => $immoRepository->getPropertyAdditionnalInformation(),
+            "property_other_room" => $immoRepository->getPropertyOtherRoom()]);
     }
 
     public function postInfoGeneral(infoGeneralRequest $request, ImmoRepository $immoRepository){

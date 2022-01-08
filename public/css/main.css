@@ -31,6 +31,11 @@ header{
     border-bottom: 1px solid #d4d4d4;
 }
 
+h2{
+    margin-bottom: 50px;
+    color: #3a7dba;
+}
+
 #message_popup{
     background-color: #51ad55;
     color: whitesmoke;
@@ -85,13 +90,7 @@ header{
 }
 
 .custom-file-upload{
-    border: 1px solid #568fc3;
-    padding: 20px;
     cursor: pointer;
-}
-
-.custom-file-upload .fa-plus{
-    font-size: 32px;
 }
 
 .property-pictures{
@@ -100,16 +99,17 @@ header{
 
 .fileList{
     list-style-type: none;
+    padding-left: 0;
 }
 
 .fileList li {
     display: inline-block;
-    width: 20%;
+    width: 25%;
 }
 
 .fileList img{
-    padding: 10px;
-    width: 100%;
+    width: 90%;
+    border: 1px solid #3a7dba;
 }
 .removeFile .fa-trash{
     font-size: 25px;
@@ -185,8 +185,6 @@ header{
 }
 
 .form_publish_btn{
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
 
@@ -343,4 +341,38 @@ header{
 .error{
     color: #df0000;
     display: none;
+}
+
+.form-control-label{
+	color: #3a7dba;
+}
+
+.form-control-label span{
+	font-size: small;
+}
+
+.rent .d_sale{
+    display: none;
+}
+
+.sale .d_sale{
+    display: block;
+}
+
+.icon_form_publish img {
+    width: 75px;
+    height: 75px;
+}
+
+.less_or_plus_box{
+    position: relative;
+}
+
+.less_or_plus_box .less, .less_or_plus_box .plus{
+    position: absolute;
+    cursor: pointer;
+}
+
+.less_or_plus_box .plus{
+    right: 0px;
 }

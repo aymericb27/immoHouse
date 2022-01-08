@@ -4,6 +4,7 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
+use App\Models\PropertyOtherRoom;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -20,6 +21,11 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     public function saveInSession($property){
         session(['property' => $property]);
+    }
+
+    public function getPropertyOtherRoom(){
+        $propertyOtherRoom = PropertyOtherRoom::select('room_'.strtoupper(app()->getLocale()) . ' as room', 'id')->get();
+        return $propertyOtherRoom;
     }
 
     public function getPropertyById($idProperty)
