@@ -16,7 +16,11 @@ class ImmoController extends Controller
 
         return view('formPublish', [
             "property_additionnal_information" => $immoRepository->getPropertyAdditionnalInformation(),
-            "property_other_room" => $immoRepository->getPropertyOtherRoom()]);
+            "property_other_room" => $immoRepository->getPropertyOtherRoom(),
+            "energy_class"=>  $immoRepository->getEnergyClass(),
+            "heating_type" => $immoRepository->getHeatingTYpe(),
+            "contact_mail" =>auth()->user()->email,
+        ]);
     }
 
     public function postInfoGeneral(infoGeneralRequest $request, ImmoRepository $immoRepository){

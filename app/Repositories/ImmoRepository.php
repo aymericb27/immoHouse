@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use App\Models\PropertyOtherRoom;
+use App\Models\EnergyClass;
+use App\Models\HeatingType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -23,9 +25,31 @@ class ImmoRepository implements ImmoRepositoryInterface
         session(['property' => $property]);
     }
 
+    public function getHeatingTYpe(){
+        $heatingType = HeatingType::select('heating_type_' . strtoupper(app()->getLocale()). ' as heating_type', 'id')->get();
+        return $heatingType;
+    }
+
+    public function getEnergyClass(){
+        $undefined = new \stdClass();
+        $undefined->id = "undefined";
+        switch(app()->getLocale()){
+            case 'FR': $undefined->class = "non défini"; break;
+            case 'EN': $undefined->class = "undefined"; break;
+            case 'NL': $undefined->class = "onbepaald"; break;
+            default: $undefined->class = "undefined";
+        }
+        $energyClass = EnergyClass::all();
+        $retEnergyClass = [];
+        $retEnergyClass[0] = $undefined;
+        for ($i = 0; $i < count($energyClass); $i++) {
+            $retEnergyClass[$i + 1] = $energyClass[$i];
+        }
+        return $retEnergyClass;
+    }
+
     public function getPropertyOtherRoom(){
-        $propertyOtherRoom = PropertyOtherRoom::select('room_'.strtoupper(app()->getLocale()) . ' as room', 'id')->get();
-        return $propertyOtherRoom;
+        return PropertyOtherRoom::select('room_'.strtoupper(app()->getLocale()) . ' as room', 'id')->get();
     }
 
     public function getPropertyById($idProperty)

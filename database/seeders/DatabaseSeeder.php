@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PropertyOtherRoomSeeder::class,
+            EnergyClass::class,
+            HeatingType::class,
         ]);
         // \App\Models\User::factory(10)->create();
     }

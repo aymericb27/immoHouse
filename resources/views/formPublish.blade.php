@@ -53,6 +53,7 @@
     <div class="col-md-8 p-80">
         {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish']) !!}
             <div id="form_publish_step-0" class="form_publish_step form_publish_selected">
+                <pre>{{print_r($energy_class,1)}}</pre>
                 <h2>{{ __('type of property') }}</h2>
                 <div class="switch_field mb-50">
                     <input type="radio" id="sale_radio" name="sale_or_rent" value="1" checked/>
@@ -386,10 +387,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row mb-50 col-md-12 {!! $errors->has('has_terrace') ? 'has-error' : '' !!}">
+                <div class="form-group row mb-50 col-md-12 {!! $errors->has('property_other_room') ? 'has-error' : '' !!}">
                     <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/living_room.png') !!}"></div>
                     <div class="col-md-6">
-                        <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}}</label>
+                        <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}}<span>({{__('optional')}})</span></label>
                         @foreach ($property_other_room as $other_room)
                             <div class="pb-10 pt-10">
                                 {!! Form::checkbox ('property_other_room', $other_room->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_".$other_room->id]) !!}
@@ -410,7 +411,30 @@
             </div>
             <div id="form_publish_step-5" class="form_publish_step">
                 <h2>{{ __('energy') }}</h2>
-                additional information
+                <div class="form-group row {!! $errors->has('energy_class') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/green-energy.png') !!}"></div>
+                    <div class="col-md-4">
+                        <label for="energy_class" class="form-control-label">{{__('energy class')}}<span> ({{__('optional')}})</span></label>
+                        <select class="form-control" name="energy_class">
+                            @foreach ( $energy_class as $class)
+                                {{-- <option value="{{$class->id}}"> {{$class->class}}</option> --}}
+                            @endforeach
+                        </select>
+                        {!! $errors->first('energy_class', '<small class="help-block">:message</small>') !!}
+                    </div>
+                </div>
+                <div class="form-group row mb-50 col-md-12 pl-0 {!! $errors->has('has_terrace') ? 'has-error' : '' !!}">
+                    <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/heater.png') !!}"></div>
+                    <div class="col-md-6">
+                        <label for="heating_type" class="form-control-label d-inline-block"> {{__('heating type')}}</label>
+                        @foreach ($heating_type as $type)
+                            <div class="pb-10 pt-10">
+                                {!! Form::checkbox ('heating_type', $type->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_heating_type_".$type->id]) !!}
+                                <label for="checkbox_heating_type_{{$type->id}}" name="checkbox2_lbl" class="css-label lite-blue-check"> {{ $type->heating_type}}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
                 <div class="form_publish_btn p-20">
                     <div>
                         <div class="previousPublishButton" id="step_publish_previous-4">
@@ -421,8 +445,25 @@
                     {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
                 </div>
             </div>
+
             <div id="form_publish_step-6" class="form_publish_step">
-                Your contact details
+                <div class="form-group col-md-6 {!! $errors->has('contact_email') ? 'has-error' : '' !!}">
+                    {!! Form::label('contact_email', __('email'), ['class' => "form-control-label" ]) !!}
+                    {{ Form::email('contact_email',$contact_mail, ['class' => 'form-control'])}}
+                    {!! $errors->first('contact_email', '<small class="help-block">:message</small>') !!}
+                    <div class="row error err_contact_email pl-15">
+                        {{__('the field e-mail is required')}}
+                    </div>
+                </div>
+                <div class="form-group col-md-6 {!! $errors->has('contact_phone_number') ? 'has-error' : '' !!}">
+                    {!! Form::label('contact_phone_number', __('phone number'), ['class' => "form-control-label" ]) !!}
+                    {{ Form::email('contact_phone_number',$contact_mail, ['class' => 'form-control'])}}
+                    {!! $errors->first('contact_phone_number', '<small class="help-block">:message</small>') !!}
+                    <div class="row error err_contact_phone_number pl-15">
+                        {{__('the field phone number is required')}}
+                    </div>
+                </div>
+
                 <div class="form_publish_btn p-20">
                     <div>
                         <div class="previousPublishButton" id="step_publish_previous-3">
@@ -433,7 +474,7 @@
                     {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-5")) }}
                 </div>
             </div>
-            <div id="form_publish_step-5" class="form_publish_step">
+            <div id="form_publish_step-7" class="form_publish_step">
                 Title and Description
                 <div class="form_publish_btn p-20">
                     <div>
@@ -445,7 +486,7 @@
                     {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
                 </div>
             </div>
-            <div id="form_publish_step-6" class="form_publish_step">
+            <div id="form_publish_step-8" class="form_publish_step">
                 payment
                 <div class="form_publish_btn p-20">
                     <div>
