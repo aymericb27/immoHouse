@@ -32,7 +32,7 @@ header{
 }
 
 h2{
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     color: #3a7dba;
 }
 
@@ -100,28 +100,61 @@ h2{
 .fileList{
     list-style-type: none;
     padding-left: 0;
+    width: 100%;
 }
 
 .fileList li {
     display: inline-block;
-    width: 25%;
+    height: 150px;
+    margin: 1%;
+    width: 23%;
+    position: relative;
+    border: 1px solid #9393a1;
+    border-radius: 3px;
+    background-color: #9393932e;
 }
 
-.fileList img{
-    width: 90%;
-    border: 1px solid #3a7dba;
+.fileList div{
+	background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    width:100%;
+    height:100%;
 }
-.removeFile .fa-trash{
+
+.removeFile .fa-trash, .makePhotoMain .fa-star{
     font-size: 25px;
 }
+
+.removeFile:hover{
+	    color: #ff5656b8;
+}
+
+.makePhotoMain:hover{
+      color : #9393a1c2;
+}
+.makePhotoMain.mainPhoto {
+	color: #f7e333;
+}
+.makePhotoMain{
+    color : #9393a1;
+    position: absolute;
+    right: 3%;
+    top: 5px;
+    background: whitesmoke;
+    padding: 4px;
+    border-radius: 2px;
+}
+
 .removeFile {
     position: relative;
-    top: -40px;
-    left: 10px;
-    vertical-align: top;
+    bottom: -110px;
+    left: 3%;
+    /* vertical-align: top; */
     background: whitesmoke;
     color: #ff5656;
     padding: 7px;
+    border-radius: 2px;
 }
 
 .list_property .picture
@@ -233,6 +266,7 @@ h2{
 
 .form_step_publish_selected {
     font-weight: 500;
+    color:#3a7dba
 }
 
 .previousPublishButton img{
@@ -351,12 +385,8 @@ h2{
 	font-size: small;
 }
 
-.rent .d_sale{
+.rent .d_sell, .sell .d_rent{
     display: none;
-}
-
-.sale .d_sale{
-    display: block;
 }
 
 .icon_form_publish img {
@@ -375,4 +405,77 @@ h2{
 
 .less_or_plus_box .plus{
     right: 0px;
+}
+
+.description_btn_box div{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 1px solid #9393a1;
+	color: #9393a1;
+	border-right: 0px;
+	border-bottom: 0px;
+	cursor: pointer;
+}
+
+.description_btn_box div:last-child{
+	border-right: 1px solid;
+}
+
+.description_btn_selected {
+	color: #3a7dba !important;
+	border-color: #3a7dba !important;
+}
+.description_btn_selected + div {
+	border-left-color:  #3a7dba !important;
+}
+
+.description_box textarea{
+    display: none;
+}
+
+.description_selected {
+    display: block !important;
+}
+
+.pack_price {
+    display: none;
+}
+
+.week_selected{
+    display: block;
+}
+
+.formula_type{
+	padding: 5px;
+	text-align: center;
+	border: 1px solid #9393a1;
+	height: 350px;
+}
+
+.formula_type .switch_field{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+}
+.pack_selected {
+    border-color:  #3a7dba;
+}
+
+.pack_selected h4{
+	color:  #3a7dba;
+}
+
+.price_check{
+	width: 20px;
+	height: 20px;
+	padding: 3px;
+}
+
+.sub_type_property_option ,.sub_type_property{
+    display: none;
+}
+
+.sub_type_property_option_selected{
+    display: block;
 }

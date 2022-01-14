@@ -1,22 +1,38 @@
-$(document).ready(function() {
+$(function() {
     $('.nextPublishButton').on('click',function(){
         if(validatePublishForm()){
-            $step = $(this).attr('id').split('-')[1];
+            $step = parseInt($('.form_publish_selected').attr('id').split('-')[1]) + 1;
             $('#left_form_step-' + $step).addClass('form_step_publish_already_selected');
             goToStep($step);
         }
     });
 
-    $('input[name="sale_or_rent"]').on('change',function(){
-        $value = parseInt($(this).val());
-        $('#form_publish_step-2').removeClass('rent sale');
-        ($value) ? $('#form_publish_step-2').addClass('sale') : $('#form_publish_step-2').addClass('rent');
+    $('.previousPublishButton').on('click',function(){
+        if(validatePublishForm()){
+            $step = parseInt($('.form_publish_selected').attr('id').split('-')[1]) - 1;
+            goToStep($step);
+        }
+
     })
 
-    $('.previousPublishButton').on('click',function(){
-        $step = $(this).attr('id').split('-')[1];
-        goToStep($step);
+    $('input[name="sale_or_rent"]').on('change',function(){
+        $value = parseInt($(this).val());
+        $('#formPublish').removeClass('rent sell');
+        ($value === 1)? $('#formPublish').addClass('sell') : $('#formPublish').addClass('rent')
+
+        $('.pack_selected').removeClass('pack_selected');
+        $( 'input[name="pack"]' ).prop( "checked", false );
     })
+
+    $('input[name="pack"]').on('change',function(){
+        $('.pack_selected').removeClass('pack_selected');
+        $(this).parent().parent().parent().addClass('pack_selected');
+    })
+
+    $('select[name="number_week"]').on('change',function(){
+        selectPriceByWeek($(this).val());
+    })
+
 
     $('.left_form_step').on('click',function(){
         $step = $(this).attr('id').split('-')[1];
@@ -28,11 +44,18 @@ $(document).ready(function() {
     })
 
     $('.image_type_of_property > div').on('click',function(){
-        $type = $(this).attr('id').split('-')[1];
-        $( 'input[name="sub_type_of_property"]' ).prop( "checked", false );
-        $('.type_of_property_selected').removeClass('type_of_property_selected');
-        $('.type_of_property_' + $type).addClass('type_of_property_selected');
+        $typeId = $(this).attr('id').split('-')[1];
+        $val = 1;
+        switch($typeId){
+            case '1' : $val = 1; break;
+            case '2' : $val = 9; break;
+            case '3' : $val = 16; break;
+        }
+        $('select[name="sub_type_property"]').val($val);
+        $('.sub_type_property_option_selected').removeClass('sub_type_property_option_selected');
+        $('.property_type-' + $typeId).addClass('sub_type_property_option_selected');
         $('.image_type_of_property_selected').removeClass('image_type_of_property_selected');
+        $('.sub_type_property').show();
         $(this).addClass('image_type_of_property_selected');
     })
 
@@ -58,6 +81,14 @@ $(document).ready(function() {
     function changeLessOrPlusInput($val,$input){
         $input.val($val);
     }
+
+    $('.description_btn_box div').on('click', function(){
+        $('.description_btn_selected').removeClass('description_btn_selected');
+        $(this).addClass('description_btn_selected');
+        $('.description_selected').removeClass('description_selected');
+        $id = $(this).attr('id').split('-')[0];
+        $('#'+ $id).addClass('description_selected');
+    })
 
     function validatePublishForm(){
         $('.error').hide();
@@ -110,7 +141,7 @@ $(document).ready(function() {
         return $isValid;
     }
 
-    $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
+    $.fn.fileUploader = function (mainPhoto,filesToUpload, sectionIdentifier) {
         var fileIdCounter = 0;
 
         $("#property_picture").on('change',function (evt) {
@@ -119,21 +150,26 @@ $(document).ready(function() {
                 fileIdCounter++;
                 var file = evt.target.files[i];
                 var fileId = sectionIdentifier + fileIdCounter;
-
+                var classPhotoMain = '';
+                if(filesToUpload.length == 0){
+                    classPhotoMain = 'mainPhoto'
+                    mainPhoto = fileId;
+                }
                 filesToUpload.push({
                     id: fileId,
                     file: file
                 });
                 var reader = new FileReader();
 
-                reader.onload = function(fileId) {
+                reader.onload = function(fileId,classPhotoMain) {
                     return function(event){
                         var removeLink = "<a class='removeFile' href='#' data-fileid='" + fileId + "'><i class='fa fa-trash'></i></a>";
-                        $html = "<li><img src='"+ event.target.result +"'>" + removeLink + "</li>";
+                        var star = "<a class='makePhotoMain "+ classPhotoMain +"' href='#'  data-fileid='" + fileId + "'><i class='fa fa-star'></i></a>";
+                        $html = "<li><div style='background-image: url(\""+event.target.result +"\")'>" + removeLink + star +"</div></li>";
                         $(".fileList").append($html);
                     }
 
-                }(fileId);
+                }(fileId,classPhotoMain);
                 reader.readAsDataURL(file);
 
             };
@@ -145,7 +181,7 @@ $(document).ready(function() {
 
         $(this).on("click", ".removeFile", function (e) {
             e.preventDefault();
-            var fileId = $(this).parent().children("a").data("fileid");
+            var fileId = $(this).data("fileid");
 
             // loop through the files array and check if the name of that file matches FileName
             // and get the index of the match
@@ -156,6 +192,14 @@ $(document).ready(function() {
             }
             console.log(filesToUpload);
             $(this).parent().remove();
+        });
+
+        $(this).on("click", ".makePhotoMain:not(.mainPhoto)", function (e) {
+            $('.mainPhoto').removeClass('mainPhoto');
+            $(this).addClass('mainPhoto');
+            mainPhoto =  $(this).data("fileid");
+            e.preventDefault();
+
         });
 
         this.clear = function () {
@@ -170,21 +214,30 @@ $(document).ready(function() {
         return this;
     };
 
+    function selectPriceByWeek($idWeek){
+        $('.week_selected').removeClass('week_selected');
+        $('.price_week-'+ $idWeek).addClass('week_selected');
+    }
+
     (function () {
         var filesToUpload = [];
+        var mainPhoto = '';
+        var files1Uploader = $("#files1").fileUploader(mainPhoto,filesToUpload, "img_property");
 
-        var files1Uploader = $("#files1").fileUploader(filesToUpload, "img_property");
+        selectPriceByWeek(1);
 
-        $("#FormInfoDetailed").on('submit',function (e) {
+
+        $("#formPublish").on('submit',function (e) {
             e.preventDefault();
-
-            var formData = new FormData(this);
+                        var formData = new FormData(this);
 
             for (var i = 0, len = filesToUpload.length; i < len; i++) {
-                formData.append("property_files[]", filesToUpload[i].file);
+                console.log('getFile');
+                formData.append("property_files[]", filesToUpload[i]);
             }
-
-            console.log(formData.entries());
+            for(var pair of formData.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]);
+             }
             formData.delete('property_pictures');
             $.ajax({
                 url: $('#FormInfoDetailed').attr('action'),

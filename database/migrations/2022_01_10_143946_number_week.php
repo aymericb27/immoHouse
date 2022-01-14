@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypeOfPropertyTable extends Migration
+class NumberWeek extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateTypeOfPropertyTable extends Migration
      */
     public function up()
     {
-        Schema::create('type_of_property', function (Blueprint $table) {
+        Schema::create('number_week', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->integer('week');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateTypeOfPropertyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_of_property');
+        Schema::dropIfExists('number_week');
     }
 }

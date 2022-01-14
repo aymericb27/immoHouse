@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\infoGeneralRequest;
 use App\Http\Requests\PublishDetailedRequest;
 use App\Repositories\ImmoRepository;
+use App\Repositories\PaymentRepository;
 
 
 class ImmoController extends Controller
 {
-    public function publish(ImmoRepository $immoRepository){
+    public function publish(ImmoRepository $immoRepository, PaymentRepository $paymentRepository){
 
 
         return view('formPublish', [
@@ -19,7 +20,10 @@ class ImmoController extends Controller
             "property_other_room" => $immoRepository->getPropertyOtherRoom(),
             "energy_class"=>  $immoRepository->getEnergyClass(),
             "heating_type" => $immoRepository->getHeatingTYpe(),
-            "contact_mail" =>auth()->user()->email,
+            "user" =>auth()->user(),
+            "payment_formula" => $paymentRepository->getAllPaymentMethod(),
+            "number_week" => $paymentRepository->getNumberWeek(),
+            "sub_property_type" => $immoRepository->getAllSubPropertyType(),
         ]);
     }
 

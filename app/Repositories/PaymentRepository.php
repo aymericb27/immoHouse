@@ -2,8 +2,9 @@
 
 namespace App\Repositories;
 use Stripe;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pack;
 class PaymentRepository implements ImmoRepositoryInterface
 {
 
@@ -12,6 +13,26 @@ class PaymentRepository implements ImmoRepositoryInterface
 	public function __construct()
 	{
 	}
+
+    public function getAllPaymentMethod(){
+        $paymentMethod = [];
+        $paymentMethod['sell'] = $this->getPaymentMethod(1);
+        $paymentMethod['rent'] = $this->getPaymentMethod(2);
+     return $paymentMethod;
+    }
+
+    private function getPaymentMethod($sellOrRent){
+        $paymentMethod = [];
+        $method = [ 1 =>'essential', 2 => 'standard', 3 => 'premium' ];
+        foreach($method as $index => $value){
+            $paymentMethod[$value] = Pack::select('price','id','fk_number_week')->where('fk_type_pack',$index)->where('fk_sell_or_rent',$sellOrRent)->get();
+        }
+        return $paymentMethod;
+    }
+
+    public function getNumberWeek(){
+        return DB::table('number_week')->get();
+    }
 
 	public function save($payment)
 	{

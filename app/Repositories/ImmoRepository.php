@@ -7,6 +7,7 @@ use App\Models\Property;
 use App\Models\PropertyOtherRoom;
 use App\Models\EnergyClass;
 use App\Models\HeatingType;
+use App\Models\SubTypeProperty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -26,19 +27,17 @@ class ImmoRepository implements ImmoRepositoryInterface
     }
 
     public function getHeatingTYpe(){
-        $heatingType = HeatingType::select('heating_type_' . strtoupper(app()->getLocale()). ' as heating_type', 'id')->get();
-        return $heatingType;
+        return HeatingType::select('heating_type_' . strtoupper(app()->getLocale()). ' as heating_type', 'id')->get();
+    }
+
+    public function getAllSubPropertyType(){
+        return SubTypeProperty::select('sub_type_'. strtoupper(app()->getLocale()) .' as sub_type','id', 'fk_type_property')->get();
     }
 
     public function getEnergyClass(){
         $undefined = new \stdClass();
         $undefined->id = "undefined";
-        switch(app()->getLocale()){
-            case 'FR': $undefined->class = "non défini"; break;
-            case 'EN': $undefined->class = "undefined"; break;
-            case 'NL': $undefined->class = "onbepaald"; break;
-            default: $undefined->class = "undefined";
-        }
+        $undefined->class = __('undefined');
         $energyClass = EnergyClass::all();
         $retEnergyClass = [];
         $retEnergyClass[0] = $undefined;

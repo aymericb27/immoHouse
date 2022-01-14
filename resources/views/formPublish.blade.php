@@ -51,20 +51,18 @@
         </ul>
     </div>
     <div class="col-md-8 p-80">
-        {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish']) !!}
+        {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish', "class" =>"sell"]) !!}
             <div id="form_publish_step-0" class="form_publish_step form_publish_selected">
-                <pre>{{print_r($energy_class,1)}}</pre>
                 <h2>{{ __('type of property') }}</h2>
                 <div class="switch_field mb-50">
                     <input type="radio" id="sale_radio" name="sale_or_rent" value="1" checked/>
-                    <label for="sale_radio">{{__('for sale')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                    <label for="sale_radio">{{__('for sale')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                     <input type="radio" id="rent_radio" name="sale_or_rent" value="0" />
-                    <label for="rent_radio">{{__('for rent')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                    <label for="rent_radio">{{__('for rent')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                 </div>
-
                 <div class="row mb-50">
                     <div class="col-md-4 image_type_of_property">
-                        <div id="image_type_of_property-house">
+                        <div id="image_type_of_property-1">
                             <div>
                                 <img class="no_checked" src="{!! url('img/icon/house.png') !!}">
                                 <img class="checked" src="{!! url('img/icon/house_colored.png') !!}">
@@ -73,7 +71,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 image_type_of_property">
-                        <div id="image_type_of_property-apartment">
+                        <div id="image_type_of_property-2">
                             <div>
                                 <img class="no_checked" src="{!! url('img/icon/apartment.png') !!}">
                                 <img class="checked" src="{!! url('img/icon/apartment_colored.png') !!}">
@@ -82,7 +80,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 image_type_of_property">
-                        <div id="image_type_of_property-other">
+                        <div id="image_type_of_property-3">
                             <div>
                                 <img class="no_checked" src="{!! url('img/icon/ground.png') !!}">
                                 <img class="checked" src="{!! url('img/icon/ground_colored.png') !!}">
@@ -94,85 +92,24 @@
                         {{__('please select a type of property')}}
                     </div>
                 </div>
-                <div class="type_of_property type_of_property_house switch_field">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="radio" id="property_house" name="sub_type_of_property" value="1"/>
-                            <label for="property_house">{{__('house')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_bungalow" name="sub_type_of_property" value="1"/>
-                            <label for="property_bungalow">{{__('bungalow')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_country_house" name="sub_type_of_property" value="1"/>
-                            <label for="property_country_house">{{__('country house')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_chalet" name="sub_type_of_property" value="1"/>
-                            <label for="property_chalet">{{__('chalet')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                    </div>
+                <div class="form-group col-md-4 sub_type_property">
+                    {!! Form::label('sub_type_property', __('subtype of property'), ['class' => "form-control-label" ]) !!}
+                    <select class="form-control" name="sub_type_property">
+                        @foreach ($sub_property_type as $type)
+                            <option class="sub_type_property_option property_type-{{$type->fk_type_property}}" value="{{$type->id}}"> {{$type->sub_type}}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="type_of_property type_of_property_apartment switch_field">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="radio" id="property_apartment" name="sub_type_of_property" value="1"/>
-                            <label for="property_apartment">{{__('apartment')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_ground_floor" name="sub_type_of_property" value="1"/>
-                            <label for="property_ground_floor">{{__('ground floor')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_penthouse" name="sub_type_of_property" value="1"/>
-                            <label for="property_penthouse">{{__('penthouse')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_duplex" name="sub_type_of_property" value="1"/>
-                            <label for="property_duplex">{{__('duplex')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                    </div>
-                </div>
-                <div class="type_of_property type_of_property_other switch_field">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="radio" id="property_ground" name="sub_type_of_property" value="1"/>
-                            <label for="property_ground">{{__('land')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_garage" name="sub_type_of_property" value="1"/>
-                            <label for="property_garage">{{__('garage')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_office" name="sub_type_of_property" value="1"/>
-                            <label for="property_office">{{__('office')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_industry" name="sub_type_of_property" value="1"/>
-                            <label for="property_industry">{{__('industry')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="radio" id="property_business" name="sub_type_of_property" value="1"/>
-                            <label for="property_business">{{__('business')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_farm" name="sub_type_of_property" value="1"/>
-                            <label for="property_farm">{{__('farm')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="radio" id="property_other" name="sub_type_of_property" value="1"/>
-                            <label for="property_other">{{__('other')}}<img src="{!! url('img/icon/check.png') !!}"></label>
-                        </div>
-                    </div>
+                <div class="form-group col-md-4 {!! $errors->has('year_construct') ? 'has-error' : '' !!}">
+                    <label for="year_construct" class="form-control-label"> {{__('year of construction')}} <span>({{__('optional')}})</span></label>
+                    {!! Form::number ('year_construct', 1945, ['class' => 'form-control']) !!}
+                    {!! $errors->first('year_construct', '<small class="help-block">:message</small>') !!}
                 </div>
                 <div class="row error err_type_of_property m-10">
                     {{__('please select a sub-type of property')}}
                 </div>
                 <div class="form_publish_btn p-20">
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-1")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn mr-20')) }}
                 </div>
             </div>
             <div id="form_publish_step-1" class="form_publish_step">
@@ -222,13 +159,13 @@
                 </div>
                 <div class="form_publish_btn row">
                     <div class="col-md-4">
-                        <div class="previousPublishButton row" id="step_publish_previous-0">
+                        <div class="previousPublishButton row">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
                     <div class="col-md-4 pr-0">
-                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-2")) }}
+                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                     </div>
 
                 </div>
@@ -248,30 +185,32 @@
                     {!! Form::number ('monthly_costs', 50000, ['class' => 'form-control']) !!}
                     {!! $errors->first('monthly_costs', '<small class="help-block">:message</small>') !!}
                 </div>
-                <div class="form-group col-md-8 d_sale {!! $errors->has('cadastral_income') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-8 d_sell {!! $errors->has('cadastral_income') ? 'has-error' : '' !!}">
                     <label for="cadastral_income" class="form-control-label"> {{__('cadastral income')}} <span>({{__('optional')}})</span></label>
                     {!! Form::number ('cadastral_income', 50000, ['class' => 'form-control']) !!}
                     {!! $errors->first('cadastral_income', '<small class="help-block">:message</small>') !!}
                 </div>
-                <div class="form-group col-md-8 d_sale {!! $errors->has('price_square_meter') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-8 d_sell {!! $errors->has('price_square_meter') ? 'has-error' : '' !!}">
                     <label for="price_square_meter" class="form-control-label"> {{__('price by m²')}} <span>({{__('optional')}})</span></label>
                     {!! Form::number ('price_square_meter', 50000, ['class' => 'form-control']) !!}
                     {!! $errors->first('price_square_meter', '<small class="help-block">:message</small>') !!}
                 </div>
                 <div class="form_publish_btn row">
                     <div class="col-md-4">
-                        <div class="previousPublishButton" id="step_publish_previous-1">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
                     <div class="col-md-4 pr-0">
-                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-3")) }}
+                        {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                     </div>
                 </div>
             </div>
             <div id="form_publish_step-3" class="form_publish_step">
                 <h2>{{ __('photo') }}</h2>
+                <p>{{__('add as many photos as possible')}}! {{__('The more you add, the more chance you have of finding a buyer')}}.</p>
+                <p>{{__('To select several photos at the same time use CTRL+Click')}}. {{__('To select all photos at the same time use CTRL+A')}}.</p>
                 <div class="gallery_property">
                     <label for='property_picture' class='custom-file-upload btn'>
                         {{__('select photos')}}
@@ -284,12 +223,12 @@
                 {!! $errors->first('property_pictures', '<small class="help-block">:message</small>') !!}
                 <div class="form_publish_btn p-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-2">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-4")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                 </div>
             </div>
             <div id="form_publish_step-4" class="form_publish_step">
@@ -357,9 +296,9 @@
                         <label for="total_area" class="form-control-label d-inline-block"> {{__('garden')}}</label>
                         <div class="switch_field text-left">
                             <input type="radio" id="has_garden_no" name="has_garden" value="0" checked/>
-                            <label for="has_garden_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_garden_no">{{__('no')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                             <input type="radio" id="has_garden_yes" name="has_garden" value="1" />
-                            <label for="has_garden_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_garden_yes">{{__('yes')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                         </div>
                     </div>
                 </div>
@@ -369,9 +308,9 @@
                         <label for="has_swimming_pool" class="form-control-label d-inline-block"> {{__('swimming pool')}}</label>
                         <div class="switch_field text-left">
                             <input type="radio" id="has_swimming_pool_no" name="has_swimming_pool" value="0" checked/>
-                            <label for="has_swimming_pool_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_swimming_pool_no">{{__('no')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                             <input type="radio" id="has_swimming_pool_yes" name="has_swimming_pool" value="1" />
-                            <label for="has_swimming_pool_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_swimming_pool_yes">{{__('yes')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                         </div>
                     </div>
                 </div>
@@ -381,16 +320,16 @@
                         <label for="has_terrace" class="form-control-label d-inline-block"> {{__('terrace')}}</label>
                         <div class="switch_field text-left">
                             <input type="radio" id="has_terrace_no" name="has_terrace" value=0 checked/>
-                            <label for="has_terrace_no">{{__('no')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_terrace_no">{{__('no')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                             <input type="radio" id="has_terrace_yes" name="has_terrace" value="1" />
-                            <label for="has_terrace_yes">{{__('yes')}}<img src="{!! url('img/icon/check.png') !!}"></label>
+                            <label for="has_terrace_yes">{{__('yes')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row mb-50 col-md-12 {!! $errors->has('property_other_room') ? 'has-error' : '' !!}">
                     <div class="d-inline-block icon_form_publish"><img src="{!! url('img/icon/living_room.png') !!}"></div>
                     <div class="col-md-6">
-                        <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}}<span>({{__('optional')}})</span></label>
+                        <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}} <span>({{__('optional')}})</span></label>
                         @foreach ($property_other_room as $other_room)
                             <div class="pb-10 pt-10">
                                 {!! Form::checkbox ('property_other_room', $other_room->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_".$other_room->id]) !!}
@@ -401,12 +340,12 @@
                 </div>
                 <div class="form_publish_btn p-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-3">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-5")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                 </div>
             </div>
             <div id="form_publish_step-5" class="form_publish_step">
@@ -417,7 +356,7 @@
                         <label for="energy_class" class="form-control-label">{{__('energy class')}}<span> ({{__('optional')}})</span></label>
                         <select class="form-control" name="energy_class">
                             @foreach ( $energy_class as $class)
-                                {{-- <option value="{{$class->id}}"> {{$class->class}}</option> --}}
+                                <option value="{{$class->id}}"> {{$class->class}}</option>
                             @endforeach
                         </select>
                         {!! $errors->first('energy_class', '<small class="help-block">:message</small>') !!}
@@ -437,19 +376,19 @@
                 </div>
                 <div class="form_publish_btn p-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-4">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                 </div>
             </div>
-
             <div id="form_publish_step-6" class="form_publish_step">
+                <h2>{{ __('your contact details') }}</h2>
                 <div class="form-group col-md-6 {!! $errors->has('contact_email') ? 'has-error' : '' !!}">
                     {!! Form::label('contact_email', __('email'), ['class' => "form-control-label" ]) !!}
-                    {{ Form::email('contact_email',$contact_mail, ['class' => 'form-control'])}}
+                    {{ Form::email('contact_email',$user->email, ['class' => 'form-control'])}}
                     {!! $errors->first('contact_email', '<small class="help-block">:message</small>') !!}
                     <div class="row error err_contact_email pl-15">
                         {{__('the field e-mail is required')}}
@@ -457,43 +396,96 @@
                 </div>
                 <div class="form-group col-md-6 {!! $errors->has('contact_phone_number') ? 'has-error' : '' !!}">
                     {!! Form::label('contact_phone_number', __('phone number'), ['class' => "form-control-label" ]) !!}
-                    {{ Form::email('contact_phone_number',$contact_mail, ['class' => 'form-control'])}}
+                    {{ Form::number('contact_phone_number',null , ['class' => 'form-control'])}}
                     {!! $errors->first('contact_phone_number', '<small class="help-block">:message</small>') !!}
                     <div class="row error err_contact_phone_number pl-15">
                         {{__('the field phone number is required')}}
                     </div>
                 </div>
-
                 <div class="form_publish_btn p-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-3">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-5")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                 </div>
             </div>
             <div id="form_publish_step-7" class="form_publish_step">
-                Title and Description
+                <h2>{{__('description')}}</h2>
+                <div class="description_btn_box ml-0 row">
+                    <div id="description_english-button" class="col-md-3 description_btn_selected">{{__('english')}}</div>
+                    <div id="description_french-button" class="col-md-3">{{__('french')}}</div>
+                    <div id="description_dutch-button" class="col-md-3">{{__('dutch')}}</div>
+                </div>
+                <div class="description_box">
+                    {!! Form::textarea ('description_EN', 'english', ['class' => 'form-control description_selected', 'id' => "description_english" ]) !!}
+                    {!! Form::textarea ('description_FR', 'french', ['class' => 'form-control', 'id' => "description_french" ]) !!}
+                    {!! Form::textarea ('description_NL', 'dutch', ['class' => 'form-control', 'id' => "description_dutch" ]) !!}
+                </div>
                 <div class="form_publish_btn p-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-4">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn', 'id' =>"step_publish_next-6")) }}
+                    {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                 </div>
             </div>
             <div id="form_publish_step-8" class="form_publish_step">
-                payment
-                <div class="form_publish_btn p-20">
+                <div class="form-group col-md-4 {!! $errors->has('number_week') ? 'has-error' : '' !!}">
+                    <label for="number_week" class="form-control-label">{{__('number of week')}}</label>
+                    <select class="form-control" name="number_week">
+                        @foreach ( $number_week as $week)
+                            <option value="{{$week->id}}"> {{$week->week}} {{__('week')}}</option>
+                        @endforeach
+                    </select>
+                    {!! $errors->first('number_week', '<small class="help-block">:message</small>') !!}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="promo_code" class="form-control-label">{{__('promo code')}}<span> ({{__('optional')}})</span></label>
+                    {!! Form::text ('promo_code', "immoflat88", ['class' => 'form-control']) !!}
+                </div>
+                <div>
+                    @foreach ($payment_formula as $sell_or_rent => $formula_type)
+                        <div class="d_{{$sell_or_rent}} row">
+                            @foreach ($formula_type as $type => $listPack )
+                                <div class="col-md-4">
+                                    <div class="formula_type">
+                                        <h4>{{__($type)}}</h4>
+                                        @foreach ($listPack as $pack)
+                                            <div class="pack_price pl-10 price_week-{{$pack->fk_number_week}}">
+                                                <div> {{$pack->price}} €</div>
+                                                <div class="pt-10 pb-10 text-left"><img class="price_check" src="{!! url('img/icon/check_colored.png') !!}"><div class="d-inline">{{__('visibile on the website')}}</div></div>
+                                                @if ($type === "standard")
+                                                <div class="pt-10 pb-10 text-left"><img class="price_check" src="{!! url('img/icon/check_colored.png') !!}"><div class="d-inline">{{__('before essential in the research')}}</div></div>
+                                                @endif
+                                                @if ($type === "premium")
+                                                <div class="pt-10 pb-10 text-left"><img class="price_check" src="{!! url('img/icon/check_colored.png') !!}"><div class="d-inline">{{__('on top on the result list')}}</div></div>
+                                                <div class="pt-10 pb-10 text-left"><img class="price_check" src="{!! url('img/icon/check_colored.png') !!}"><div class="d-inline">{{__('visibile on the main page')}}</div></div>
+                                                @endif
+                                                <div class="switch_field">
+                                                    <input type="radio" id="pack-{{$pack->id}}" name="pack" value="{{$pack->id}}"/>
+                                                    <label for="pack-{{$pack->id}}" class="w-50">{{__('select')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+                <div class="form_publish_btn pt-20">
                     <div>
-                        <div class="previousPublishButton" id="step_publish_previous-5">
+                        <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
+                        {!! Form::submit(__('send'), ['class' => 'btn pull-right']) !!}
                     </div>
                 </div>
             </div>

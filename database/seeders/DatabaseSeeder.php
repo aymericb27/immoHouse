@@ -17,7 +17,12 @@ class DatabaseSeeder extends Seeder
             PropertyOtherRoomSeeder::class,
             EnergyClass::class,
             HeatingType::class,
+            SellOrRent::class,
+            NumberWeek::class,
+            TypePack::class,
+            Pack::class,
+            TypeProperty::class,
+            SubTypeProperty::class,
         ]);
-        // \App\Models\User::factory(10)->create();
     }
 }

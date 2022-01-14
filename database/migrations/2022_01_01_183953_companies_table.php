@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePropertyPictureTable extends Migration
+class CompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreatePropertyPictureTable extends Migration
      */
     public function up()
     {
-        Schema::create('property_picture', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('extension');
-            $table->integer('order');
-            $table->integer('fk_property')->unsigned();
-            $table->foreign('fk_property')->references('id')->on('property');
+            $table->string('name');
+            $table->string('extension_logo');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreatePropertyPictureTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('property_picture');
+        Schema::dropIfExists('companies');
     }
 }
