@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             Pack::class,
             TypeProperty::class,
             SubTypeProperty::class,
+            Province::class,
+            Promo::class,
         ]);
     }
 }

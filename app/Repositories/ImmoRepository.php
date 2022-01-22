@@ -8,6 +8,7 @@ use App\Models\PropertyOtherRoom;
 use App\Models\EnergyClass;
 use App\Models\HeatingType;
 use App\Models\SubTypeProperty;
+use App\Models\Province;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -69,10 +70,9 @@ class ImmoRepository implements ImmoRepositoryInterface
     public function getListingPropertiesByUserId($idUser){
         return DB::table('property')
         ->join('type_of_property','property.fk_type_of_property','=','type_of_property.id')
-        ->join('condition_building','condition_building.id','=','property.fk_condition_building')
         ->select('property.price','property.id','property.address_number','property.address_postal_code','property.address')
         ->where('property.fk_user','=',$idUser)
-        ->get()->toArray();
+        ->get();
     }
 
     public function getPicturesByIdProperty($idProperty)
@@ -89,37 +89,113 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     }
 
-	public function save($property)
-	{
+    private function getLocalization($town,$street,$adressNumber){
 
-        $this->property->sale_or_rent =session('property')['sale_or_rent'];
-        $this->property->price = session('property')['price'];
-        $this->property->address = session('property')['address'];
-        $this->property->address_number = session('property')['address_number'];
-        $this->property->address_box = session('property')['address_box'];
-        $this->property->address_postal_code = session('property')['postal_code'];
-        $this->property->fk_type_of_property = session('property')['fk_type_of_property'];
-        $this->property->fk_user = Auth::id();
-
-        unset($property['_token']);
-        foreach($property as $key => $pro ){
-            $this->property->$key = $pro;
+        $address = "$adressNumber $street, $town, BE";
+        $address = str_replace(' ', '+', $address);
+        // geocoding api url
+        $url = "https://maps.google.com/maps/api/geocode/json?address=$address&key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY";
+        // send api request
+        $geocode = file_get_contents($url);
+        $json = json_decode($geocode);
+        $data['fk_province'] = null;
+        if($json->status == "OK"){
+            foreach($json->results[0]->address_components as $compoments){
+                if($compoments->types[0] == "administrative_area_level_2"){
+                    $data['fk_province'] = $this->getProvinceIdByShortName($compoments->short_name);
+                } else if ($compoments->short_name == "Bruxelles"){
+                    $data['fk_province'] = $this->getProvinceIdByShortName("BXL");
+                }
+            }
+            $data['lat'] = $json->results[0]->geometry->location->lat;
+            $data['lng'] = $json->results[0]->geometry->location->lng;
+        } else{
+            $data['lat'] = null;
+            $data['lng'] = null;
         }
+
+        return $data;
+    }
+
+    private function getProvinceIdByShortName($shortName){
+        return Province::select('id')->where('short_name', $shortName)->first()->id;
+    }
+
+	public function save($request, $isVisible)
+	{
+        $localization = $this->getLocalization($request->get('town'), $request->get('street'), $request->get('address_number'));
+        $this->property->address_box = ($request->get('address_box')) ? $request->get('address_box'): null;
+        $this->property->address_number = ($request->get('address_number')) ? $request->get('address_number'): null;
+        $this->property->address_postal_code = $request->get('postal_code');
+        $this->property->address_street = $request->get('street');
+        $this->property->address_town = $request->get('town');
+        $this->property->cadastral_income = ($request->get('cadastral_income')) ? $request->get('cadastral_income'): null;
+        $this->property->contact_email = $request->get('contact_email');
+        $this->property->contact_phone_number = ($request->get('contact_phone_number')) ? $request->get('contact_phone_number'): null;
+        $this->property->description_EN = ($request->get('description_EN')) ? $request->get('description_EN'): null;
+        $this->property->description_FR = ($request->get('description_FR')) ? $request->get('description_FR'): null;
+        $this->property->description_NL = ($request->get('description_NL')) ? $request->get('description_NL'): null;
+        $this->property->fk_energy_class = ($request->get('energy_class') !== "undefined") ? $request->get('energy_class'): null;
+        $this->property->fk_pack = $request->get('pack');
+        $this->property->fk_province = $localization['fk_province'];
+        $this->property->fk_sell_or_rent = $request->get('sell_or_rent');
+        $this->property->fk_sub_type_property = $request->get('sub_type_property');
+        $this->property->fk_users = $request->get('fk_users');
+        $this->property->has_garden = $request->get('has_garden');
+        $this->property->has_swimming_pool = $request->get('has_swimming_pool');
+        $this->property->has_terrace = $request->get('has_terrace');
+        $this->property->is_online = $isVisible;
+        $this->property->latitude = $localization['lat'];
+        $this->property->longitude = $localization['lng'];
+        $this->property->monthly_costs = $request->get('monthly_costs');
+        $this->property->nbr_bathroom = $request->get('nbr_bathroom');
+        $this->property->nbr_bedroom = $request->get('nbr_bedroom');
+        $this->property->nbr_room = $request->get('nbr_room');
+        $this->property->nbr_toilet = $request->get('nbr_toilet');
+        $this->property->price = $request->get('price');
+        $this->property->price_square_meter = ($request->get('price_square_meter')) ? $request->get('price_square_meter'): null;
+        $this->property->total_area =($request->get('total_area')) ? $request->get('total_area'): null;
+        $this->property->year_construct =($request->get('year_construct')) ? $request->get('year_construct'): null;
         $this->property->save();
+
+        $property_other_room = $request->get('property_other_room');
+        if($property_other_room){
+            foreach($property_other_room as $other_room_id){
+                DB::table('property_other_room_property')->insert([
+                    'fk_property' => $this->property->id,
+                    'fk_property_other_room' => $other_room_id,
+                ]);
+            }
+        }
+
+        $heating_type = $request->get('heating_type');
+        if($heating_type){
+            foreach($heating_type as $heating_type_id){
+                DB::table('property_heating_type')->insert([
+                    'fk_property' => $this->property->id,
+                    'fk_heating_type' => $heating_type_id,
+                ]);
+            }
+        }
         return $this->property->id;
 	}
 
-    public function savePhoto($idProperty,$files){
-        foreach($files as $key => $file){
+    public function savePhoto($idProperty,$request){
+        $files = $request->file('property_pictures');
+        $id_files = $request->get('property_pictures_id');
+        $main_file = $request->get('main_photo');
 
+        for ($i=0; $i < count($files) ; $i++) {
             $idPicture = DB::table('property_picture')->insertGetId(
-                ['extension' => $file->getClientOriginalExtension(),
-                 'order'=> $key,
-                 'fk_property'=> $idProperty
+                ['extension' => $files[$i]->getClientOriginalExtension(),
+                 'order'=> $i,
+                 'fk_property'=> $idProperty,
+                 'is_main_picture' => ($main_file == $id_files[$i]) ? 1 : 0
                 ]);
+            $store  = Storage::disk('public')->put('property-'. $idProperty .'/pic-'.  $idPicture  .'.'. $files[$i]->getClientOriginalExtension(),  File::get($files[$i]));
 
-            $store  = Storage::disk('public')->put('immo_'. $idProperty .'/pic-'.  $idPicture  .'.'. $file->getClientOriginalExtension(),  File::get($file));
-       }
+        }
+        return true;
     }
 
 

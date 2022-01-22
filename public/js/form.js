@@ -15,8 +15,9 @@ $(function() {
 
     })
 
-    $('input[name="sale_or_rent"]').on('change',function(){
+    $('input[name="sell_or_rent"]').on('change',function(){
         $value = parseInt($(this).val());
+
         $('#formPublish').removeClass('rent sell');
         ($value === 1)? $('#formPublish').addClass('sell') : $('#formPublish').addClass('rent')
 
@@ -30,6 +31,8 @@ $(function() {
     })
 
     $('select[name="number_week"]').on('change',function(){
+        $('.pack_selected').removeClass('pack_selected');
+        $( 'input[name="pack"]' ).prop( "checked", false );
         selectPriceByWeek($(this).val());
     })
 
@@ -103,10 +106,6 @@ $(function() {
                     $errorClass.push('err_image_type_of_property');
                     break;
                 }
-                if(!verifySubTypeProperty()){
-                    $isValid = false;
-                    $errorClass.push('err_type_of_property');
-                }
                 break;
             case 1:
                 $arrAdress = ['street', 'town', 'postal_code', 'address_number'];
@@ -116,11 +115,30 @@ $(function() {
                         $errorClass.push('err_' + value);
                     }
                 })
+                break;
             case 2:
                 if(!$('input[name="price"]').val()){
                     $isValid = false;
                     $errorClass.push('err_price');
                 }
+                break;
+            case 3:
+                if($('.fileList').children().length == 0){
+                    $isValid = false;
+                    $errorClass.push('err_property_pictures');
+                }
+                console.log(filesToUpload);
+                break;
+            case 8:
+                if(!$('input[name="type_payment"]').is(':checked')){
+                    $isValid = false;
+                    $errorClass.push('err_type_payment');
+                }
+                if(!$('input[name="pack"]').is(':checked')){
+                    $isValid = false;
+                    $errorClass.push('err_pack');
+                }
+                break;
         }
         if(!$isValid){
             $.each($errorClass,function(index,value){
@@ -131,24 +149,21 @@ $(function() {
         return $isValid;
     }
 
-    function verifySubTypeProperty(){
-        $isValid = false;
-        $('input[name="sub_type_of_property"]').each(function(){
-            if($(this).prop('checked')){
-               $isValid = true;
-            }
-        })
-        return $isValid;
-    }
-
     $.fn.fileUploader = function (mainPhoto,filesToUpload, sectionIdentifier) {
         var fileIdCounter = 0;
-
+        var numberOfFile = 0;
         $("#property_picture").on('change',function (evt) {
 
+            $('.err_size_picture').hide();
             for (var i = 0; i < evt.target.files.length; i++) {
+                numberOfFile++;
                 fileIdCounter++;
                 var file = evt.target.files[i];
+                if(file.size >= 5242880 ){
+                    $('.err_size_picture').show();
+                    return false;
+                }
+                $('#numberOfPicture').html(numberOfFile);
                 var fileId = sectionIdentifier + fileIdCounter;
                 var classPhotoMain = '';
                 if(filesToUpload.length == 0){
@@ -190,17 +205,24 @@ $(function() {
                     filesToUpload.splice(i, 1);
                 }
             }
-            console.log(filesToUpload);
-            $(this).parent().remove();
+            $(this).parent().parent().remove();
+            numberOfFile--;
+            $('#numberOfPicture').html(numberOfFile);
         });
 
         $(this).on("click", ".makePhotoMain:not(.mainPhoto)", function (e) {
+            console.log(mainPhoto);
             $('.mainPhoto').removeClass('mainPhoto');
             $(this).addClass('mainPhoto');
             mainPhoto =  $(this).data("fileid");
+            console.log(mainPhoto);
             e.preventDefault();
 
         });
+
+        this.mainPhoto = function(){
+            return mainPhoto;
+        }
 
         this.clear = function () {
             for (var i = 0; i < filesToUpload.length; ++i) {
@@ -222,38 +244,63 @@ $(function() {
     (function () {
         var filesToUpload = [];
         var mainPhoto = '';
-        var files1Uploader = $("#files1").fileUploader(mainPhoto,filesToUpload, "img_property");
+        var stripe = Stripe('pk_test_bhE8iLRrJjBdRSlBjOucSzIy00G7xE6jW4');
+        $pictures = $("#files1").fileUploader(mainPhoto,filesToUpload, "img_property");
 
         selectPriceByWeek(1);
-
-
         $("#formPublish").on('submit',function (e) {
             e.preventDefault();
-                        var formData = new FormData(this);
+        });
 
-            for (var i = 0, len = filesToUpload.length; i < len; i++) {
-                console.log('getFile');
-                formData.append("property_files[]", filesToUpload[i]);
-            }
-            for(var pair of formData.entries()) {
-                console.log(pair[0]+ ', '+ pair[1]);
-             }
-            formData.delete('property_pictures');
-            $.ajax({
-                url: $('#FormInfoDetailed').attr('action'),
-                data: formData,
-                cache: false,
-                processData: false,
-                contentType: false,
-                type: "POST",
-                success: function (data) {
-                    console.log(data);
-                   // files1Uploader.clear();
-                },
-                error: function (data) {
-                    alert("ERROR - " + data.responseText);
+        $("#sendPublish").on('click',function (e) {
+            if(validatePublishForm()){
+                e.preventDefault();
+                $form = $('#formPublish');
+                var formData = new FormData(document.getElementById('formPublish'));
+                formData.delete('property_pictures');
+                for (var i = 0, len = filesToUpload.length; i < len; i++) {
+                    formData.append("property_pictures[]", filesToUpload[i].file);
+                    formData.append("property_pictures_id[]", filesToUpload[i].id);
                 }
-            });
+                formData.append('main_photo', $pictures.mainPhoto());
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        console.log(data);
+                        if(data.redirect == "property"){
+                            window.location.replace(data.url);
+                        }
+                        else if(data.redirect == "payment"){
+                            if(data['payement_method'] === 'bancontact'){
+
+                                window.location.replace(data.session.redirect.url);
+
+                            } else if (data['payement_method'] === 'visa'){
+                                stripe.redirectToCheckout({
+
+                                    sessionId: data.session
+
+                                }).then(function (result) {
+                                    // If `redirectToCheckout` fails due to a browser or network
+                                    // error, display the localized error message to your customer
+                                    // using `result.error.message`.
+                                    alert(result.error.message);
+                                });
+                              }
+                        }
+                    // files1Uploader.clear();
+                    },
+                    error: function (data) {
+                        alert("ERROR - " + data.responseText);
+                    }
+                });
+            }
         });
     })()
 });

@@ -5,5 +5,5 @@ namespace App\Repositories;
 interface ImmoRepositoryInterface
 {
 
-    public function save($input);
+    public function save($input, $isVisible);
 }

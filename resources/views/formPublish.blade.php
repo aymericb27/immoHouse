@@ -51,13 +51,14 @@
         </ul>
     </div>
     <div class="col-md-8 p-80">
-        {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish', "class" =>"sell"]) !!}
+        {!! Form::open(['url' => 'publish', 'enctype'=>'multipart/form-data',"id" =>'formPublish', "class" =>"sell", 'action' =>$formAction]) !!}
             <div id="form_publish_step-0" class="form_publish_step form_publish_selected">
+                {!! Form::number ('fk_users', $user->id, ['class' => 'd-none']) !!}
                 <h2>{{ __('type of property') }}</h2>
                 <div class="switch_field mb-50">
-                    <input type="radio" id="sale_radio" name="sale_or_rent" value="1" checked/>
+                    <input type="radio" id="sale_radio" name="sell_or_rent" value="1" checked/>
                     <label for="sale_radio">{{__('for sale')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
-                    <input type="radio" id="rent_radio" name="sale_or_rent" value="0" />
+                    <input type="radio" id="rent_radio" name="sell_or_rent" value="2" />
                     <label for="rent_radio">{{__('for rent')}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
                 </div>
                 <div class="row mb-50">
@@ -117,7 +118,7 @@
                 <div class="row">
                     <div class="form-group col-md-8 {!! $errors->has('street') ? 'has-error' : '' !!}">
                         {!! Form::label('street', __('street'), ['class' => "form-control-label" ]) !!}
-                        {!! Form::text ('street', "rue de morimont", ['class' => 'form-control', "id" => "ship-address"]) !!}
+                        {!! Form::text ('street', "rue des alliés", ['class' => 'form-control', "id" => "ship-address"]) !!}
                         {!! $errors->first('street', '<small class="help-block">:message</small>') !!}
                         <div class="row error err_street pl-15">
                             {{__('the field street is required')}}
@@ -127,7 +128,7 @@
                 <div class="row">
                     <div class="form-group col-md-5 {!! $errors->has('town') ? 'has-error' : '' !!}">
                         {!! Form::label('town', __('town'), ['class' => "form-control-label" ]) !!}
-                        {!! Form::text ('town', 45, ['class' => 'form-control', "id" =>'locality']) !!}
+                        {!! Form::text ('town', "Forest", ['class' => 'form-control', "id" =>'locality']) !!}
                         {!! $errors->first('town', '<small class="help-block">:message</small>') !!}
                         <div class="row error err_town pl-15">
                             {{__('the field town is required')}}
@@ -135,7 +136,7 @@
                     </div>
                     <div class="form-group col-md-3  {!! $errors->has('postal_code') ? 'has-error' : '' !!}">
                         {!! Form::label('postal_code', __('postal code'), ['class' => "form-control-label" ]) !!}
-                        {!! Form::number ('postal_code', 1340, ['class' => 'form-control', 'id' => "postcode"]) !!}
+                        {!! Form::number ('postal_code', 1190, ['class' => 'form-control', 'id' => "postcode"]) !!}
                         {!! $errors->first('postal_code', '<small class="help-block">:message</small>') !!}
                         <div class="row error err_postal_code pl-15">
                             {{__('the field postal code is required')}}
@@ -145,7 +146,7 @@
                 <div class="row">
                     <div class="form-group col-md-4 {!! $errors->has('address_number') ? 'has-error' : '' !!}">
                         {!! Form::label('address_number', __('number'), ['class' => "form-control-label" ]) !!}
-                        {!! Form::number ('address_number', 45, ['class' => 'form-control']) !!}
+                        {!! Form::number ('address_number', 28, ['class' => 'form-control']) !!}
                         {!! $errors->first('address_number', '<small class="help-block">:message</small>') !!}
                         <div class="row error err_address_number pl-15">
                             {{__('the field number is required')}}
@@ -153,7 +154,7 @@
                     </div>
                     <div class="form-group col-md-4 {!! $errors->has('address_box') ? 'has-error' : '' !!}">
                         {!! Form::label('address_box', __('box'), ['class' => "form-control-label" ]) !!}
-                        {!! Form::number ('address_box', 2, ['class' => 'form-control']) !!}
+                        {!! Form::number ('address_box', null, ['class' => 'form-control']) !!}
                         {!! $errors->first('address_box', '<small class="help-block">:message</small>') !!}
                     </div>
                 </div>
@@ -172,37 +173,45 @@
             </div>
             <div id="form_publish_step-2" class="form_publish_step">
                 <h2>{{ __('price') }}</h2>
-                <div class="form-group col-md-8 {!! $errors->has('price') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-4 {!! $errors->has('price') ? 'has-error' : '' !!}">
                     {!! Form::label('price', __('price'), ['class' => "form-control-label" ]) !!}
-                    {!! Form::number ('price', 50000, ['class' => 'form-control']) !!}
+                    <div class="input_symbol_euro">
+                        {!! Form::number ('price', 50000, ['class' => 'form-control']) !!}
+                    </div>
                     {!! $errors->first('price', '<small class="help-block">:message</small>') !!}
                     <div class="row error err_price pl-15">
                         {{__('the field price is required')}}
                     </div>
                 </div>
-                <div class="form-group col-md-8 {!! $errors->has('monthly_costs') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-4 {!! $errors->has('monthly_costs') ? 'has-error' : '' !!}">
                     <label for="monthly_costs" class="form-control-label"> {{__('monthly costs')}} <span>({{__('optional')}})</span></label>
-                    {!! Form::number ('monthly_costs', 50000, ['class' => 'form-control']) !!}
+                    <div class="input_symbol_euro">
+                        {!! Form::number ('monthly_costs', 0, ['class' => 'form-control']) !!}
+                    </div>
                     {!! $errors->first('monthly_costs', '<small class="help-block">:message</small>') !!}
                 </div>
-                <div class="form-group col-md-8 d_sell {!! $errors->has('cadastral_income') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-4 d_sell {!! $errors->has('cadastral_income') ? 'has-error' : '' !!}">
                     <label for="cadastral_income" class="form-control-label"> {{__('cadastral income')}} <span>({{__('optional')}})</span></label>
-                    {!! Form::number ('cadastral_income', 50000, ['class' => 'form-control']) !!}
+                    <div class="input_symbol_euro">
+                        {!! Form::number ('cadastral_income', 50000, ['class' => 'form-control']) !!}
+                    </div>
                     {!! $errors->first('cadastral_income', '<small class="help-block">:message</small>') !!}
                 </div>
-                <div class="form-group col-md-8 d_sell {!! $errors->has('price_square_meter') ? 'has-error' : '' !!}">
+                <div class="form-group col-md-4 d_sell {!! $errors->has('price_square_meter') ? 'has-error' : '' !!}">
                     <label for="price_square_meter" class="form-control-label"> {{__('price by m²')}} <span>({{__('optional')}})</span></label>
-                    {!! Form::number ('price_square_meter', 50000, ['class' => 'form-control']) !!}
+                    <div class="input_symbol_euro">
+                        {!! Form::number ('price_square_meter', 50000, ['class' => 'form-control']) !!}
+                    </div>
                     {!! $errors->first('price_square_meter', '<small class="help-block">:message</small>') !!}
                 </div>
                 <div class="form_publish_btn row">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="previousPublishButton">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
                     </div>
-                    <div class="col-md-4 pr-0">
+                    <div class="col-md-2 pr-0">
                         {{ Form::button(__('next'), array('class' => 'nextPublishButton btn')) }}
                     </div>
                 </div>
@@ -211,6 +220,7 @@
                 <h2>{{ __('photo') }}</h2>
                 <p>{{__('add as many photos as possible')}}! {{__('The more you add, the more chance you have of finding a buyer')}}.</p>
                 <p>{{__('To select several photos at the same time use CTRL+Click')}}. {{__('To select all photos at the same time use CTRL+A')}}.</p>
+                <p>{{__('Number of pictures')}} : <span id="numberOfPicture">0</span>/25</p>
                 <div class="gallery_property">
                     <label for='property_picture' class='custom-file-upload btn'>
                         {{__('select photos')}}
@@ -219,6 +229,12 @@
                 </div>
                 <div class="row files" id="files1">
                     <ul class="fileList"></ul>
+                </div>
+                <div class="err_size_picture error pt-20">
+                    {{__('the picture is more than 5MB')}}
+                </div>
+                <div class="err_property_pictures error pt-20">
+                    {{__('you must add at least one photo')}}
                 </div>
                 {!! $errors->first('property_pictures', '<small class="help-block">:message</small>') !!}
                 <div class="form_publish_btn p-20">
@@ -332,7 +348,7 @@
                         <label for="other_room" class="form-control-label d-inline-block"> {{__('other room')}} <span>({{__('optional')}})</span></label>
                         @foreach ($property_other_room as $other_room)
                             <div class="pb-10 pt-10">
-                                {!! Form::checkbox ('property_other_room', $other_room->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_".$other_room->id]) !!}
+                                {!! Form::checkbox ('property_other_room[]', $other_room->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_".$other_room->id]) !!}
                                 <label for="checkbox_property_other_room_{{$other_room->id}}" name="checkbox2_lbl" class="css-label lite-blue-check"> {{ $other_room->room}}</label>
                             </div>
                         @endforeach
@@ -368,7 +384,7 @@
                         <label for="heating_type" class="form-control-label d-inline-block"> {{__('heating type')}}</label>
                         @foreach ($heating_type as $type)
                             <div class="pb-10 pt-10">
-                                {!! Form::checkbox ('heating_type', $type->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_heating_type_".$type->id]) !!}
+                                {!! Form::checkbox ('heating_type[]', $type->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_heating_type_".$type->id]) !!}
                                 <label for="checkbox_heating_type_{{$type->id}}" name="checkbox2_lbl" class="css-label lite-blue-check"> {{ $type->heating_type}}</label>
                             </div>
                         @endforeach
@@ -435,6 +451,29 @@
                 </div>
             </div>
             <div id="form_publish_step-8" class="form_publish_step">
+                <h2>{{__('payment')}}</h2>
+                <div class="form-group col-md-12">
+                    <label for="visa_or_bancontact" class="form-control-label d-inline-block"> {{__('payment type')}}</label>
+                    <div class="switch_field text-left">
+                        <input type="radio" id="bancontact" name="type_payment" value="bancontact"/>
+                        <label class="label_style_payment" for="bancontact">
+                            <span>{{__('bancontact')}}</span>
+                            <img class="img_style_payment" src="{!! url('img/bancontact.png') !!}">
+                        </label>
+                        <input type="radio" id="visa" name="type_payment" value="visa" />
+                        <label class="label_style_payment" for="visa">
+                            <span>{{__('visa')}}</span>
+                            <img class="img_style_payment" src="{!! url('img/visa.png') !!}">
+                        </label>
+                    </div>
+                    <div class="row error err_type_payment pl-15">
+                        {{__('you must choose a type of payment')}}
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="promo_code" class="form-control-label">{{__('promo code')}}<span> ({{__('optional')}})</span></label>
+                    {!! Form::text ('promo_code', "immoflat88", ['class' => 'form-control']) !!}
+                </div>
                 <div class="form-group col-md-4 {!! $errors->has('number_week') ? 'has-error' : '' !!}">
                     <label for="number_week" class="form-control-label">{{__('number of week')}}</label>
                     <select class="form-control" name="number_week">
@@ -444,12 +483,8 @@
                     </select>
                     {!! $errors->first('number_week', '<small class="help-block">:message</small>') !!}
                 </div>
-
-                <div class="form-group col-md-4">
-                    <label for="promo_code" class="form-control-label">{{__('promo code')}}<span> ({{__('optional')}})</span></label>
-                    {!! Form::text ('promo_code', "immoflat88", ['class' => 'form-control']) !!}
-                </div>
-                <div>
+                <div class="form-group col-md-12">
+                    <label for="pack" class="form-control-label"> {{__('package type')}}</label>
                     @foreach ($payment_formula as $sell_or_rent => $formula_type)
                         <div class="d_{{$sell_or_rent}} row">
                             @foreach ($formula_type as $type => $listPack )
@@ -478,14 +513,20 @@
                             @endforeach
                         </div>
                     @endforeach
+                    <div class="row error err_pack pl-15">
+                        {{__('you must choose a pack')}}
+                    </div>
                 </div>
                 <div class="form_publish_btn pt-20">
-                    <div>
-                        <div class="previousPublishButton">
+                    <div class="row pr-15 pl-15">
+                        <div class="previousPublishButton col-md-6">
                             <div class="d-inline-block"><img src="{!! url('img/icon/left-arrows.png') !!}"></div>
                             <div class="d-inline-block">{{ __('previous') }}</div>
                         </div>
-                        {!! Form::submit(__('send'), ['class' => 'btn pull-right']) !!}
+                        <div class="col-md-6">
+                            {!! Form::submit(__('send'), ['class' => 'btn pull-right', "id" => "sendPublish"]) !!}
+                        </div>
+
                     </div>
                 </div>
             </div>

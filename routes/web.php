@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImmoController;
 use App\Http\Controllers\LogoutController;
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +24,9 @@ Route::get('publishSuccessful/{idProperty}', function($idProperty){
     return view('welcome',['idProperty' => $idProperty, 'message' => 'publishSuccessful']);
 });
 
-Route::get('/publish',[App\Http\Controllers\ImmoController::class,'publish']);
-Route::post('/postInfoGeneral',[App\Http\Controllers\ImmoController::class,'postInfoGeneral']);
-Route::post('/publishDetailed',[App\Http\Controllers\ImmoController::class,'publishDetailed']);
-Route::get('/getMyListingProperties',[App\Http\Controllers\ImmoController::class,'getMyListingProperties']);
+Route::get('/publish',[ImmoController::class,'getPublishForm']);
+Route::post('/publish',[ImmoController::class,'publish']);
+Route::get('/getMyListingProperties',[ImmoController::class,'getMyListingProperties']);
 Route::get('/getProperty/{n}', [App\Http\Controllers\ImmoController::class,'getProperty']);
 
 Route::post('/postPayment',[App\Http\Controllers\PaymentController::class,'postPayment']);

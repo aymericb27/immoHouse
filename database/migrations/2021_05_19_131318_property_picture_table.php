@@ -17,6 +17,7 @@ class PropertyPictureTable extends Migration
             $table->id();
             $table->string('extension');
             $table->integer('order');
+            $table->integer('is_main_picture');
             $table->integer('fk_property')->unsigned();
             $table->foreign('fk_property')->references('id')->on('property');
             $table->timestamps();

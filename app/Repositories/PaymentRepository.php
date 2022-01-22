@@ -5,10 +5,12 @@ use Stripe;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pack;
-class PaymentRepository implements ImmoRepositoryInterface
+use App\Models\Promo;
+use App\Models\UsersPromo;
+use App\Models\Property;
+use App\Models\Order;
+class PaymentRepository
 {
-
-    protected $property;
 
 	public function __construct()
 	{
@@ -16,12 +18,12 @@ class PaymentRepository implements ImmoRepositoryInterface
 
     public function getAllPaymentMethod(){
         $paymentMethod = [];
-        $paymentMethod['sell'] = $this->getPaymentMethod(1);
-        $paymentMethod['rent'] = $this->getPaymentMethod(2);
+        $paymentMethod['sell'] = $this->getPaymentPack(1);
+        $paymentMethod['rent'] = $this->getPaymentPack(2);
      return $paymentMethod;
     }
 
-    private function getPaymentMethod($sellOrRent){
+    private function getPaymentPack($sellOrRent){
         $paymentMethod = [];
         $method = [ 1 =>'essential', 2 => 'standard', 3 => 'premium' ];
         foreach($method as $index => $value){
@@ -30,26 +32,69 @@ class PaymentRepository implements ImmoRepositoryInterface
         return $paymentMethod;
     }
 
+    public function getPackById($id){
+        return Pack::select('price')->where('id',$id)->first();
+    }
+
+    public function getPromoByCode($code){
+        return Promo::where('code',$code)->first();
+    }
+
     public function getNumberWeek(){
         return DB::table('number_week')->get();
     }
 
-	public function save($payment)
+	public function save($request, $idProperty)
 	{
-        $command = ['command-0' => 2999, 'command-1' => 5999, 'command-2' => 9999];
-        $paymentMethod = $payment['payment_method'];
+        $promoCode = $this->getPromoByCode($request->get('promo_code'));
+        if($promoCode){
+           $fk_promo = $promoCode->id;
+           $promoUser = UsersPromo::where('fk_promo', $fk_promo)->where('fk_users', $request->get('fk_users'))->first();
+           if(!$promoUser){
+                UsersPromo::insert([
+                    "fk_users" => $request->get('fk_users'),
+                    "fk_promo" => $fk_promo,
+                    "count_promo" => 1,
+                ]);
+                if($promoCode->promo_pourcent == 100){
+                    Property::where('id',$idProperty)->update([
+                        'is_online' => 1,
+                    ]);
+                    return ['redirect' => 'property', 'url' => url('/')];
+                }
+           } else {
+               if($promoCode->count_max >= $promoUser->count_promo ){
+                   $count_promo = ++$promoUser->count_promo;
+                   UsersPromo::where('id', $promoUser->id)->update([
+                       'count_promo' => $count_promo,
+                   ]);
+
+                   if($promoCode->promo_pourcent == 100){
+                    Property::where('id',$idProperty)->update([
+                        'is_online' => 1,
+                    ]);
+                    return ['redirect' => 'property', 'url' =>url('/')];
+                }
+               } else {
+                   $fk_promo = null;
+               }
+           }
+        } else {
+            $fk_promo = null;
+        }
+
+        $paymentMethod = $request->get('type_payment');
+        $pack = $this->getPackById($request->get('pack'));
+        $price = str_replace(".", "", $pack->price);
         if($paymentMethod === 'bancontact'){
-
-
-            $idSession = $this->createStripeSource($command[$payment['command_selected']]);
-            $contactRequest['secret'] = $idSession->id;
+            $idSession = $this->createStripeSource($price, $request->get('contact_email'));
+            $secretId = $idSession->id;
 
         } elseif ($paymentMethod === 'visa'){
-            $idSession = $this->createStripeSession($command[$payment['command_selected']]);
-            $contactRequest['secret'] = $idSession;
+            $idSession = $this->createStripeSession($price, $request->get('contact_email'));
+            $secretId = $idSession;
         }
-        $idCommand = 1;
-        return json_encode( ['payement_method' => $paymentMethod, "session" => $idSession, 'idCommand' => $idCommand]  );
+        return ['redirect' => 'payment', 'payement_method' => $paymentMethod, "session" => $idSession];
 	}
 
     public function paymentSuccess(){
@@ -59,19 +104,18 @@ class PaymentRepository implements ImmoRepositoryInterface
     public function paymentCancel(){
 
     }
-    private function createStripeSession($amount){
+    private function createStripeSession($amount, $email){
 
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
+        Stripe\Stripe::setApiKey('sk_test_zkZylv1VXC1geSp1FR53RemV00xFy483eS');
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
-                'name' => 'réservation voiture',
+                'name' => __('publication of announcement'),
                 'amount' => $amount,
                 'currency' => 'eur',
                 'quantity' => 1,
             ]],
-            'customer_email' => auth()->user()->email,
+            'customer_email' => $email,
             'success_url' => url('paymentSuccess'),
             'cancel_url' => url('paymentCancel'),
         ]);
@@ -79,17 +123,16 @@ class PaymentRepository implements ImmoRepositoryInterface
         return $session->id;
     }
 
-    private function createStripeSource($amount){
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+    private function createStripeSource($amount, $email){
+        Stripe\Stripe::setApiKey('sk_test_zkZylv1VXC1geSp1FR53RemV00xFy483eS');
 
         $session = \Stripe\Source::create([
             "type" => "bancontact",
             "currency" => "eur",
             "amount" => $amount,
             "owner" => [
-                "name" => auth()->user()->name ,
-                "email" => auth()->user()->email,
-                "phone" => 0476574160,
+                "name" => "baurain",
+                "email" => $email,
             ],
             "redirect" => [
                 "return_url" =>  url('paymentSuccess'),

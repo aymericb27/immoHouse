@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Requests\PublishRequest;
 use App\Http\Requests\infoGeneralRequest;
 use App\Http\Requests\PublishDetailedRequest;
 use App\Repositories\ImmoRepository;
@@ -12,11 +13,10 @@ use App\Repositories\PaymentRepository;
 
 class ImmoController extends Controller
 {
-    public function publish(ImmoRepository $immoRepository, PaymentRepository $paymentRepository){
+    public function getPublishForm(ImmoRepository $immoRepository, PaymentRepository $paymentRepository){
 
 
         return view('formPublish', [
-            "property_additionnal_information" => $immoRepository->getPropertyAdditionnalInformation(),
             "property_other_room" => $immoRepository->getPropertyOtherRoom(),
             "energy_class"=>  $immoRepository->getEnergyClass(),
             "heating_type" => $immoRepository->getHeatingTYpe(),
@@ -24,7 +24,16 @@ class ImmoController extends Controller
             "payment_formula" => $paymentRepository->getAllPaymentMethod(),
             "number_week" => $paymentRepository->getNumberWeek(),
             "sub_property_type" => $immoRepository->getAllSubPropertyType(),
+            "formAction" => "publish"
         ]);
+    }
+
+    public function publish(PublishRequest $request, ImmoRepository $immoRepository,PaymentRepository $paymentRepository){
+        $idProperty = $immoRepository->save($request,0);
+        $immoRepository->savePhoto($idProperty,$request);
+        return $paymentRepository->save($request,$idProperty);
+        return $request->input();
+
     }
 
     public function postInfoGeneral(infoGeneralRequest $request, ImmoRepository $immoRepository){
