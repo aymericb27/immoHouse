@@ -54,12 +54,11 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     public function getPropertyById($idProperty)
     {
-        $property = DB::table('property')
-        ->join('type_of_property','property.fk_type_of_property','=','type_of_property.id')
-        ->join('condition_building','condition_building.id','=','property.fk_condition_building')
+        return DB::table('property')
+        ->select('property.id as idProperty','fk_users')
+        ->join('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
         ->where('property.id','=',$idProperty)
-        ->get()->toArray();
-        return $property[0];
+        ->first();
     }
 
     public function getPropertyAdditionnalInformation()
@@ -69,10 +68,21 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     public function getListingPropertiesByUserId($idUser){
         return DB::table('property')
-        ->join('type_of_property','property.fk_type_of_property','=','type_of_property.id')
-        ->select('property.price','property.id','property.address_number','property.address_postal_code','property.address')
-        ->where('property.fk_user','=',$idUser)
+        ->join('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
+        ->join('sell_or_rent','property.fk_sell_or_rent','=','sell_or_rent.id')
+        ->select('property.price','property.id as idProperty','sell_or_rent.id as SellOrRentId','sell_or_rent.type','sub_type_property.sub_type_'. strtoupper(App::currentLocale()).' as sub_type')
+        ->where('property.fk_users','=',$idUser)
+        ->where('property.is_visible','=',1)
         ->get();
+    }
+
+    public function hidePropertyById($idProperty){
+        $property = $this->getPropertyById($idProperty);
+        if(auth()->user()->id == $property->fk_users){
+            Property::where('id',$property->idProperty)->update([
+                'is_visible' => 0
+            ]);
+        }
     }
 
     public function getPicturesByIdProperty($idProperty)
@@ -80,12 +90,12 @@ class ImmoRepository implements ImmoRepositoryInterface
         return DB::table('property_picture')->where('fk_property',$idProperty)->get()->toArray();
     }
 
-    public function getFirstPictureByIdProperty($idProperty)
+    public function getMainPictureByIdProperty($idProperty)
     {
         return DB::table('property_picture')
         ->where('fk_property',$idProperty)
-        ->where('order',0)
-        ->get()->toArray()[0];
+        ->where('is_main_picture',1)
+        ->first();
 
     }
 
@@ -121,7 +131,7 @@ class ImmoRepository implements ImmoRepositoryInterface
         return Province::select('id')->where('short_name', $shortName)->first()->id;
     }
 
-	public function save($request, $isVisible)
+	public function save($request, $isOnline)
 	{
         $localization = $this->getLocalization($request->get('town'), $request->get('street'), $request->get('address_number'));
         $this->property->address_box = ($request->get('address_box')) ? $request->get('address_box'): null;
@@ -136,7 +146,6 @@ class ImmoRepository implements ImmoRepositoryInterface
         $this->property->description_FR = ($request->get('description_FR')) ? $request->get('description_FR'): null;
         $this->property->description_NL = ($request->get('description_NL')) ? $request->get('description_NL'): null;
         $this->property->fk_energy_class = ($request->get('energy_class') !== "undefined") ? $request->get('energy_class'): null;
-        $this->property->fk_pack = $request->get('pack');
         $this->property->fk_province = $localization['fk_province'];
         $this->property->fk_sell_or_rent = $request->get('sell_or_rent');
         $this->property->fk_sub_type_property = $request->get('sub_type_property');
@@ -144,7 +153,8 @@ class ImmoRepository implements ImmoRepositoryInterface
         $this->property->has_garden = $request->get('has_garden');
         $this->property->has_swimming_pool = $request->get('has_swimming_pool');
         $this->property->has_terrace = $request->get('has_terrace');
-        $this->property->is_online = $isVisible;
+        $this->property->is_visible = 1;
+        $this->property->is_online = $isOnline;
         $this->property->latitude = $localization['lat'];
         $this->property->longitude = $localization['lng'];
         $this->property->monthly_costs = $request->get('monthly_costs');

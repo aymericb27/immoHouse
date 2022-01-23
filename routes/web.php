@@ -23,7 +23,7 @@ Route::get('/', function () {
 Route::get('publishSuccessful/{idProperty}', function($idProperty){
     return view('welcome',['idProperty' => $idProperty, 'message' => 'publishSuccessful']);
 });
-
+Route::get('/deleteProperty/{n}',[ImmoController::class,'deleteProperty']);
 Route::get('/publish',[ImmoController::class,'getPublishForm']);
 Route::post('/publish',[ImmoController::class,'publish']);
 Route::get('/getMyListingProperties',[ImmoController::class,'getMyListingProperties']);

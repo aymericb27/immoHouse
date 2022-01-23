@@ -46,6 +46,11 @@ class ImmoController extends Controller
         return $request->input();
     }
 
+    public function deleteProperty($n, ImmoRepository $immoRepository){
+        $immoRepository->hidePropertyById($n);
+        return url('/getMyListingProperties');
+    }
+
     public function getProperty($n,ImmoRepository $immoRepository){
         $property = $immoRepository->getPropertyById($n);
         $property->id = $n;
@@ -56,9 +61,9 @@ class ImmoController extends Controller
     public  function getMyListingProperties(ImmoRepository $immoRepository){
         $listProperties = $immoRepository->getListingPropertiesByUserId(Auth::id());
         foreach($listProperties as $key => $property){
-            $listProperties[$key]->picture = $immoRepository->getFirstPictureByIdProperty($property->id);
+            $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
         }
-        return view('listingOfProperties', ['listProperties' => $listProperties]);
+        return view('listingOfPropertiesUser', ['listProperties' => $listProperties]);
 
     }
 

@@ -12,8 +12,9 @@ use App\Models\Order;
 class PaymentRepository
 {
 
-	public function __construct()
+	public function __construct(Order $order)
 	{
+        $this->order = $order;
 	}
 
     public function getAllPaymentMethod(){
@@ -46,17 +47,27 @@ class PaymentRepository
 
 	public function save($request, $idProperty)
 	{
+        $this->order->fk_pack = $request->get('pack');
+        $this->order->is_active = 1;
+        $this->order->fk_users_promo = null;
+        $this->order->fk_property = $idProperty;
+        $this->order->id_stripe = null;
+        $pack = $this->getPackById($request->get('pack'));
+        $price = (int) str_replace(".", "", $pack->price);
         $promoCode = $this->getPromoByCode($request->get('promo_code'));
         if($promoCode){
            $fk_promo = $promoCode->id;
            $promoUser = UsersPromo::where('fk_promo', $fk_promo)->where('fk_users', $request->get('fk_users'))->first();
            if(!$promoUser){
-                UsersPromo::insert([
+               $price = round(($price / 100 ) * $promoCode->promo_pourcent);
+                $idusersPromo = UsersPromo::insertGetId([
                     "fk_users" => $request->get('fk_users'),
                     "fk_promo" => $fk_promo,
                     "count_promo" => 1,
                 ]);
+                $this->order->fk_users_promo = $idusersPromo;
                 if($promoCode->promo_pourcent == 100){
+                    $this->order->save();
                     Property::where('id',$idProperty)->update([
                         'is_online' => 1,
                     ]);
@@ -64,28 +75,25 @@ class PaymentRepository
                 }
            } else {
                if($promoCode->count_max >= $promoUser->count_promo ){
+                   $price = round(($price / 100 ) * $promoCode->promo_pourcent);
+                   $this->order->fk_users_promo = $promoUser->id;
                    $count_promo = ++$promoUser->count_promo;
                    UsersPromo::where('id', $promoUser->id)->update([
                        'count_promo' => $count_promo,
                    ]);
 
                    if($promoCode->promo_pourcent == 100){
-                    Property::where('id',$idProperty)->update([
-                        'is_online' => 1,
-                    ]);
-                    return ['redirect' => 'property', 'url' =>url('/')];
-                }
-               } else {
-                   $fk_promo = null;
+                        $this->order->save();
+                        Property::where('id',$idProperty)->update([
+                            'is_online' => 1,
+                        ]);
+                        return ['redirect' => 'property', 'url' =>url('/')];
+                    }
                }
            }
-        } else {
-            $fk_promo = null;
         }
 
         $paymentMethod = $request->get('type_payment');
-        $pack = $this->getPackById($request->get('pack'));
-        $price = str_replace(".", "", $pack->price);
         if($paymentMethod === 'bancontact'){
             $idSession = $this->createStripeSource($price, $request->get('contact_email'));
             $secretId = $idSession->id;
@@ -94,6 +102,8 @@ class PaymentRepository
             $idSession = $this->createStripeSession($price, $request->get('contact_email'));
             $secretId = $idSession;
         }
+        $this->order->id_stripe = $secretId;
+        $this->order->save();
         return ['redirect' => 'payment', 'payement_method' => $paymentMethod, "session" => $idSession];
 	}
 

@@ -35,6 +35,7 @@ class CreatePropertyTable extends Migration
             $table->integer('has_swimming_pool');
             $table->integer('has_terrace');
             $table->integer('is_online');
+            $table->integer('is_visible');
             $table->integer('latitude');
             $table->integer('longitude');
             $table->integer('monthly_costs')->nullable();

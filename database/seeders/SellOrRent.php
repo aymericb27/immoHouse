@@ -14,10 +14,10 @@ class SellOrRent extends Seeder
     public function run()
     {
         DB::table('sell_or_rent')->insert([
-            'type' => "sell",
+            'type' => "to sell",
         ]);
         DB::table('sell_or_rent')->insert([
-            'type' => "rent",
+            'type' => "to rent",
         ]);
     }
 }
