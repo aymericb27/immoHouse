@@ -157,13 +157,19 @@ h2{
     border-radius: 2px;
 }
 
-.list_property_user .picture
+.list_property_user .picture, .property_horizontal .picture
 {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    height: 200px;
     position: relative;
+}
+
+.property_horizontal .picture {
+	height: 200px;
+}
+.list_property_user .picture{
+    height: 200px;
 }
 
 .list_property_user:nth-child(even){
@@ -228,12 +234,16 @@ h2{
 .form_publish_selected{
     display: block !important;
 }
-.previousPublishButton{
+.previousPublishButton, .ReturnResultButton{
     text-decoration: underline;
     cursor: pointer;
     color: #4987bf;
+}
+
+.previousPublishButton{
     float: left;
 }
+
 
 .form_step_publish_already_selected{
     color: #4987bf;
@@ -265,7 +275,7 @@ h2{
     color:#3a7dba
 }
 
-.previousPublishButton img{
+.previousPublishButton img, .ReturnResultButton img{
     width: 25px;
     height: 25px;
 }
@@ -552,4 +562,54 @@ label.label_style_payment{
 .modal_btn {
 	text-align:center;
 	padding: 10px;
+}
+
+.property_contact_and_picture .img_private_user
+{
+    width: 100px;
+}
+
+.property_contact_and_picture {
+	padding: 10px;
+	background-color:#3a7dba1f
+
+}
+.property_contact_and_picture .img_contact{
+    width: 70px;
+}
+
+#mapProperty {
+    height: 350px;
+    width: 100%;
+}
+
+.hyperlink{
+    text-decoration: underline;
+    color: #3a7dba;
+    font-weight: bolder;
+}
+
+.property_detailed p {
+	margin-bottom: 5px;
+}
+.property_detailed strong{
+	width: 25%;
+	display: inline-block;
+}
+
+.property_horizontal{
+	border: 1px solid #afafaf;
+	padding: 0px;
+}
+
+.property_horizontal:hover{
+	background-color: #f3f3f3;
+	box-shadow: 0px 0px 5px #6e6e6e;
+	cursor: pointer;
+}
+
+.property_horizontal .picture img{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
 }

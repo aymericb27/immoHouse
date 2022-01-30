@@ -412,7 +412,7 @@
                 </div>
                 <div class="form-group col-md-6 {!! $errors->has('contact_phone_number') ? 'has-error' : '' !!}">
                     {!! Form::label('contact_phone_number', __('phone number'), ['class' => "form-control-label" ]) !!}
-                    {{ Form::number('contact_phone_number',null , ['class' => 'form-control'])}}
+                    {{ Form::tel('contact_phone_number',null , ['class' => 'form-control'])}}
                     {!! $errors->first('contact_phone_number', '<small class="help-block">:message</small>') !!}
                     <div class="row error err_contact_phone_number pl-15">
                         {{__('the field phone number is required')}}

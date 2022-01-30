@@ -12,6 +12,7 @@
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{!! url('img/icon/property_information.png') !!}">
 
 </head>
 <body ng-app="myApp">
@@ -72,5 +73,6 @@
 <script src="{!! url('js/main.js') !!}"></script>
 <script src="{!! url('js/form.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY" async></script>
 
 </html>

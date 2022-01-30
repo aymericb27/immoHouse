@@ -36,7 +36,6 @@
         </div>
         <div class="modal_btn"> {{ Form::button(__('no'), array('class' => 'refuseDeleteProperty btn')) }} {{ Form::button(__('yes'), array('class' => 'acceptDeleteProperty btn btn-danger')) }}</div>
     </div>
-
 </div>
 
 @endsection

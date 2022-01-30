@@ -53,9 +53,12 @@ class ImmoController extends Controller
 
     public function getProperty($n,ImmoRepository $immoRepository){
         $property = $immoRepository->getPropertyById($n);
-        $property->id = $n;
         $property->pictures =  $immoRepository->getPicturesByIdProperty($n);
-        return view('property_detailed',['property' => $property ]);
+        $propertyNearby = $immoRepository->getPropertiesNearby($property);
+        foreach($propertyNearby as $key => $prop){
+            $propertyNearby[$key]->picture = $immoRepository->getMainPictureByIdProperty($prop->idProperty);
+        }
+        return view('property_detailed',['property' => $property, 'property_nearby' => $propertyNearby ]);
     }
 
     public  function getMyListingProperties(ImmoRepository $immoRepository){

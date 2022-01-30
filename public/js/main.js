@@ -39,12 +39,42 @@ $(function() {
         });
     });
 
+    $('.contactByPhoneBtn').on('click',function(){
+        $(this).addClass('d-none');
+        $('.contact_phone_number').removeClass('d-none');
+    })
+
+    $('.contactByMailBtn').on('click',function(){
+        $('.modalSendMail').removeClass('d-none');
+    });
+
     $('.modal .close').on('click',function(){
-        $('.modaDeleteProperty').addClass('d-none');
+        $('.modal').addClass('d-none');
     })
 
     $('.refuseDeleteProperty').on('click',function(){
         $('.modaDeleteProperty').addClass('d-none');
+    })
+
+    $('.openModalMapProperty').on('click',function(event){
+        event.preventDefault();
+        $hrefExplode = $(this).attr('href').split('-');
+        $lat = parseFloat($hrefExplode[0]);
+        $lng = parseFloat($hrefExplode[1]);
+        var myLatLng = { lat: $lat, lng: $lng };
+        $('.modalMapProperty').removeClass('d-none');
+
+        let map;
+
+        map = new google.maps.Map(document.getElementById("mapProperty"), {
+            center: myLatLng,
+            zoom: 15,
+        });
+        new google.maps.Marker({
+            position: myLatLng,
+            map,
+            title: "Hello World!",
+          });
     })
 
 })
