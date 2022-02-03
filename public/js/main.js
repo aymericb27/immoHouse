@@ -73,8 +73,70 @@ $(function() {
         new google.maps.Marker({
             position: myLatLng,
             map,
-            title: "Hello World!",
           });
     })
 
+    function openModalLogin(){
+        removeDisplayNone('.loginModal');
+        $.ajax({
+            url: '/saveRouteForLogin',
+            data: { pathname : window.location.pathname},
+            type: "GET",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (data) {
+                alert("ERROR - " + data.message);
+            }
+        });
+    }
+
+    $('#openModalLogin').on('click',function(event){
+        event.preventDefault();
+        openModalLogin();
+    })
+
+    $('.star_favorite').on('click',function(event){
+        var th = $(this);
+        var idProperty = th.attr('id').split('-')[1];
+        isUserConnected(function(result){
+            if(result){
+                $.ajax({
+                    url: '/toggleFavoris',
+                    data : {idProperty : idProperty},
+                    type: "GET",
+                    success: function(result){
+                        console.log(result);
+                        (result === "add") ? th.addClass('is_favorite') : th.removeClass('is_favorite');
+                    },
+                    error: function (data) {
+                        alert("ERROR - " + data.message);
+                    }
+                })
+            } else {
+                openModalLogin();
+            }
+        })
+
+    })
+
+    function isUserConnected(callback){
+        $.ajax({
+            url: '/isUserConnected',
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: "GET",
+            success: function (result) {
+                callback(result);
+            },
+            error: function (data) {
+                alert("ERROR - " + data.message);
+            }
+        });
+    }
+
+    function removeDisplayNone($id){
+        $($id).removeClass('d-none');
+    }
 })

@@ -9,7 +9,8 @@
             <div class="d-inline-block">{{ __('return to result') }}</div>
         </div>
         <div>
-            <h3 class="mb-0 pt-10 mainColor">{{$property->sub_type}} {{__($property->typeSellOrRent)}}</h3>
+            <h3 class="mb-0 pt-10 mainColor">{{$property->sub_type}} {{__($property->typeSellOrRent)}} <i class="fa fa-star star_favorite @if($is_favorite) is_favorite @endif" id="fav-{{$property->idProperty}}" aria-hidden="true"></i>
+            </h3>
             <p>{{$property->address_street}}
                 @if(isset($property->address_number)), {{$property->address_number}}
                     @if(isset($property->address_box))

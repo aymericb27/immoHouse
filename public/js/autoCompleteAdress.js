@@ -12,20 +12,27 @@ let address2Field;
 let postalField;
 
 function initAutocomplete() {
-  address1Field = document.querySelector("#ship-address");
-  address2Field = document.querySelector("#address2");
-  postalField = document.querySelector("#postcode");
-  // Create the autocomplete object, restricting the search predictions to
-  // addresses in the US and Canada.
-  autocomplete = new google.maps.places.Autocomplete(address1Field, {
-    componentRestrictions: { country: ["be"] },
-    fields: ["address_components", "geometry"],
-    types: ["address"],
-  });
-  address1Field.focus();
-  // When the user selects an address from the drop-down, populate the
-  // address fields in the form.
-  autocomplete.addListener("place_changed", fillInAddress);
+    if($('#ship-address').length != 0){
+        address1Field = document.querySelector("#ship-address");
+        postalField = document.querySelector("#postcode");
+        autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["be"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+        });
+        // Create the autocomplete object, restricting the search predictions to
+        // addresses in the US and Canada.
+
+        if(address1Field){
+            address1Field.focus();
+        }
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener("place_changed", fillInAddress);
+    }
+    
+
+
 }
 
 function fillInAddress() {

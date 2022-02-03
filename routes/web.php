@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImmoController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,9 +36,15 @@ Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paym
 
 Auth::routes();
 Route::get('/logout', [LogoutController::class,'perform'])->name('logout.perform');
-
+Route::get('/toggleFavoris', [ImmoController::class,'toggleFavoris']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
-
+Route::get('/sign-in/google',[LoginController::class, 'google'] );
+Route::get('sign-in/facebook', [LoginController::class, 'facebook']);
+Route::get('/sign-in/google/redirect',[LoginController::class, 'googleRedirect'] );
+Route::get('/sign-in/facebook/redirect',[LoginController::class, 'facebookRedirect'] );
+Route::get('/isUserConnected',[LoginController::class, 'isUserConnected']);
+Route::get('/saveRouteForLogin', [LoginController::class, 'saveRouteForLogin']);
+Route::get('logout', [LoginController::class, 'logout']);
 Route::get('/language/{lang}', function($lang){
     App::setlocale($lang);
     session()->put('locale', $lang);

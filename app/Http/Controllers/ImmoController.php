@@ -28,6 +28,10 @@ class ImmoController extends Controller
         ]);
     }
 
+    public function toggleFavoris(Request $request, ImmoRepository $immoRepository){
+        return $immoRepository->toggleFavoris($request->get('idProperty'));
+    }
+
     public function publish(PublishRequest $request, ImmoRepository $immoRepository,PaymentRepository $paymentRepository){
         $idProperty = $immoRepository->save($request,0);
         $immoRepository->savePhoto($idProperty,$request);
@@ -55,10 +59,14 @@ class ImmoController extends Controller
         $property = $immoRepository->getPropertyById($n);
         $property->pictures =  $immoRepository->getPicturesByIdProperty($n);
         $propertyNearby = $immoRepository->getPropertiesNearby($property);
+        $isFavorite = null;
+        if(Auth::check()){
+            $isFavorite = $immoRepository->verifyFavoriteProperty($n);
+        }
         foreach($propertyNearby as $key => $prop){
             $propertyNearby[$key]->picture = $immoRepository->getMainPictureByIdProperty($prop->idProperty);
         }
-        return view('property_detailed',['property' => $property, 'property_nearby' => $propertyNearby ]);
+        return view('property_detailed',['property' => $property, 'property_nearby' => $propertyNearby , 'is_favorite' => $isFavorite]);
     }
 
     public  function getMyListingProperties(ImmoRepository $immoRepository){

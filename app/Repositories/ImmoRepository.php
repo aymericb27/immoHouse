@@ -10,6 +10,7 @@ use App\Models\HeatingType;
 use App\Models\SubTypeProperty;
 use App\Models\Province;
 use App\Models\Company;
+use App\Models\UsersPropertyFavorites;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -100,6 +101,29 @@ class ImmoRepository implements ImmoRepositoryInterface
             ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
             ->orderBy('distance')
             ->where('property.id','!=', $property->idProperty)->get();
+    }
+
+    public function toggleFavoris($idProperty){
+        if(Auth::check()){
+            $favorite = $this->verifyFavoriteProperty($idProperty);
+            if($favorite){
+                UsersPropertyFavorites::where('id', $favorite->id)->delete();
+                return 'delete';
+            } else {
+                UsersPropertyFavorites::insert([
+                    'fk_property' => $idProperty,
+                    'fk_users' => Auth::id(),
+                ]);
+                return 'add';
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function verifyFavoriteProperty($idProperty){
+        return UsersPropertyFavorites::where('fk_property', $idProperty)
+            ->where('fk_users', Auth::id())->first();
     }
 
     public function getPropertyAdditionnalInformation()

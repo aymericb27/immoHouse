@@ -65,13 +65,13 @@ h2{
     cursor: pointer;
 }
 
-.background-accueil{
+.background_homepage{
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../img/background-accueil.jpg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     position: relative;
-    height: 300px;
+    height: 450px;
 }
 
 .boxCommand div{
@@ -299,20 +299,21 @@ h2{
 	color: #939393;
 	font-size: 14px;
 	line-height: 1;
+	margin-bottom: 0px;
 	width: 19%;
 	height: 35px;
 	text-align: center;
 	padding: 8px 16px;
 	border-radius: 2px;
 	margin-right: -1px;
-	border: 1px solid #939393;
+	border: 1px solid #ced4da;
 	transition: all 0.1s ease-in-out;
 }
 
 .switch_field label:hover {
 	cursor: pointer;
-	color:#9393a18c;
-	border-color: #9393a18c;
+	color: #ced4da;
+	border-color: #ced4dac2;
 }
 
 .switch_field input:checked + label {
@@ -612,4 +613,75 @@ label.label_style_payment{
     position: absolute;
     bottom: 10px;
     right: 15px;
+}
+
+.googleBtn{
+	background-color: #fefefe !important;
+	color: #747474;
+	border: 1px solid #747474;
+
+}
+
+.facebookBtn{
+	background-color:#4267b2 !important;
+}
+
+.googleBtn:hover{
+	color:#747474b0 !important;
+	border-color: #747474b0 !important;
+}
+
+.googleBtn img, .facebookBtn img{
+	width: 36px;
+	position: absolute;
+	left:10px;
+	top: 0px;
+}
+
+.star_favorite {
+    color: #dfdfdf;
+    cursor: pointer;
+}
+
+.star_favorite.is_favorite{
+	color: #f5e23d!important;
+}
+
+
+.star_favorite:hover:not(.is_favorite){
+	color: #dfdfdf8f;
+}
+
+.box_search_homepage {
+	background-color: white;
+	padding: 40px;
+	border-radius: 3px;
+	width: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.search_price_box {
+	border: 1px solid #ced4da;
+	padding: 6px;
+	padding-left: 15px;
+	cursor: pointer;
+	border-radius: 3px;
+}
+
+.search_price_box i {
+	font-weight: 600;
+	float: right;
+	padding-top: 4px;
+}
+
+.form-control::placeholder{
+	color: #939393;
+}
+
+.boxBtnSearchProperty a{
+    width: 19%;
 }
