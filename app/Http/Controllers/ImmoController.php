@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PublishRequest;
 use App\Http\Requests\infoGeneralRequest;
 use App\Http\Requests\PublishDetailedRequest;
+use App\Http\Requests\ResearchInListRequest;
 use App\Repositories\ImmoRepository;
 use App\Repositories\PaymentRepository;
 
@@ -36,7 +37,6 @@ class ImmoController extends Controller
         $idProperty = $immoRepository->save($request,0);
         $immoRepository->savePhoto($idProperty,$request);
         return $paymentRepository->save($request,$idProperty);
-        return $request->input();
 
     }
 
@@ -48,6 +48,27 @@ class ImmoController extends Controller
     public function postPayment(Request $request)
     {
         return $request->input();
+    }
+
+    public function researchInList(ResearchInListRequest $request,  ImmoRepository $immoRepository){
+        $listProperties = $immoRepository->researchInList($request);
+        foreach($listProperties as $key => $property){
+            $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
+        }
+        return view('listingOfProperties',['listProperties' => $listProperties]);
+    }
+
+    public function loadResearch( ImmoRepository $immoRepository){
+        $listProperties = $immoRepository->researchInList(false);
+        foreach($listProperties as $key => $property){
+            $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
+        }
+        return view('listingOfProperties',['listProperties' => $listProperties]);
+    }
+
+    public function home(ImmoRepository $immoRepository){
+        $sub_property = $immoRepository->getSubPropertyByIds([1,9,16,17,18,20,21,22]);
+        return view('welcome', ["sub_property_type" => $sub_property]);
     }
 
     public function deleteProperty($n, ImmoRepository $immoRepository){

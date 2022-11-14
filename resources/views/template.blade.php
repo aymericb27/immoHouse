@@ -73,5 +73,5 @@
 <script src="{!! url('js/form.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
 <script src="{!! url('js/autoCompleteAdress.js') !!}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly&language={{app()->getLocale()}}" async></script>
 </html>

@@ -15,9 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [ImmoController::class,'home'])->name('home');
 
 
 
@@ -27,6 +25,8 @@ Route::get('publishSuccessful/{idProperty}', function($idProperty){
 Route::get('/deleteProperty/{n}',[ImmoController::class,'deleteProperty']);
 Route::get('/publish',[ImmoController::class,'getPublishForm']);
 Route::post('/publish',[ImmoController::class,'publish']);
+Route::post('/researchInList',[ImmoController::class,'researchInList']);
+Route::get('/research',[ImmoController::class,'loadResearch']);
 Route::get('/getMyListingProperties',[ImmoController::class,'getMyListingProperties']);
 Route::get('/getProperty/{n}', [App\Http\Controllers\ImmoController::class,'getProperty']);
 
@@ -37,7 +37,7 @@ Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paym
 Auth::routes();
 Route::get('/logout', [LogoutController::class,'perform'])->name('logout.perform');
 Route::get('/toggleFavoris', [ImmoController::class,'toggleFavoris']);
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/home', [ImmoController::class,'home']);
 Route::get('/sign-in/google',[LoginController::class, 'google'] );
 Route::get('sign-in/facebook', [LoginController::class, 'facebook']);
 Route::get('/sign-in/google/redirect',[LoginController::class, 'googleRedirect'] );

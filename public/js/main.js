@@ -1,15 +1,51 @@
 $(function() {
     var idProperty = '';
+    let minimumPrice = '';
+    let maximumPrice = '';
     $('.close_popup i').on('click',function(){
         $('#message_popup').hide();
     });
 
-    $( document ).ready(function() {
-        $val_is_society = $('input[type=radio][name=is_society]').val();
-        if($val_is_society === '1' && $('input[type=radio][name=is_society]').is(':checked')){
-            $('.company_register').removeClass('d-none');
+    $('.search_price_box_value input').on('keyup mouseup', function () {
+        $html = '';
+
+        ($(this).attr('name') === "minimum_price") ? minimumPrice = transformPrice($(this).val()) : maximumPrice = transformPrice($(this).val());
+        if(minimumPrice && maximumPrice){
+            $html = minimumPrice + ' - ' + maximumPrice;
+        } else if(minimumPrice){
+            $html = minimumPrice + ' < ';
+        } else if(maximumPrice){
+            $html = '< ' + maximumPrice;
         }
+        ($('input[name="minimum_price"]').val() || $('input[name="maximum_price"]').val())? addDisplayNone('.price_text'): removeDisplayNone('.price_text');
+        $('.price_value').html($html);
     });
+
+    function transformPrice($val){
+        $val = parseInt($val);
+        if( $val >= 1000000) {
+            $val = ($val / 1000000) + "M";
+        }
+        if($val >= 1000){
+            $val = ($val / 1000) + 'K';
+        }
+
+        return $val;
+    }
+
+    $('.search_price_box').on('click',function(){
+        $('.search_price_box_value').toggleClass('d-none');
+    })
+
+    $('.search_val').on('click',function(){
+        addDisplayNone('.search_price_box_value');
+    })
+
+    $val_is_society = $('input[type=radio][name=is_society]').val();
+    if($val_is_society === '1' && $('input[type=radio][name=is_society]').is(':checked')){
+        $('.company_register').removeClass('d-none');
+    }
+
     $('input[type=radio][name=is_society]').change(function() {
         (this.value == 1) ? $('.company_register').removeClass('d-none') : $('.company_register').addClass('d-none');
     });
@@ -138,5 +174,9 @@ $(function() {
 
     function removeDisplayNone($id){
         $($id).removeClass('d-none');
+    }
+
+    function addDisplayNone($id){
+        $($id).addClass('d-none');
     }
 })

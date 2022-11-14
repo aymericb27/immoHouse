@@ -71,7 +71,7 @@ class Province extends Seeder
             'name_FR' => "brabant flamand",
             'name_EN' => "flemish brabant",
             'name_NL' => "vlaams-Brabant",
-            'short_name' => 'NA',
+            'short_name' => 'VB',
         ]);
 
 

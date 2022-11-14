@@ -157,7 +157,7 @@ h2{
     border-radius: 2px;
 }
 
-.list_property_user .picture, .property_horizontal .picture
+.list_property_user .picture, .property_horizontal .picture, .list_property .picture
 {
     background-repeat: no-repeat;
     background-position: center center;
@@ -165,10 +165,7 @@ h2{
     position: relative;
 }
 
-.property_horizontal .picture {
-	height: 200px;
-}
-.list_property_user .picture{
+.property_horizontal .picture , .list_property_user .picture, .list_property .picture{
     height: 200px;
 }
 
@@ -617,9 +614,8 @@ label.label_style_payment{
 
 .googleBtn{
 	background-color: #fefefe !important;
-	color: #747474;
+	color: #747474 !important;
 	border: 1px solid #747474;
-
 }
 
 .facebookBtn{
@@ -654,9 +650,9 @@ label.label_style_payment{
 
 .box_search_homepage {
 	background-color: white;
-	padding: 40px;
+	padding: 45px;
 	border-radius: 3px;
-	width: 50%;
+	width: 60%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -684,4 +680,32 @@ label.label_style_payment{
 
 .boxBtnSearchProperty a{
     width: 19%;
+}
+
+.search_place{
+	background-color: #3a7dba;
+	color: white;
+	border-radius: 15px;
+	padding : 5px 10px;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.search_place .fa-close{
+	padding-left: 5px;
+	cursor: pointer;
+}
+
+.search_place .fa-close:hover{
+	color : #efefef
+}
+
+.search_price_box_value {
+	border : 1px solid #ced4da;
+	padding: 15px;
+	width: 25%;
+	position: fixed;
+	background-color: white;
+	border-radius: 3px;
+	box-shadow: 0px 0px 3px;
 }

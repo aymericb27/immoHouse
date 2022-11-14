@@ -37,6 +37,89 @@ class ImmoRepository implements ImmoRepositoryInterface
         return SubTypeProperty::select('sub_type_'. strtoupper(app()->getLocale()) .' as sub_type','id', 'fk_type_property')->get();
     }
 
+    public function getSubPropertyByIds($SubProp){
+        return SubTypeProperty::select('sub_type_'. strtoupper(app()->getLocale()) .' as sub_type','id')
+        ->whereIn('id', $SubProp)
+        ->get();
+    }
+
+    public function verifyCountResearch(&$count){
+        $result = ($count > 0) ? 'OR' : '';
+        $count++;
+        return $result;
+    }
+
+    public function researchInList($request){
+        if($request === false){
+            $listSearchPlace = false;
+        } else {
+            $listSearchPlace = $request->get('place_research');
+        }
+        $countSearchPlace = 0;
+        $sqlWhereSearchPlace = '(';
+        $sqlSelectDistance = '';
+        $listDistance = [];
+        if($listSearchPlace){
+            foreach($listSearchPlace as $searchPlace){
+                $searchPlace = json_decode($searchPlace);
+                if($searchPlace->type === "locality" || $searchPlace->type === "sublocality_level_1"){
+                    if($searchPlace->name === "Bruxelles" || $searchPlace->name === "Brussel" || $searchPlace->name === "Brussels"){
+                        $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( property.fk_province = ". $this->getProvinceIdByShortName("BXL") .") ";
+                    } else {
+                        if($postalCode = $this->getLocalization($searchPlace->name,'','')['postal_code']){
+                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( address_postal_code = '". $postalCode ."' ) ";
+                        } else {
+                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." (( distance_$countSearchPlace = 'ok' ) OR ( address_town = '". $searchPlace->name ."' )) ";
+                            array_push($listDistance, ['id' => $countSearchPlace, 'lat' => $searchPlace->lat, 'lng' =>$searchPlace->lng]);
+                        }
+                    }
+                } else if ($searchPlace->type === "administrative_area_level_2"){
+                    $sqlWhereSearchPlace .= $this->verifyCountResearch($count) ." ( property.fk_province = ". $this->getProvinceIdByShortName($searchPlace->shortName) .") ";
+                }
+            }
+            $sqlWhereSearchPlace .= ')';
+            foreach($listDistance as $distance){
+                $sqlSelectDistance .= ", SQRT( POW(111.111 * (property.latitude - ". $distance['lat'] ."), 2) + POW(111.111 * (". $distance['lng'] ." - property.longitude) * COS(property.latitude / 57.2), 2)) as distance_". $distance['id'];
+            }
+        }
+
+
+        $sql = Property::selectRaw("property.id as idProperty, pack.fk_type_pack, property.fk_province,sub_type_". strtoupper(App::currentLocale()) . " as sub_type,
+        sell_or_rent.type as typeSellOrRent,property.price,property.fk_energy_class,property.fk_sell_or_rent,address_town $sqlSelectDistance")
+            ->join('sell_or_rent', 'property.fk_sell_or_rent', '=', 'sell_or_rent.id')
+            ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
+            ->join('order','order.fk_property','=','property.id')
+            ->join('pack','order.fk_pack','=','pack.id')
+            ->where('order.is_active', 1)
+            ->where('property.is_online', 1)
+            ->where('property.is_visible', 1)
+            ->orderBy('pack.fk_type_pack','DESC');
+        if($countSearchPlace > 0){
+            $sql->havingRaw($sqlWhereSearchPlace);
+        }
+        if($request){
+            if($sellOrRent = $request->get('sell_or_rent')){
+                $sql->where('property.fk_sell_or_rent', $sellOrRent);
+            }
+            if($fkSubProperty = $request->get('sub_type_property')){
+                $sql->where('property.fk_sub_type_property', $fkSubProperty);
+            }
+
+            $minimumPrice = $request->get('minimum_price');
+            $maximumPrice = $request->get('maximum_price');
+
+            if($minimumPrice && $maximumPrice){
+                $sql->whereBetween('property.price', [$minimumPrice, $maximumPrice]);
+            } else if ($minimumPrice){
+                $sql->where('property.price','>=',$minimumPrice);
+            } else if ($maximumPrice){
+                $sql->where('property.price','<=',$maximumPrice);
+            }
+        }
+
+        return $sql->get();
+        }
+
     public function getEnergyClass(){
         $undefined = new \stdClass();
         $undefined->id = "undefined";
@@ -167,7 +250,7 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     private function getLocalization($town,$street,$adressNumber){
 
-        $address = "$adressNumber $street, $town, BE";
+        $address = "$adressNumber $street $town, Belgium";
         $address = str_replace(' ', '+', $address);
         // geocoding api url
         $url = "https://maps.google.com/maps/api/geocode/json?address=$address&key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY";
@@ -175,12 +258,16 @@ class ImmoRepository implements ImmoRepositoryInterface
         $geocode = file_get_contents($url);
         $json = json_decode($geocode);
         $data['fk_province'] = null;
+        $data['postal_code'] = null;
         if($json->status == "OK"){
             foreach($json->results[0]->address_components as $compoments){
                 if($compoments->types[0] == "administrative_area_level_2"){
                     $data['fk_province'] = $this->getProvinceIdByShortName($compoments->short_name);
-                } else if ($compoments->short_name == "Bruxelles"){
+                } else if ($compoments->short_name == "Bruxelles" || $compoments->short_name == "Brussel" || $compoments->short_name == "Brussels"){
                     $data['fk_province'] = $this->getProvinceIdByShortName("BXL");
+                }
+                if($compoments->types[0] == "postal_code"){
+                    $data['postal_code'] = $compoments->long_name;
                 }
             }
             $data['lat'] = $json->results[0]->geometry->location->lat;
@@ -194,7 +281,7 @@ class ImmoRepository implements ImmoRepositoryInterface
     }
 
     private function getProvinceIdByShortName($shortName){
-        return Province::select('id')->where('short_name', $shortName)->first()->id;
+        return ($province = Province::select('id')->where('short_name', $shortName)->first()) ? $province->id : null;
     }
 
 	public function save($request, $isOnline)

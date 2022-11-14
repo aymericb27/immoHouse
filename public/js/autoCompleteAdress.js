@@ -10,7 +10,8 @@ let autocomplete;
 let address1Field;
 let address2Field;
 let postalField;
-
+let countPlace = 0;
+let listPlaceResearch = [];
 function initAutocomplete() {
     if($('#ship-address').length != 0){
         address1Field = document.querySelector("#ship-address");
@@ -30,9 +31,83 @@ function initAutocomplete() {
         // address fields in the form.
         autocomplete.addListener("place_changed", fillInAddress);
     }
-    
+
+    if($('#searchText').length !== 0){
+        address1Field = document.querySelector("#searchText");
+        autocomplete = new google.maps.places.Autocomplete(address1Field, {
+            componentRestrictions: { country: ["be"] },
+            fields: ["address_components", "geometry"],
+            types: ["(regions)"],
+        });
+
+        if(address1Field){
+            address1Field.focus();
+        }
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener("place_changed", addAdressToResearch);
+    }
 
 
+
+}
+
+function addAdressToResearch(){
+    const place = autocomplete.getPlace();
+    $('#searchText').val('');
+    console.log(place);
+    countPlace++;
+    $txt = '';
+    $type = '';
+    $shortName = '';
+    $count = 0;
+    for (const component of place.address_components) {
+        const componentType = component.types[0];
+        switch (componentType) {
+
+          case "sublocality_level_1": {
+              $type = componentType;
+              $txt += component.long_name;
+              $count++;
+          }
+          case "locality": {
+              if($count == 0){
+                $type = componentType;
+                $txt += component.long_name;
+                $count++;
+              }
+            break;
+          }
+          case "administrative_area_level_2": {
+            if($count == 0){
+                $type = componentType;
+                $txt += component.long_name;
+                $shortName = component.short_name;
+                $count++;
+              }
+            break;
+          }
+          case "administrative_area_level_1": {
+            if($count == 0){
+                $type = componentType;
+                $txt += component.long_name;
+                $shortName = component.short_name;
+                $count++;
+              }
+            break;
+          }
+        }
+    }
+    listPlaceResearch.push({
+        id : countPlace,
+        lat : place.geometry.location.lat(),
+        lng : place.geometry.location.lng(),
+        type : $type,
+        name : $txt,
+        shortName : $shortName,
+    });
+    $html = "<div id='search_place-"+ countPlace +"' class='search_place'>"+ $txt +"<i class='fa fa-close close_search_place'></i></div>";
+    $('.listResearch').append($html)
 }
 
 function fillInAddress() {
@@ -78,3 +153,46 @@ function fillInAddress() {
   // prediction, set cursor focus on the second address line to encourage
   // entry of subpremise information such as apartment, unit, or floor number.
 }
+
+$('.listResearch').on('click', '.close_search_place', function(){
+    $id = $(this).parent().attr('id').split('-')[1];
+    console.log($id);
+    for (var i = 0; i < listPlaceResearch.length; ++i) {
+        if (listPlaceResearch[i].id == $id){
+            listPlaceResearch.splice(i, 1);
+        }
+    }
+    $(this).parent().remove();
+    console.log(listPlaceResearch);
+});
+
+$('.searchInTheList').on('click',function(event){
+    var formData = new FormData(document.getElementById('searchPropertyForm'));
+    for(var i = 0; i < listPlaceResearch.length; ++i){
+        console.log(listPlaceResearch[i]);
+        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    }
+    for(var pair of formData.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]);
+     }
+     console.log(listPlaceResearch);
+
+     $.ajax({
+        url: '/researchInList',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (data) {
+            console.log(data);
+            document.open();
+            window.history.pushState('', '', '/research');
+            document.write(data);
+            document.close();
+        },
+        error: function (data) {
+            alert("ERROR - " + data.responseText);
+        }
+    });
+})

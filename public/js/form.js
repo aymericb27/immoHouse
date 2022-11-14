@@ -127,7 +127,6 @@ $(function() {
                     $isValid = false;
                     $errorClass.push('err_property_pictures');
                 }
-                console.log(filesToUpload);
                 break;
             case 8:
                 if(!$('input[name="type_payment"]').is(':checked')){
