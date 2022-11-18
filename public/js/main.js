@@ -1,8 +1,8 @@
-$(function() {
+$(function () {
     var idProperty = '';
     let minimumPrice = '';
     let maximumPrice = '';
-    $('.close_popup i').on('click',function(){
+    $('.close_popup i').on('click', function () {
         $('#message_popup').hide();
     });
 
@@ -10,52 +10,52 @@ $(function() {
         $html = '';
 
         ($(this).attr('name') === "minimum_price") ? minimumPrice = transformPrice($(this).val()) : maximumPrice = transformPrice($(this).val());
-        if(minimumPrice && maximumPrice){
+        if (minimumPrice && maximumPrice) {
             $html = minimumPrice + ' - ' + maximumPrice;
-        } else if(minimumPrice){
+        } else if (minimumPrice) {
             $html = minimumPrice + ' < ';
-        } else if(maximumPrice){
+        } else if (maximumPrice) {
             $html = '< ' + maximumPrice;
         }
-        ($('input[name="minimum_price"]').val() || $('input[name="maximum_price"]').val())? addDisplayNone('.price_text'): removeDisplayNone('.price_text');
+        ($('input[name="minimum_price"]').val() || $('input[name="maximum_price"]').val()) ? addDisplayNone('.price_text') : removeDisplayNone('.price_text');
         $('.price_value').html($html);
     });
 
-    function transformPrice($val){
+    function transformPrice($val) {
         $val = parseInt($val);
-        if( $val >= 1000000) {
+        if ($val >= 1000000) {
             $val = ($val / 1000000) + "M";
         }
-        if($val >= 1000){
+        if ($val >= 1000) {
             $val = ($val / 1000) + 'K';
         }
 
         return $val;
     }
 
-    $('.search_price_box').on('click',function(){
+    $('.search_price_box').on('click', function () {
         $('.search_price_box_value').toggleClass('d-none');
     })
 
-    $('.search_val').on('click',function(){
+    $('.search_val').on('click', function () {
         addDisplayNone('.search_price_box_value');
     })
 
     $val_is_society = $('input[type=radio][name=is_society]').val();
-    if($val_is_society === '1' && $('input[type=radio][name=is_society]').is(':checked')){
+    if ($val_is_society === '1' && $('input[type=radio][name=is_society]').is(':checked')) {
         $('.company_register').removeClass('d-none');
     }
 
-    $('input[type=radio][name=is_society]').change(function() {
+    $('input[type=radio][name=is_society]').change(function () {
         (this.value == 1) ? $('.company_register').removeClass('d-none') : $('.company_register').addClass('d-none');
     });
 
-    $('.deleteProperty').on('click',function(){
+    $('.deleteProperty').on('click', function () {
         $('.modaDeleteProperty').removeClass('d-none');
         idProperty = $(this).attr('id').split('-')[1];
     })
 
-    $('.acceptDeleteProperty').on('click',function(){
+    $('.acceptDeleteProperty').on('click', function () {
         console.log(idProperty);
         $('.modaDeleteProperty').addClass('d-none');
         $.ajax({
@@ -75,24 +75,24 @@ $(function() {
         });
     });
 
-    $('.contactByPhoneBtn').on('click',function(){
+    $('.contactByPhoneBtn').on('click', function () {
         $(this).addClass('d-none');
         $('.contact_phone_number').removeClass('d-none');
     })
 
-    $('.contactByMailBtn').on('click',function(){
+    $('.contactByMailBtn').on('click', function () {
         $('.modalSendMail').removeClass('d-none');
     });
 
-    $('.modal .close').on('click',function(){
+    $('.modal .close').on('click', function () {
         $('.modal').addClass('d-none');
     })
 
-    $('.refuseDeleteProperty').on('click',function(){
+    $('.refuseDeleteProperty').on('click', function () {
         $('.modaDeleteProperty').addClass('d-none');
     })
 
-    $('.openModalMapProperty').on('click',function(event){
+    $('.openModalMapProperty').on('click', function (event) {
         event.preventDefault();
         $hrefExplode = $(this).attr('href').split('-');
         $lat = parseFloat($hrefExplode[0]);
@@ -109,14 +109,14 @@ $(function() {
         new google.maps.Marker({
             position: myLatLng,
             map,
-          });
+        });
     })
 
-    function openModalLogin(){
+    function openModalLogin() {
         removeDisplayNone('.loginModal');
         $.ajax({
             url: '/saveRouteForLogin',
-            data: { pathname : window.location.pathname},
+            data: { pathname: window.location.pathname },
             type: "GET",
             success: function (result) {
                 console.log(result);
@@ -127,23 +127,32 @@ $(function() {
         });
     }
 
-    $('#openModalLogin').on('click',function(event){
+    $('#openModalLogin').on('click', function (event) {
         event.preventDefault();
         openModalLogin();
     })
+    $('.list_property .star_favorite').on('click', function (event) {
+        event.preventDefault();
+    });
 
-    $('.star_favorite').on('click',function(event){
+    $('.property_horizontal .star_favorite').on('click', function (event) {
+        event.preventDefault();
+    });
+
+    $('.star_favorite').on('click', function (event) {
         var th = $(this);
         var idProperty = th.attr('id').split('-')[1];
-        isUserConnected(function(result){
-            if(result){
+
+        isUserConnected(function (result) {
+            if (result) {
+                th.toggleClass('is_favorite');
                 $.ajax({
                     url: '/toggleFavoris',
-                    data : {idProperty : idProperty},
+                    data: { idProperty: idProperty },
                     type: "GET",
-                    success: function(result){
+                    success: function (result) {
                         console.log(result);
-                        (result === "add") ? th.addClass('is_favorite') : th.removeClass('is_favorite');
+                        //(result === "add") ? th.addClass('is_favorite') : th.removeClass('is_favorite');
                     },
                     error: function (data) {
                         alert("ERROR - " + data.message);
@@ -156,7 +165,7 @@ $(function() {
 
     })
 
-    function isUserConnected(callback){
+    function isUserConnected(callback) {
         $.ajax({
             url: '/isUserConnected',
             cache: false,
@@ -172,11 +181,29 @@ $(function() {
         });
     }
 
-    function removeDisplayNone($id){
+    function removeDisplayNone($id) {
         $($id).removeClass('d-none');
     }
 
-    function addDisplayNone($id){
+    function addDisplayNone($id) {
         $($id).addClass('d-none');
     }
+
+    
+
+})
+
+
+$(".slider-btn.next").on('click', function () {
+    var nameSlide = $(this).attr('id').split('-')[1];
+    var sliderMain = document.getElementById("slider-main-" + nameSlide);
+    var item = sliderMain.getElementsByClassName('item');
+    sliderMain.append(item[0]);
+})
+
+$(".slider-btn.prev").on('click', function(){
+    var nameSlide = $(this).attr('id').split('-')[1];
+    var sliderMain = document.getElementById("slider-main-" + nameSlide);
+    var item = sliderMain.getElementsByClassName('item');
+    sliderMain.prepend(item[item.length - 1]);
 })

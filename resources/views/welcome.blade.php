@@ -45,11 +45,19 @@
             <div class="listResearch mb-40 mt-10"></div>
             <div class="text-center boxBtnSearchProperty">
                 <a  class="btn searchInTheList">{{__('search in the list')}}</a>
-                <a class="btn">{{__('add more filter')}} <i class="fa fa-plus"></i></a>
+                <a class="btn welcomeAddMoreFilter">{{__('add more filter')}} <i class="fa fa-plus"></i></a>
                 <a  class="btn">{{__('search in map')}} <i class="fa fa-map-marker" aria-hidden="true"></i></a>
             </div>
 
         {!! Form::close() !!}
     </div>
+</div>
+<div class="mt-40">
+    <h3 class="mainColor mt-20 ml-10 mb-20 text-center">{{__('featured properties')}}</h3>
+    @include('sliderHorizontal', array('name' => 'featuredProperties', 'listItems' => $featuredProperties))
+</div>
+<div class="mt-40 pb-40">
+    <h3 class="mainColor mt-20 ml-10 mb-20 text-center">{{__('recently added')}}</h3>
+    @include('sliderHorizontal', array('name' => 'lastAdded', 'listItems' => $lastAdded))
 </div>
 @endsection

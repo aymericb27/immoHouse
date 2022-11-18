@@ -156,27 +156,44 @@ function fillInAddress() {
 
 $('.listResearch').on('click', '.close_search_place', function(){
     $id = $(this).parent().attr('id').split('-')[1];
-    console.log($id);
     for (var i = 0; i < listPlaceResearch.length; ++i) {
         if (listPlaceResearch[i].id == $id){
             listPlaceResearch.splice(i, 1);
         }
     }
     $(this).parent().remove();
-    console.log(listPlaceResearch);
 });
+
+
+$('.welcomeAddMoreFilter').on('click',function(event){
+    var formData = new FormData(document.getElementById('searchPropertyForm'));
+    for(var i = 0; i < listPlaceResearch.length; ++i){
+        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    }
+     $.ajax({
+        url: '/addMoreFilter',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (data) {
+            document.open();
+            window.history.pushState('', '', '/moreFilter');
+            document.write(data);
+            document.close();
+        },
+        error: function (data) {
+            alert("ERROR - " + data.responseText);
+        }
+    });
+})
 
 $('.searchInTheList').on('click',function(event){
     var formData = new FormData(document.getElementById('searchPropertyForm'));
     for(var i = 0; i < listPlaceResearch.length; ++i){
-        console.log(listPlaceResearch[i]);
         formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
     }
-    for(var pair of formData.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]);
-     }
-     console.log(listPlaceResearch);
-
      $.ajax({
         url: '/researchInList',
         data: formData,
@@ -185,7 +202,6 @@ $('.searchInTheList').on('click',function(event){
         contentType: false,
         type: "POST",
         success: function (data) {
-            console.log(data);
             document.open();
             window.history.pushState('', '', '/research');
             document.write(data);

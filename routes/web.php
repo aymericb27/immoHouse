@@ -29,7 +29,8 @@ Route::post('/researchInList',[ImmoController::class,'researchInList']);
 Route::get('/research',[ImmoController::class,'loadResearch']);
 Route::get('/getMyListingProperties',[ImmoController::class,'getMyListingProperties']);
 Route::get('/getProperty/{n}', [App\Http\Controllers\ImmoController::class,'getProperty']);
-
+Route::post('/addMoreFilter',[ImmoController::class,'addMoreFilter']);
+Route::get('/moreFilter', [ImmoController::class,'addMoreFilter']);
 Route::post('/postPayment',[App\Http\Controllers\PaymentController::class,'postPayment']);
 Route::get('/paymentSuccess',[App\Http\Controllers\PaymentController::class,'paymentSuccess']);
 Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paymentCancel']);

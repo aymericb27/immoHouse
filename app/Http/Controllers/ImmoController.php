@@ -50,6 +50,14 @@ class ImmoController extends Controller
         return $request->input();
     }
 
+    public function addMoreFilter(ResearchInListRequest $request,  ImmoRepository $immoRepository){
+        return view('moreFilter', [
+            'req' => $request->input(),
+            'sell_or_rent' => $immoRepository->getSellOrRent(),
+            "property_type" => $immoRepository->getAllPropertyType(),
+        ]);
+    }
+
     public function researchInList(ResearchInListRequest $request,  ImmoRepository $immoRepository){
         $listProperties = $immoRepository->researchInList($request);
         foreach($listProperties as $key => $property){
@@ -68,7 +76,19 @@ class ImmoController extends Controller
 
     public function home(ImmoRepository $immoRepository){
         $sub_property = $immoRepository->getSubPropertyByIds([1,9,16,17,18,20,21,22]);
-        return view('welcome', ["sub_property_type" => $sub_property]);
+        $lastAdded = $immoRepository->getlastAddedProperty();
+        $lastAdded = $immoRepository->getSpacePrice($lastAdded);
+        $featuredProperties = $immoRepository->getFeaturedProperties();
+        $featuredProperties = $immoRepository->getSpacePrice($featuredProperties);
+        foreach($lastAdded as $key => $property){
+            $lastAdded[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
+            $lastAdded[$key]->isFavorite = $immoRepository->verifyFavoriteProperty($property->idProperty);
+        }
+        foreach($featuredProperties as $key => $property){
+            $featuredProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
+            $featuredProperties[$key]->isFavorite = $immoRepository->verifyFavoriteProperty($property->idProperty);
+        }
+        return view('welcome', ["sub_property_type" => $sub_property, "lastAdded" => $lastAdded, "featuredProperties" => $featuredProperties]);
     }
 
     public function deleteProperty($n, ImmoRepository $immoRepository){

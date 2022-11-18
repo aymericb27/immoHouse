@@ -11,6 +11,8 @@ use App\Models\SubTypeProperty;
 use App\Models\Province;
 use App\Models\Company;
 use App\Models\UsersPropertyFavorites;
+use App\Models\SellOrRent;
+use App\Models\TypeProperty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
@@ -27,6 +29,14 @@ class ImmoRepository implements ImmoRepositoryInterface
 
     public function saveInSession($property){
         session(['property' => $property]);
+    }
+
+    public function getAllPropertyType(){
+        return TypeProperty::select('id','type_'. strtoupper(app()->getLocale()) .' as type')->get();
+    }
+
+    public function getSellOrRent(){
+        return SellOrRent::select('id', 'type')->get();
     }
 
     public function getHeatingTYpe(){
@@ -47,6 +57,24 @@ class ImmoRepository implements ImmoRepositoryInterface
         $result = ($count > 0) ? 'OR' : '';
         $count++;
         return $result;
+    }
+
+    public function getFeaturedProperties(){
+        return Property::select('property.id as idProperty','property.fk_energy_class',"sub_type_". strtoupper(App::currentLocale()) . " as sub_type", 'sell_or_rent.type as typeSellOrRent', 'property.price', 'property.address_town')
+        ->join('sell_or_rent', 'property.fk_sell_or_rent', '=', 'sell_or_rent.id')
+        ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
+        ->join('order','order.fk_property','=','property.id')
+        ->join('pack','order.fk_pack','=','pack.id')
+        ->where('pack.fk_type_pack','=', 3)
+        ->where('order.is_active', 1)
+        ->orderBy('property.created_at',"DESC")->limit(30)->get();
+    }
+
+    public function getlastAddedProperty(){
+        return Property::select('property.id as idProperty','property.fk_energy_class',"sub_type_". strtoupper(App::currentLocale()) . " as sub_type", 'sell_or_rent.type as typeSellOrRent', 'property.price', 'property.address_town')
+        ->join('sell_or_rent', 'property.fk_sell_or_rent', '=', 'sell_or_rent.id')
+        ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
+        ->orderBy('property.created_at',"DESC")->limit(30)->get();
     }
 
     public function researchInList($request){
@@ -84,7 +112,7 @@ class ImmoRepository implements ImmoRepositoryInterface
         }
 
 
-        $sql = Property::selectRaw("property.id as idProperty, pack.fk_type_pack, property.fk_province,sub_type_". strtoupper(App::currentLocale()) . " as sub_type,
+        $sql = Property::selectRaw("property.id as idProperty, property.nbr_bedroom, property.total_area, description_". strtoupper(App::currentLocale()) . " as description ,pack.fk_type_pack, property.fk_province,sub_type_". strtoupper(App::currentLocale()) . " as sub_type,
         sell_or_rent.type as typeSellOrRent,property.price,property.fk_energy_class,property.fk_sell_or_rent,address_town $sqlSelectDistance")
             ->join('sell_or_rent', 'property.fk_sell_or_rent', '=', 'sell_or_rent.id')
             ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
@@ -117,9 +145,21 @@ class ImmoRepository implements ImmoRepositoryInterface
             }
         }
 
-        return $sql->get();
+        $listProperty = $sql->get();
+        $listProperty = $this->getSpacePrice($listProperty);
+        for ($i=0; $i < count($listProperty); $i++) {
+            $listProperty[$i]['isFavorite'] = $this->verifyFavoriteProperty($listProperty[$i]['idProperty']);
+
+        }
+        return $listProperty;
         }
 
+    public function getSpacePrice($listProperty){
+        for ($i=0; $i < count($listProperty); $i++) {
+            $listProperty[$i]->price = number_format($listProperty[$i]->price, 0, '.', ' ');
+        }
+        return $listProperty;
+    }
     public function getEnergyClass(){
         $undefined = new \stdClass();
         $undefined->id = "undefined";
