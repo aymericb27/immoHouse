@@ -32,9 +32,10 @@ Route::get('/getProperty/{n}', [App\Http\Controllers\ImmoController::class,'getP
 Route::post('/addMoreFilter',[ImmoController::class,'addMoreFilter']);
 Route::get('/moreFilter', [ImmoController::class,'addMoreFilter']);
 Route::post('/postPayment',[App\Http\Controllers\PaymentController::class,'postPayment']);
+Route::post('/researchByMoreFilter',[ImmoController::class,'researchByMoreFilter']);
 Route::get('/paymentSuccess',[App\Http\Controllers\PaymentController::class,'paymentSuccess']);
 Route::get('/paymentCancel',[App\Http\Controllers\PaymentController::class,'paymentCancel']);
-
+Route::post('/getNumberPropertiesMoreFilter',[ImmoController::class,'getNumberPropertiesMoreFilter']);
 Auth::routes();
 Route::get('/logout', [LogoutController::class,'perform'])->name('logout.perform');
 Route::get('/toggleFavoris', [ImmoController::class,'toggleFavoris']);

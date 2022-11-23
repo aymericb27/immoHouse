@@ -53,6 +53,12 @@ class ImmoRepository implements ImmoRepositoryInterface
         ->get();
     }
 
+    public function getSubPropertiesByFk($fkTypeProperty){
+        return SubTypeProperty::select('sub_type_'. strtoupper(app()->getLocale()) .' as sub_type','id')
+        ->where('fk_type_property', $fkTypeProperty)
+        ->get();
+    }
+
     public function verifyCountResearch(&$count){
         $result = ($count > 0) ? 'OR' : '';
         $count++;
@@ -97,12 +103,12 @@ class ImmoRepository implements ImmoRepositoryInterface
                         if($postalCode = $this->getLocalization($searchPlace->name,'','')['postal_code']){
                             $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( address_postal_code = '". $postalCode ."' ) ";
                         } else {
-                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." (( distance_$countSearchPlace = 'ok' ) OR ( address_town = '". $searchPlace->name ."' )) ";
+                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." (( distance_$countSearchPlace = 'ok' ) OR ( address_town = \"". $searchPlace->name ."\" )) ";
                             array_push($listDistance, ['id' => $countSearchPlace, 'lat' => $searchPlace->lat, 'lng' =>$searchPlace->lng]);
                         }
                     }
                 } else if ($searchPlace->type === "administrative_area_level_2"){
-                    $sqlWhereSearchPlace .= $this->verifyCountResearch($count) ." ( property.fk_province = ". $this->getProvinceIdByShortName($searchPlace->shortName) .") ";
+                    $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( property.fk_province = ". $this->getProvinceIdByShortName($searchPlace->shortName) .") ";
                 }
             }
             $sqlWhereSearchPlace .= ')';
@@ -123,6 +129,7 @@ class ImmoRepository implements ImmoRepositoryInterface
             ->where('property.is_visible', 1)
             ->orderBy('pack.fk_type_pack','DESC');
         if($countSearchPlace > 0){
+
             $sql->havingRaw($sqlWhereSearchPlace);
         }
         if($request){
@@ -132,16 +139,60 @@ class ImmoRepository implements ImmoRepositoryInterface
             if($fkSubProperty = $request->get('sub_type_property')){
                 $sql->where('property.fk_sub_type_property', $fkSubProperty);
             }
+            if($fkSubTabProperty = $request->get('sub_type_property_tab')){
+                $sql->whereIn('property.fk_sub_type_property', $fkSubTabProperty);
+            }
 
             $minimumPrice = $request->get('minimum_price');
             $maximumPrice = $request->get('maximum_price');
-
             if($minimumPrice && $maximumPrice){
                 $sql->whereBetween('property.price', [$minimumPrice, $maximumPrice]);
             } else if ($minimumPrice){
                 $sql->where('property.price','>=',$minimumPrice);
             } else if ($maximumPrice){
                 $sql->where('property.price','<=',$maximumPrice);
+            }
+
+            $minimumBedRoom = $request->get('minimum_bedroom');
+            $maximumBedRoom = $request->get('maximum_bedroom');
+            if($maximumBedRoom == "0"){
+                $maximumBedRoom = null;
+            }
+            if($minimumBedRoom && $maximumBedRoom){
+                $sql->whereBetween('property.nbr_bedroom', [$minimumBedRoom, $maximumBedRoom]);
+            } else if ($minimumBedRoom){
+                $sql->where('property.nbr_bedroom','>=',$minimumBedRoom);
+            } else if ($maximumBedRoom){
+                $sql->where('property.nbr_bedroom','<=',$maximumBedRoom);
+            }
+
+            $minimumTotalArea = $request->get('minimum_total_area');
+            $maximumTotalArea = $request->get('maximum_total_area');
+            if($maximumTotalArea == "0"){
+                $maximumTotalArea = null;
+            }
+            if($minimumTotalArea && $maximumTotalArea){
+                $sql->whereBetween('property.total_area', [$minimumTotalArea, $maximumTotalArea]);
+            } else if ($minimumTotalArea){
+                $sql->where('property.total_area','>=',$minimumTotalArea);
+            } else if ($maximumTotalArea){
+                $sql->where('property.total_area','<=',$maximumTotalArea);
+            }
+
+            if($energyClassTab = $request->get('energy_class')){
+                $sql->whereIn('property.fk_energy_class', $energyClassTab);
+            }
+
+            if($request->get('is_garden')){
+                $sql->where('property.has_garden', 1);
+            }
+
+            if($request->get('is_swimming_pool')){
+                $sql->where('property.has_swimming_pool', 1);
+            }
+
+            if($request->get('is_terrace')){
+                $sql->where('property.has_terrace', 1);
             }
         }
 
@@ -160,7 +211,7 @@ class ImmoRepository implements ImmoRepositoryInterface
         }
         return $listProperty;
     }
-    public function getEnergyClass(){
+    public function getEnergyClassWithUndefined(){
         $undefined = new \stdClass();
         $undefined->id = "undefined";
         $undefined->class = __('undefined');
@@ -171,6 +222,10 @@ class ImmoRepository implements ImmoRepositoryInterface
             $retEnergyClass[$i + 1] = $energyClass[$i];
         }
         return $retEnergyClass;
+    }
+
+    public function getEnergyClass(){
+        return EnergyClass::all();
     }
 
     public function getPropertyOtherRoom(){

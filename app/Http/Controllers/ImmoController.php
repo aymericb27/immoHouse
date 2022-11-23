@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PublishRequest;
 use App\Http\Requests\infoGeneralRequest;
 use App\Http\Requests\PublishDetailedRequest;
+use App\Http\Requests\ResearchInMoreFilter;
 use App\Http\Requests\ResearchInListRequest;
 use App\Repositories\ImmoRepository;
 use App\Repositories\PaymentRepository;
@@ -19,7 +20,7 @@ class ImmoController extends Controller
 
         return view('formPublish', [
             "property_other_room" => $immoRepository->getPropertyOtherRoom(),
-            "energy_class"=>  $immoRepository->getEnergyClass(),
+            "energy_class"=>  $immoRepository->getEnergyClassWithUndefined(),
             "heating_type" => $immoRepository->getHeatingTYpe(),
             "user" =>auth()->user(),
             "payment_formula" => $paymentRepository->getAllPaymentMethod(),
@@ -51,10 +52,16 @@ class ImmoController extends Controller
     }
 
     public function addMoreFilter(ResearchInListRequest $request,  ImmoRepository $immoRepository){
+        $listPropertiesType = $immoRepository->getAllPropertyType();
+        foreach( $listPropertiesType as $key => $type){
+            $listPropertiesType[$key]["subPropertyType"] = $immoRepository->getSubPropertiesByFk($type->id);
+            $listPropertiesType[$key]["checked"] = ($type->id == 1) ? 1 : 0;
+        }
         return view('moreFilter', [
             'req' => $request->input(),
             'sell_or_rent' => $immoRepository->getSellOrRent(),
-            "property_type" => $immoRepository->getAllPropertyType(),
+            "property_type" => $listPropertiesType,
+            "list_energy_class" => $immoRepository->getEnergyClass(),
         ]);
     }
 
@@ -64,6 +71,15 @@ class ImmoController extends Controller
             $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
         }
         return view('listingOfProperties',['listProperties' => $listProperties]);
+    }
+
+    public function researchByMoreFilter(ResearchInMoreFilter $request, ImmoRepository $immoRepository){
+        $listProperties = $immoRepository->researchInList($request);
+        return $listProperties;
+    }
+
+    public function getNumberPropertiesMoreFilter(ResearchInMoreFilter $request, ImmoRepository $immoRepository){
+        return count($immoRepository->researchInList($request));
     }
 
     public function loadResearch( ImmoRepository $immoRepository){

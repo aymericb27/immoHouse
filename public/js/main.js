@@ -189,8 +189,6 @@ $(function () {
         $($id).addClass('d-none');
     }
 
-    
-
 })
 
 
@@ -201,7 +199,7 @@ $(".slider-btn.next").on('click', function () {
     sliderMain.append(item[0]);
 })
 
-$(".slider-btn.prev").on('click', function(){
+$(".slider-btn.prev").on('click', function () {
     var nameSlide = $(this).attr('id').split('-')[1];
     var sliderMain = document.getElementById("slider-main-" + nameSlide);
     var item = sliderMain.getElementsByClassName('item');

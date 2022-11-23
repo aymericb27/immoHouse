@@ -107,7 +107,10 @@ function addAdressToResearch(){
         shortName : $shortName,
     });
     $html = "<div id='search_place-"+ countPlace +"' class='search_place'>"+ $txt +"<i class='fa fa-close close_search_place'></i></div>";
-    $('.listResearch').append($html)
+    $('.listResearch').append($html);
+    if($('#searchPropertyInMoreFilterForm').length !== 0){
+        loadNumberProperty();
+    }
 }
 
 function fillInAddress() {
@@ -162,6 +165,9 @@ $('.listResearch').on('click', '.close_search_place', function(){
         }
     }
     $(this).parent().remove();
+    if($('#searchPropertyInMoreFilterForm').length !== 0){
+        loadNumberProperty();
+    }
 });
 
 
@@ -212,3 +218,24 @@ $('.searchInTheList').on('click',function(event){
         }
     });
 })
+
+function loadNumberProperty(){
+    var formData = new FormData(document.getElementById('searchPropertyInMoreFilterForm'));
+    for(var i = 0; i < listPlaceResearch.length; ++i){
+        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    }
+     $.ajax({
+        url: 'getNumberPropertiesMoreFilter',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        success: function (result) {
+            $('.numberProperties').html(result);
+        },
+        error: function (data) {
+            alert("ERROR - " + data.responseText);
+        }
+    });
+}

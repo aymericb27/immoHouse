@@ -1,4 +1,6 @@
 $(function() {
+
+    //** PUBLISH FORM  **/
     $('.nextPublishButton').on('click',function(){
         if(validatePublishForm()){
             $step = parseInt($('.form_publish_selected').attr('id').split('-')[1]) + 1;
@@ -78,6 +80,7 @@ $(function() {
 
     $('.less_or_plus_box .plus').on('click',function(){
         $input = $(this).prev();
+        $val = parseInt($input.val());
         changeLessOrPlusInput(++$val,$input);
     })
 
@@ -302,4 +305,83 @@ $(function() {
             }
         });
     })()
+
+    //** MORE FILTER FORM **//
+    $('#searchPropertyInMoreFilterForm .less_or_plus_box').on('click',function(event){
+        loadNumberProperty();
+    })
+    $('#searchPropertyInMoreFilterForm').on('keyup change paste', 'input, select, textarea', function(){
+        loadNumberProperty();
+    });
+
+    function loadNumberProperty(){
+        sendMoreFilterForm('getNumberPropertiesMoreFilter',function(result){
+            $('.numberProperties').html(result);
+        });
+    }
+
+    $('.searchInMoreFilter').on('click',function(event){
+        sendMoreFilterForm('researchByMoreFilter',function(result){
+            console.log(result);
+        });
+    })
+
+    $('.moreFilterPropertyType label').on('click',function(event){
+        $id = $(this).attr('id').split('-')[1];
+        ($(this).hasClass('isPropertyTypeSelected')) ? $(this).removeClass("isPropertyTypeSelected") : $(this).addClass("isPropertyTypeSelected");
+        $("#propertyTypeSubTab_" + $id + " input").prop('checked',($(this).hasClass('isPropertyTypeSelected')));
+        console.log($id);
+    })
+
+    $('.checkbox_sub_type_property').on('click',function(event){
+        let isAlreadyChecked = 0;
+        $idCheckBox = $(this).prev().attr('id');
+        $id = $(this).parent().parent().attr('id').split('_')[1];
+        let propTypeLabel = $('#property_type_label-' + $id);
+
+        if(!$(this).prev().is(':checked')){
+
+            isAlreadyChecked = 1;
+            if(!propTypeLabel.hasClass('isPropertyTypeSelected')){
+                propTypeLabel.addClass('isPropertyTypeSelected');
+                propTypeLabel.prev().prop('checked',true);
+            }
+        }
+        $("#propertyTypeSubTab_" + $id + " input").each(function(index,element){
+            if($(element).is(':checked') && $(element).attr('id') !== $idCheckBox){
+                isAlreadyChecked = 1;
+            }
+        });
+        if(!isAlreadyChecked){
+            propTypeLabel.removeClass('isPropertyTypeSelected');
+            propTypeLabel.prev().prop('checked',false);
+        }
+    })
+
+    $('.btnSwitchSubProperty').on('click',function(event){
+        $(this).toggleClass('btnSwitchSubPropertySelected');
+        $('.btnSwitchSubPropertySelected').not(this).removeClass('btnSwitchSubPropertySelected');
+        $id = $(this).prev().attr('id').split('')
+    });
+
+    function sendMoreFilterForm(url,callback){
+        var formData = new FormData(document.getElementById('searchPropertyInMoreFilterForm'));
+        for(var i = 0; i < listPlaceResearch.length; ++i){
+            formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+        }
+         $.ajax({
+            url: url,
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: "POST",
+            success: function (data) {
+                callback(data);
+            },
+            error: function (data) {
+                alert("ERROR - " + data.responseText);
+            }
+        });
+    }
 });

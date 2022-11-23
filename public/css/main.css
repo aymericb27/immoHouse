@@ -813,3 +813,39 @@ label.label_style_payment{
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+.containerFilterInput
+{
+    margin: 0px 15px;
+    padding: 0px;
+}
+
+.moreFilterFooter {
+	position: fixed;
+	bottom: 0px;
+	padding: 10px;
+	text-align: center;
+	background: white;
+	width: 100%;
+	box-shadow: 0px 0px 3px #6e6e6e;
+}
+
+.moreFilterPropertyType label
+{
+    width : 100%;
+    font-size: 16px;
+}
+
+.btnSwitchSubProperty
+{
+    font-size: 14px;
+    text-decoration: underline;
+    padding: 5px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.btnSwitchSubProperty .fa
+{
+    font-size: 12px;
+}
