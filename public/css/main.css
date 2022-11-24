@@ -849,3 +849,12 @@ label.label_style_payment{
 {
     font-size: 12px;
 }
+
+.btnSwitchSubPropertySelected .fa-chevron-right, .btnSwitchSubProperty .fa-chevron-down
+ {
+    display: none;
+ }
+
+ .btnSwitchSubPropertySelected .fa-chevron-down {
+    display: inline-block;
+ }

@@ -7,7 +7,7 @@
             <h3 class="filterTitle mainColor">{{__('transaction type')}}</h3>
             @foreach ($sell_or_rent as $typeTransaction)
                 <div class="pl-20">
-                    {!! Form::checkbox ('type_transaction[]', $typeTransaction->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_". $typeTransaction->id]) !!}
+                    {!! Form::checkbox ('type_transaction[]', $typeTransaction->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_property_other_room_". $typeTransaction->id, "checked" => (array_key_exists('sell_or_rent',$req) && $req['sell_or_rent'] == $typeTransaction->id)]) !!}
                     <label for="checkbox_property_other_room_{{$typeTransaction->id}}" name="checkbox2_lbl" class="css-label lite-blue-check"> {{ $typeTransaction->type}}</label>
                 </div>
             @endforeach
@@ -17,7 +17,13 @@
             <div class="row pl-20 ml-0">
             {!! Form::text ('search_text', null, ['class' => 'form-control search_val col-md-6', "id" =>'searchText', "placeholder" => __('Province, postal code or town')]) !!}
             </div>
-            <div class="listResearch pl-20 mt-10"></div>
+            <div class="listResearch pl-20 mt-10">
+                @if(array_key_exists('place_research', $req))
+                    @foreach ($req['place_research'] as $placeJson )
+                         <div id='search_place-{{json_decode($placeJson)->id}}' class='search_place'>{{json_decode($placeJson)->name}}<i class='fa fa-close close_search_place'></i></div>
+                    @endforeach
+                @endif
+            </div>
         </div>
         <div>
             <h3 class="filterTitle mainColor">{{__('property type')}}</h3>
@@ -26,14 +32,14 @@
                 <div class="col-md-4">
                     <input type="checkbox" id="property_type_{{$type->id}}" name="property_type_tab" value="1" @if($type->checked == 1) checked @endif>
                     <label for="property_type_{{$type->id}}" class="@if($type->checked == 1) isPropertyTypeSelected @endif" id="property_type_label-{{$type->id}}">{{$type->type}}<img src="{!! url('img/icon/check_colored.png') !!}"></label>
-                    <div class="mainColor btnSwitchSubProperty"><i class="fa fa-chevron-right"></i>{{__('see sub property type')}}</div>
+                    <div class="mainColor btnSwitchSubProperty"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-down"></i>{{__('see sub property type')}}</div>
                 </div>
 
                 @endforeach
             </div>
             <div class="pt-20 pl-20">
                 @foreach ($property_type as $type)
-                    <div class="row col-md-12 d-none" id="propertyTypeSubTab_{{$type->id}}">
+                    <div class="row col-md-12 d-none propertyTypeSubTab" id="propertyTypeSubTab_{{$type->id}}">
                         @foreach ($type->subPropertyType as $subTypeProperty )
                             <div class="col-md-6" style="padding-bottom : 5px">
                                 {!! Form::checkbox ('sub_type_property_tab[]', $subTypeProperty->id,false, ['class' => 'css-checkbox', 'id' =>"checkbox_sub_type_property-". $subTypeProperty->id, 'checked' => ($type->checked === 1)]) !!}
@@ -65,10 +71,10 @@
             <h3 class="filterTitle mainColor">{{__('price')}}</h3>
             <div class="row pl-20 ml-0">
                 <div class="col-md-4 containerFilterInput" style="margin-left: 0px">
-                    {!! Form::number ('minimum_price', null, ['class' => 'form-control', "placeholder" => __('minimum') . ' €']) !!}
+                    {!! Form::number ('minimum_price', (array_key_exists('minimum_price',$req))?$req['minimum_price'] : null, ['class' => 'form-control', "placeholder" => __('minimum') . ' €']) !!}
                 </div>
                 <div class="col-md-4 containerFilterInput">
-                    {!! Form::number ('maximum_price', null, ['class' => 'form-control', "placeholder" => __('maximum') . ' €']) !!}
+                    {!! Form::number ('maximum_price', (array_key_exists('maximum_price',$req))?$req['maximum_price'] : null, ['class' => 'form-control', "placeholder" => __('maximum') . ' €']) !!}
                 </div>
             </div>
         </div>
@@ -123,9 +129,9 @@
                 @endforeach
             </div>
         </div>
-        <div>
+        <div class="pb-40">
             <h3 class="filterTitle mainColor">{{__('more options')}}</h3>
-            <div class="row pl-20">
+            <div class="row pl-20 pb-40">
                 <div class="col-md-6" style="padding-bottom : 5px">
                     {!! Form::checkbox ('is_garden', 1,false, ['class' => 'css-checkbox', 'id' =>"checkbox_is_garden"]) !!}
                     <label for="checkbox_is_garden" name="is_garden" class="css-label lite-blue-check">{{__('garden')}}</label>
@@ -145,5 +151,14 @@
 <div class="moreFilterFooter">
     <button class="btn searchInMoreFilter">{{__('search')}} (<span class="numberProperties">0</span>)</button>
 </div>
-<pre>{{print_r($property_type, true)}}</pre>
+@if(array_key_exists('place_research', $req))
+<script>
+    $listPlaceResearch = [];
+    let placeToSearch = {!! json_encode($req["place_research"], JSON_HEX_TAG) !!};
+    for(let i = 0; i < placeToSearch.length ; i++){
+        $place = jQuery.parseJSON(placeToSearch[i]);
+        $listPlaceResearch.push($place);
+    }
+</script>
+@endif
 @endsection

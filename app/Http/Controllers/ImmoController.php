@@ -62,6 +62,7 @@ class ImmoController extends Controller
             'sell_or_rent' => $immoRepository->getSellOrRent(),
             "property_type" => $listPropertiesType,
             "list_energy_class" => $immoRepository->getEnergyClass(),
+            "count_properties" => count($immoRepository->researchInList($request))
         ]);
     }
 
@@ -70,7 +71,7 @@ class ImmoController extends Controller
         foreach($listProperties as $key => $property){
             $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
         }
-        return view('listingOfProperties',['listProperties' => $listProperties]);
+        return view('listingOfProperties',['req'=> $request->input(),'listProperties' => $listProperties]);
     }
 
     public function researchByMoreFilter(ResearchInMoreFilter $request, ImmoRepository $immoRepository){
@@ -87,7 +88,7 @@ class ImmoController extends Controller
         foreach($listProperties as $key => $property){
             $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
         }
-        return view('listingOfProperties',['listProperties' => $listProperties]);
+        return view('listingOfProperties',['req'=> null,'listProperties' => $listProperties]);
     }
 
     public function home(ImmoRepository $immoRepository){

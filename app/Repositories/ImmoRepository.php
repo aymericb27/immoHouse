@@ -101,7 +101,7 @@ class ImmoRepository implements ImmoRepositoryInterface
                         $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( property.fk_province = ". $this->getProvinceIdByShortName("BXL") .") ";
                     } else {
                         if($postalCode = $this->getLocalization($searchPlace->name,'','')['postal_code']){
-                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( address_postal_code = '". $postalCode ."' ) ";
+                            $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." ( property.address_postal_code = '". $postalCode ."' ) ";
                         } else {
                             $sqlWhereSearchPlace .= $this->verifyCountResearch($countSearchPlace) ." (( distance_$countSearchPlace = 'ok' ) OR ( address_town = \"". $searchPlace->name ."\" )) ";
                             array_push($listDistance, ['id' => $countSearchPlace, 'lat' => $searchPlace->lat, 'lng' =>$searchPlace->lng]);
@@ -118,7 +118,7 @@ class ImmoRepository implements ImmoRepositoryInterface
         }
 
 
-        $sql = Property::selectRaw("property.id as idProperty, property.nbr_bedroom, property.total_area, description_". strtoupper(App::currentLocale()) . " as description ,pack.fk_type_pack, property.fk_province,sub_type_". strtoupper(App::currentLocale()) . " as sub_type,
+        $sql = Property::selectRaw("property.id as idProperty, property.nbr_bedroom,property.address_postal_code, property.total_area, description_". strtoupper(App::currentLocale()) . " as description ,pack.fk_type_pack, property.fk_province,sub_type_". strtoupper(App::currentLocale()) . " as sub_type,
         sell_or_rent.type as typeSellOrRent,property.price,property.fk_energy_class,property.fk_sell_or_rent,address_town $sqlSelectDistance")
             ->join('sell_or_rent', 'property.fk_sell_or_rent', '=', 'sell_or_rent.id')
             ->leftJoin('sub_type_property','property.fk_sub_type_property','=','sub_type_property.id')
@@ -133,6 +133,10 @@ class ImmoRepository implements ImmoRepositoryInterface
             $sql->havingRaw($sqlWhereSearchPlace);
         }
         if($request){
+
+            if($tabSellOrRent = $request->get('type_transaction')){
+                $sql->whereIn('property.fk_sell_or_rent', $tabSellOrRent);
+            }
             if($sellOrRent = $request->get('sell_or_rent')){
                 $sql->where('property.fk_sell_or_rent', $sellOrRent);
             }

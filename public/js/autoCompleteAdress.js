@@ -1,4 +1,4 @@
-// This sample uses the Places Autocomplete widget to:
+// This sample uses the Places  widget to:
 // 1. Help the user select a place
 // 2. Retrieve the address components associated with that place
 // 3. Populate the form fields with those address components.
@@ -11,7 +11,7 @@ let address1Field;
 let address2Field;
 let postalField;
 let countPlace = 0;
-let listPlaceResearch = [];
+$listPlaceResearch = [];
 function initAutocomplete() {
     if($('#ship-address').length != 0){
         address1Field = document.querySelector("#ship-address");
@@ -98,7 +98,7 @@ function addAdressToResearch(){
           }
         }
     }
-    listPlaceResearch.push({
+    $listPlaceResearch.push({
         id : countPlace,
         lat : place.geometry.location.lat(),
         lng : place.geometry.location.lng(),
@@ -157,24 +157,13 @@ function fillInAddress() {
   // entry of subpremise information such as apartment, unit, or floor number.
 }
 
-$('.listResearch').on('click', '.close_search_place', function(){
-    $id = $(this).parent().attr('id').split('-')[1];
-    for (var i = 0; i < listPlaceResearch.length; ++i) {
-        if (listPlaceResearch[i].id == $id){
-            listPlaceResearch.splice(i, 1);
-        }
-    }
-    $(this).parent().remove();
-    if($('#searchPropertyInMoreFilterForm').length !== 0){
-        loadNumberProperty();
-    }
-});
+
 
 
 $('.welcomeAddMoreFilter').on('click',function(event){
     var formData = new FormData(document.getElementById('searchPropertyForm'));
-    for(var i = 0; i < listPlaceResearch.length; ++i){
-        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    for(var i = 0; i < $listPlaceResearch.length; ++i){
+        formData.append("place_research[]", JSON.stringify($listPlaceResearch[i]));
     }
      $.ajax({
         url: '/addMoreFilter',
@@ -197,8 +186,8 @@ $('.welcomeAddMoreFilter').on('click',function(event){
 
 $('.searchInTheList').on('click',function(event){
     var formData = new FormData(document.getElementById('searchPropertyForm'));
-    for(var i = 0; i < listPlaceResearch.length; ++i){
-        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    for(var i = 0; i < $listPlaceResearch.length; ++i){
+        formData.append("place_research[]", JSON.stringify($listPlaceResearch[i]));
     }
      $.ajax({
         url: '/researchInList',
@@ -221,8 +210,8 @@ $('.searchInTheList').on('click',function(event){
 
 function loadNumberProperty(){
     var formData = new FormData(document.getElementById('searchPropertyInMoreFilterForm'));
-    for(var i = 0; i < listPlaceResearch.length; ++i){
-        formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+    for(var i = 0; i < $listPlaceResearch.length; ++i){
+        formData.append("place_research[]", JSON.stringify($listPlaceResearch[i]));
     }
      $.ajax({
         url: 'getNumberPropertiesMoreFilter',

@@ -307,6 +307,11 @@ $(function() {
     })()
 
     //** MORE FILTER FORM **//
+
+    if($("#searchPropertyInMoreFilterForm").length) {
+        loadNumberProperty();
+    }
+
     $('#searchPropertyInMoreFilterForm .less_or_plus_box').on('click',function(event){
         loadNumberProperty();
     })
@@ -322,6 +327,10 @@ $(function() {
 
     $('.searchInMoreFilter').on('click',function(event){
         sendMoreFilterForm('researchByMoreFilter',function(result){
+            document.open();
+            window.history.pushState('', '', '/moreFilter');
+            document.write(data);
+            document.close();
             console.log(result);
         });
     })
@@ -361,13 +370,17 @@ $(function() {
     $('.btnSwitchSubProperty').on('click',function(event){
         $(this).toggleClass('btnSwitchSubPropertySelected');
         $('.btnSwitchSubPropertySelected').not(this).removeClass('btnSwitchSubPropertySelected');
-        $id = $(this).prev().attr('id').split('')
+        $id = $(this).prev().attr('id').split('-')[1];
+        $('.propertyTypeSubTab').addClass('d-none');
+        if($(this).hasClass('btnSwitchSubPropertySelected')){
+            $('#propertyTypeSubTab_' + $id).removeClass('d-none');
+        }
     });
 
     function sendMoreFilterForm(url,callback){
         var formData = new FormData(document.getElementById('searchPropertyInMoreFilterForm'));
-        for(var i = 0; i < listPlaceResearch.length; ++i){
-            formData.append("place_research[]", JSON.stringify(listPlaceResearch[i]));
+        for(var i = 0; i < $listPlaceResearch.length; ++i){
+            formData.append("place_research[]", JSON.stringify($listPlaceResearch[i]));
         }
          $.ajax({
             url: url,

@@ -205,3 +205,15 @@ $(".slider-btn.prev").on('click', function () {
     var item = sliderMain.getElementsByClassName('item');
     sliderMain.prepend(item[item.length - 1]);
 })
+$('.listResearch').on('click', '.close_search_place', function(){
+    $id = $(this).parent().attr('id').split('-')[1];
+    for (var i = 0; i < $listPlaceResearch.length; ++i) {
+        if ($listPlaceResearch[i].id == $id){
+            $listPlaceResearch.splice(i, 1);
+        }
+    }
+    $(this).parent().remove();
+    if($('#searchPropertyInMoreFilterForm').length !== 0){
+        loadNumberProperty();
+    }
+});

@@ -35,6 +35,7 @@
             </div>
         </a>
     @endforeach
+    <pre>{{print_r($req, true)}}</pre>
     <pre>{{print_r($listProperties,1)}}</pre>
 </div>
 @endsection
