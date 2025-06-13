@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class PropertyPicture extends Model
 {
     use HasFactory;
-    protected $table = "order";
+    protected $table = "property_picture";
 }

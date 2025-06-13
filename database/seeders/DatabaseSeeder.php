@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -25,6 +24,10 @@ class DatabaseSeeder extends Seeder
             SubTypeProperty::class,
             Province::class,
             Promo::class,
+            User::class,
+            Property::class,
+            PropertyPicture::class,
+            Order::class,
         ]);
     }
 }
