@@ -5,7 +5,7 @@
     <div class="box_search_homepage">
         {!! Form::open(['url' => 'searchProperty', 'enctype'=>'multipart/form-data', "id" =>'searchPropertyForm' ]) !!}
             <div class="mb-40 text-center">
-                <h2 class="mb-10">{{__('welcome to immoflat')}}</h2>
+                <h2 class="mb-10">{{__('Welcome to ImmoHouse')}}</h2>
                 <p class="mainColor font-italic">{{__('simple, fast and effective')}} !</p>
             </div>
             <div class="row">

@@ -11,6 +11,7 @@ use App\Http\Requests\ResearchInMoreFilter;
 use App\Http\Requests\ResearchInListRequest;
 use App\Repositories\ImmoRepository;
 use App\Repositories\PaymentRepository;
+use Illuminate\Support\Facades\Log;
 
 
 class ImmoController extends Controller

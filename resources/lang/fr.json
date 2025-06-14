@@ -53,8 +53,12 @@
     "the field postal code is required": "le champs code postal est requis",
     "the field town is required" : "le champs ville est requis",
     "the field street is required" : "le champs rue est requis",
+    "to sell": "à vendre",
+    "to rent": "à louer",
     "type of property": "type de propriété",
     "town" : "ville",
+    "Welcome to ImmoHouse" : "Bienvenue sur ImmoHouse",
+    "simple, fast and effective" : "simple, rapide et efficace",
     "yes": "oui",
     "your contact details": "vos coordonnées"
 }

@@ -11,6 +11,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" href="{!! url('img/icon/property_information.png') !!}">
 </head>
@@ -24,8 +26,8 @@
             </div>
             <div class='menu col-md-7'>
                 <ul>
-                    <li><a>Agences</a></li>
-                    <li><a>A vendre</a></li>
+                    <li><a href="{!! url('/getListProperty?sell_or_rent=2') !!}">{{__("to rent")}}</a></li>
+                    <li><a href="{!! url('/getListProperty?sell_or_rent=1') !!}">{{__("to sell")}}</a></li>
                     @auth
                         <li><a href="{!! url('/publish') !!}">{{__("publish an announcement")}} </a></li>
                         <li><a href="{!! url('/getMyListingProperties') !!}">{{__('my list of properties')}}</a></li>
