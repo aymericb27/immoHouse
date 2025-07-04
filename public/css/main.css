@@ -880,4 +880,16 @@ label.label_style_payment{
 
 #filter_listing_properties{
     border-right: 1px solid #d4d4d4;
+    padding: 1em;
+}
+#listing_properties_property_sub_type_container {
+ padding: 10px;
+}
+.listing_properties_property_sub_type {
+  padding: 5px;
+}
+
+.filterTitleListing {
+    font-weight: 500;
+    font-size: larger;
 }
