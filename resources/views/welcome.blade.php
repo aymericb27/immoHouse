@@ -3,7 +3,7 @@
 @section('content')
 <div class="background_homepage">
     <div class="box_search_homepage">
-        {!! Form::open(['url' => 'searchProperty', 'enctype'=>'multipart/form-data', "id" =>'searchPropertyForm' ]) !!}
+        {!! Form::open(['url' => 'researchInList', 'enctype'=>'multipart/form-data', "id" =>'searchPropertyForm' ]) !!}
             <div class="mb-40 text-center">
                 <h2 class="mb-10">{{__('Welcome to ImmoHouse')}}</h2>
                 <p class="mainColor font-italic">{{__('simple, fast and effective')}} !</p>
@@ -13,8 +13,8 @@
                     {!! Form::text ('search_text', null, ['class' => 'form-control search_val', "id" =>'searchText', "placeholder" => __('Province, postal code or town')]) !!}
                 </div>
                 <div class="col-md-2 pl-10 pr-10">
-                    <select class="form-control search_val" name="sell_or_rent">
-                        <option value="1">{{__('to sell')}}</option>
+                    <select class="form-control search_val"  name="sell_or_rent">
+                        <option value="1" selected>{{__('to sell')}}</option>
                         <option value="2">{{__('to rent')}}</option>
                     </select>
                 </div>
@@ -44,7 +44,7 @@
             <div  class="d-none"><a class="btn-link">{{__('add more filter')}} <i class="fa fa-plus"></i></a></div>
             <div class="listResearch mb-40 mt-10"></div>
             <div class="text-center boxBtnSearchProperty">
-                <a  class="btn searchInTheList">{{__('search in the list')}}</a>
+                {!! Form::submit(__('search in the list'), ['class' => 'btn searchInTheList' ]) !!}
                 <a class="btn welcomeAddMoreFilter">{{__('add more filter')}} <i class="fa fa-plus"></i></a>
                 <a  class="btn">{{__('search in map')}} <i class="fa fa-map-marker" aria-hidden="true"></i></a>
             </div>

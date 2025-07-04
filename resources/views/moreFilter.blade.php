@@ -12,7 +12,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="">
+        <div>
             <h3 class="filterTitle mainColor">{{__('adress')}}</h3>
             <div class="row pl-20 ml-0">
             {!! Form::text ('search_text', null, ['class' => 'form-control search_val col-md-6', "id" =>'searchText', "placeholder" => __('Province, postal code or town')]) !!}

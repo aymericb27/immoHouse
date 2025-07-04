@@ -184,7 +184,7 @@ $('.welcomeAddMoreFilter').on('click',function(event){
     });
 })
 
-$('.searchInTheList').on('click',function(event){
+/* $('.searchInTheList').on('click',function(event){
     var formData = new FormData(document.getElementById('searchPropertyForm'));
     for(var i = 0; i < $listPlaceResearch.length; ++i){
         formData.append("place_research[]", JSON.stringify($listPlaceResearch[i]));
@@ -206,7 +206,7 @@ $('.searchInTheList').on('click',function(event){
             alert("ERROR - " + data.responseText);
         }
     });
-})
+}) */
 
 function loadNumberProperty(){
     var formData = new FormData(document.getElementById('searchPropertyInMoreFilterForm'));

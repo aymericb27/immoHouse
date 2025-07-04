@@ -10,13 +10,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> 
      @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" href="{!! url('img/icon/property_information.png') !!}">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
-<body ng-app="myApp">
+<body ng-app="myApp" >
+    <div id="app">
     <header>
         <div class='row m-0' >
             <div class="menu-logo col-md-3">
@@ -37,13 +38,29 @@
                     @endguest
                 </ul>
             </div>
-            <div class="menu-lang col-md-2">
-                <ul>
-                    <li><a href="{!! url('/language/FR') !!}">FR</a></li>
-                    <li><a href="{!! url('/language/NL') !!}">NL</a></li>
-                    <li><a href="{!! url('/language/EN') !!}">ENG</a></li>
+            <div class="menu_lang col-md-2">
+                <div>
+                    <div @click="showDropdownLang()" id="currentLanguage"> 
+                        <i class="fa" :class="{ 'fa-chevron-right' : isDropLangVisible, 'fa-chevron-down' : !isDropLangVisible}"></i>                
+                        {{ strtoupper(app()->getLocale())}} 
+                    </div>
+                </div>
+                <ul class="dropdown_lang" :class="{ 'd-none': isDropLangVisible }">
+                @php
+                    $languages = ['fr', 'en', 'nl'];
+                @endphp
+                @foreach ($languages as $lang)
+                    @if($lang !== app()->getLocale())
+                        <li>
+                            <a href="{!! url('/language/'.$lang) !!}">{{ strtoupper($lang) }}</a>
+                        </li>
+                    @endif
+
+                @endforeach 
+
                 </ul>
             </div>
+
         </div>
     </header>
     @isset($message)
@@ -66,7 +83,9 @@
     <div id="content">
 	    @yield('content')
     </div>
-    @include('auth.login')
+    @include('auth.login') 
+</div>
+<script src="{!! url('js/app.js') !!}"></script>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://js.stripe.com/v3/"></script>
@@ -75,6 +94,5 @@
 <script src="{!! url('js/main.js') !!}"></script>
 <script src="{!! url('js/form.js') !!}"></script>
 <script src="{!! url('js/PaymentController.js') !!}"></script>
-
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CacJhZWCAY97sjTu6LhB9OXifYzHefY&callback=initAutocomplete&libraries=places&v=weekly&language={{app()->getLocale()}}" async></script>
  </html>

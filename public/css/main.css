@@ -686,8 +686,9 @@ label.label_style_payment{
 	color: #939393;
 }
 
-.boxBtnSearchProperty a{
+.boxBtnSearchProperty a, .boxBtnSearchProperty input{
     width: 19%;
+    margin: 5px;
 }
 
 .search_place{
@@ -858,3 +859,25 @@ label.label_style_payment{
  .btnSwitchSubPropertySelected .fa-chevron-down {
     display: inline-block;
  }
+
+ .menu_lang {
+    padding-top: 37px;
+ }
+
+.dropdown_lang {
+    border: 1px solid;
+    list-style-type: none;
+    position: fixed;
+    padding: 10px 20px;
+    margin: 5px 0px 0px 0px;
+    z-index: 1;
+    background-color: white;
+}
+
+#currentLanguage {
+    cursor: pointer;
+}
+
+#filter_listing_properties{
+    border-right: 1px solid #d4d4d4;
+}
