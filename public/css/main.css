@@ -893,3 +893,14 @@ label.label_style_payment{
     font-weight: 500;
     font-size: larger;
 }
+
+.boxBtnSearchInfilterListingProperties {
+    text-align: center;
+    border-top: 1px solid #d4d4d4;
+    padding: 15px 0px 15px 0Px;
+    width: 100%;
+    position: sticky;
+    left: 15px;
+    bottom: 0px;
+    background-color: #ffffff;
+}

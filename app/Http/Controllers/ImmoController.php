@@ -80,9 +80,19 @@ class ImmoController extends Controller
         return view('listingOfProperties',['req'=> $request->input(),'listProperties' => $listProperties,"property_sub_type" => $listPropertiesSubType]);
     }
 
-    public function researchByMoreFilter(ResearchInMoreFilter $request, ImmoRepository $immoRepository){
+    public function researchByMoreFilter(ResearchInListRequest $request, ImmoRepository $immoRepository){
         $listProperties = $immoRepository->researchInList($request);
-        return $listProperties;
+        $listPropertiesSubType = $immoRepository->getAllSubPropertyType();
+
+        
+        foreach( $listPropertiesSubType as $key => $subtype){
+            $listPropertiesSubType[$key]["before"] = (in_array($subtype->id,[1,9,16,17,18,20,21,22])) ? 1 : 0; // display certain sub type before other
+        }
+
+        foreach($listProperties as $key => $property){
+            $listProperties[$key]->picture = $immoRepository->getMainPictureByIdProperty($property->idProperty);
+        }
+        return view('listingOfProperties',['req'=> $request->input(),'listProperties' => $listProperties,"property_sub_type" => $listPropertiesSubType]);
     }
 
     public function getNumberPropertiesMoreFilter(ResearchInMoreFilter $request, ImmoRepository $immoRepository){

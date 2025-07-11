@@ -71,7 +71,7 @@ $(function() {
         $('#form_publish_step-' + $step).addClass('form_publish_selected');
     }
 
-    $('.less_or_plus_box .less').on('click',function(){
+/*     $('.less_or_plus_box .less').on('click',function(){
         $input = $(this).next();
         if(($val = parseInt($input.val())) > 0){
             changeLessOrPlusInput(--$val,$input);
@@ -86,7 +86,7 @@ $(function() {
 
     function changeLessOrPlusInput($val,$input){
         $input.val($val);
-    }
+    } */
 
     $('.description_btn_box div').on('click', function(){
         $('.description_btn_selected').removeClass('description_btn_selected');
@@ -329,7 +329,7 @@ $(function() {
         sendMoreFilterForm('researchByMoreFilter',function(result){
             document.open();
             window.history.pushState('', '', '/moreFilter');
-            document.write(data);
+            document.write(result);
             document.close();
             console.log(result);
         });
