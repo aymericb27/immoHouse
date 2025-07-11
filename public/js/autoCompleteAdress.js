@@ -13,6 +13,8 @@ let postalField;
 let countPlace = 0;
 $listPlaceResearch = [];
 function initAutocomplete() {
+  console.log("try to autocomplete");
+  return true;
     if($('#ship-address').length != 0){
         address1Field = document.querySelector("#ship-address");
         postalField = document.querySelector("#postcode");
