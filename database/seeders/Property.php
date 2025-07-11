@@ -43,7 +43,7 @@ class property extends Seeder
             'address_town' => "hélécine",
             'contact_email' => "aymeric@gmail.com",
             'fk_sell_or_rent' => 1,
-            'fk_sub_type_property' => 2,
+            'fk_sub_type_property' => 9,
             'fk_users' => 1,
             'nbr_bedroom' => 2,
             'total_area' => 800,
