@@ -3,7 +3,7 @@
 @section('content')
 <div class="background_homepage">
     <div class="box_search_homepage">
-        {!! Form::open(['url' => 'researchInList', 'enctype'=>'multipart/form-data', "id" =>'searchPropertyForm' ]) !!}
+        {!! Form::open(['url' => 'getListProperties', 'enctype'=>'multipart/form-data', "id" =>'searchPropertyForm' ]) !!}
             <div class="mb-40 text-center">
                 <h2 class="mb-10">{{__('Welcome to ImmoHouse')}}</h2>
                 <p class="mainColor font-italic">{{__('simple, fast and effective')}} !</p>

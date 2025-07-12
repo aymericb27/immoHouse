@@ -85,4 +85,6 @@ Route::post('/researchByMoreFilter',[ImmoController::class,'researchByMoreFilter
 
 Route::post('/researchInList',[ImmoController::class,'researchInList']);
 
+Route::post('/getListProperties', [ImmoController::class,'getListProperties']);
+
 Route::post('/researchInListFiltered',[ImmoController::class,'researchInListFiltered']);

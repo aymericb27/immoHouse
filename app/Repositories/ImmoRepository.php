@@ -138,7 +138,8 @@ class ImmoRepository implements ImmoRepositoryInterface
                 $sql->whereIn('property.fk_sell_or_rent', $tabSellOrRent);
             }
             if($sellOrRent = $request->get('sell_or_rent')){
-                $sql->where('property.fk_sell_or_rent', $sellOrRent);
+                $sellOrRent = (is_array($sellOrRent)) ? $sellOrRent : [$sellOrRent];
+                $sql->whereIn('property.fk_sell_or_rent', $sellOrRent);
             }
             if($fkSubProperty = $request->get('sub_type_property')){
                 $sql->where('property.fk_sub_type_property', $fkSubProperty);
@@ -199,7 +200,6 @@ class ImmoRepository implements ImmoRepositoryInterface
                 $sql->where('property.has_terrace', 1);
             }
         }
-
         $listProperty = $sql->get();
         $listProperty = $this->getSpacePrice($listProperty);
         for ($i=0; $i < count($listProperty); $i++) {
